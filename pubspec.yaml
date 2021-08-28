@@ -1,8 +1,7 @@
 name: cool_dropdown
 description: A new Flutter package project.
 version: 1.0.0
-author:
-homepage:
+homepage: https://github.com/joo6077/cool_dropdown
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
