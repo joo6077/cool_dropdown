@@ -16,13 +16,13 @@
 
 ## Samples
 <div style="display: flex;">
-<img src="/sample_01.gif" height="500">
-<img src="/sample_02.gif" height="500"/>
-<img src="/sample_03.gif" height="500"/>
+<img src="https://github.com/joo6077/cool_dropdown/blob/master/screenshots/sample_01.gif" height="500">
+<img src="https://github.com/joo6077/cool_dropdown/blob/master/screenshots/sample_02.gif" height="500"/>
+<img src="https://github.com/joo6077/cool_dropdown/blob/master/screenshots/sample_03.gif" height="500"/>
 </div>
 
 ## Options map
-<img src="/dropdown_description.png" height="500"/>
+<img src="https://github.com/joo6077/cool_dropdown/blob/master/screenshots/dropdown_description.png" height="500"/>
 
 
 ## Important options 
