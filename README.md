@@ -1,4 +1,11 @@
 # Cool drop down
+<div align="center">
+<a href="https://pub.dev/packages/cool_dropdown/changelog" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/pub-v1.0.0-orange.svg"></a>
+<a href="https://pub.dev/packages/cool_dropdown" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/build-passing-6FCC76.svg"></a>
+<a href="https://opensource.org/licenses/MIT" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/license-MIT-blueviolet.svg"></a>
+<a href="https://flutter.dev/" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/platform-flutter-ff69b4.svg"></a>
+</div>
+
 ## Features
  - All customizable css
  - Auto scroll to selected item position
@@ -9,13 +16,13 @@
 
 ## Samples
 <div style="display: flex;">
-<img src="/sample_01.gif" height="500">
-<img src="/sample_02.gif" height="500"/>
-<img src="/sample_03.gif" height="500"/>
+<img src="https://github.com/joo6077/cool_dropdown/blob/master/screenshots/sample_01.gif" height="500">
+<img src="https://github.com/joo6077/cool_dropdown/blob/master/screenshots/sample_02.gif" height="500"/>
+<img src="https://github.com/joo6077/cool_dropdown/blob/master/screenshots/sample_03.gif" height="500"/>
 </div>
 
 ## Options map
-<img src="/dropdown_description.png" height="500"/>
+<img src="https://github.com/joo6077/cool_dropdown/blob/master/screenshots/dropdown_description.png" height="500"/>
 
 
 ## Important options 
