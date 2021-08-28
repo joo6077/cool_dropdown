@@ -9,9 +9,9 @@
 
 ## Samples
 <div style="display: flex;">
-<img src="/sample_01.gif" height="600">
-<img src="/sample_02.gif" height="600"/>
-<img src="/sample_03.gif" height="600"/>
+<img src="/sample_01.gif" height="500">
+<img src="/sample_02.gif" height="500"/>
+<img src="/sample_03.gif" height="500"/>
 </div>
 
 ## Options map
