@@ -9,3 +9,7 @@
 ## [1.0.2] - 2021.08.28
 
 * readme image issue on pub.dev
+
+## [1.0.2] - 2021.08.28
+
+* edit description
