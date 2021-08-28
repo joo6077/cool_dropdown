@@ -1,3 +1,7 @@
 ## [1.0.0] - 2021.08.28
 
-* initial release.
+* Initial release.
+
+## [1.0.1] - 2021.08.28
+
+* Edit path of image readme & description.
