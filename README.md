@@ -16,13 +16,13 @@
 
 ## Samples
 <div style="display: flex;">
-<img src="https://github.com/joo6077/cool_dropdown/blob/master/screenshots/sample_01.gif" height="500">
-<img src="https://github.com/joo6077/cool_dropdown/blob/master/screenshots/sample_02.gif" height="500"/>
-<img src="https://github.com/joo6077/cool_dropdown/blob/master/screenshots/sample_03.gif" height="500"/>
+<img src="https://github.com/joo6077/cool_dropdown/blob/master/screenshots/sample_01.gif?raw=true" height="500">
+<img src="https://github.com/joo6077/cool_dropdown/blob/master/screenshots/sample_02.gif?raw=true" height="500"/>
+<img src="https://github.com/joo6077/cool_dropdown/blob/master/screenshots/sample_03.gif?raw=true" height="500"/>
 </div>
 
 ## Options map
-<img src="https://github.com/joo6077/cool_dropdown/blob/master/screenshots/dropdown_description.png" height="500"/>
+<img src="https://github.com/joo6077/cool_dropdown/blob/master/screenshots/dropdown_description.png?raw=true" height="500"/>
 
 
 ## Important options 
