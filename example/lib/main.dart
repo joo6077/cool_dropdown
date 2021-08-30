@@ -101,6 +101,8 @@ class _MyAppState extends State<MyApp> {
                 onChange: (selectedItem) {
                   print(selectedItem);
                 },
+                // dropdownBoxBD: BoxDecoration(
+                //     color: Colors.white, border: Border.all(width: 20)),
               ),
             ),
             SizedBox(

@@ -1,4 +1,5 @@
 library cool_dropdown;
+
 import 'package:flutter/material.dart';
 import 'package:cool_dropdown/utils/animation_util.dart';
 import 'package:cool_dropdown/utils/extension_util.dart';
@@ -195,7 +196,8 @@ class CoolDropdown extends StatefulWidget {
   _CoolDropdownState createState() => _CoolDropdownState();
 }
 
-class _CoolDropdownState extends State<CoolDropdown> with TickerProviderStateMixin {
+class _CoolDropdownState extends State<CoolDropdown>
+    with TickerProviderStateMixin {
   GlobalKey inputKey = GlobalKey();
   Offset triangleOffset = Offset(0, 0);
   late OverlayEntry _overlayEntry;
@@ -314,6 +316,14 @@ class _CoolDropdownState extends State<CoolDropdown> with TickerProviderStateMix
     super.initState();
   }
 
+  RotationTransition rotationIcon() {
+    return RotationTransition(
+        turns: Tween(begin: 0.0, end: widget.dropdownIconRotationValue).animate(
+            CurvedAnimation(parent: rotationController, curve: Curves.easeIn)),
+        child: widget.dropdownIcon);
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -359,9 +369,8 @@ class _CoolDropdownState extends State<CoolDropdown> with TickerProviderStateMix
                                   SizedBox(
                                     width: widget.labelIconGap,
                                   ),
-                                selectedItem['icon'] != null
-                                    ? selectedItem['icon'] as Widget
-                                    : Container(),
+                                if (selectedItem['icon'] != null)
+                                  selectedItem['icon'] as Widget,
                               ].isReverse(widget.dropdownItemReverse),
                             ),
                           ),
@@ -381,13 +390,4 @@ class _CoolDropdownState extends State<CoolDropdown> with TickerProviderStateMix
       ),
     );
   }
-
-  RotationTransition rotationIcon() {
-    return RotationTransition(
-        turns: Tween(begin: 0.0, end: widget.dropdownIconRotationValue).animate(
-            CurvedAnimation(
-                parent: rotationController, curve: Curves.easeIn)),
-        child: widget.dropdownIcon);
-  }
 }
-

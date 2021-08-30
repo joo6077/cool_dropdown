@@ -151,24 +151,43 @@ class _DropdownBodyState extends State<DropdownBody>
 
   @override
   void initState() {
-    isTop = (getHalfHeightPosition() < widget.screenHeight * 0.5);
-    // scroll 위치에 따른 높이 설정
+    currentIndex = widget.dropdownList.indexWhere(
+        (dropdownItem) => mapEquals(dropdownItem, widget.selectedItem));
+    setOffset();
+    setAnimation();
+    setScrollPosition(currentIndex);
+
+    super.initState();
+  }
+
+  void dispose() {
+    super.dispose();
+  }
+
+  void setOffset() {
+    // inputBox info
+    dynamic inputBox = widget.inputKey.currentContext!.findRenderObject();
+    Offset inputPosition = inputBox!.localToGlobal(Offset.zero);
+
     double actualBoxHeight = widget.dropdownBoxHeight +
         widget.dropdownBoxPadding.top +
         widget.dropdownBoxPadding.bottom;
-    // offset 셋팅
+    double inputCenterPosition =
+        inputPosition.dy + (inputBox.size.height * 0.5);
+    double sidePadding =
+        widget.dropdownBoxPadding.right + widget.dropdownBoxPadding.left;
+    isTop = (inputCenterPosition < widget.screenHeight * 0.5);
 
     if (isTop) {
-      // top
+      // position dropbox top
       dropdownOffset = setDropdownPosition(
-        type: 'dropdownBoxAlign',
-        alignment: widget.dropdownBoxAlign,
-        width: widget.dropdownBoxWidth,
-        gap: widget.gap,
-        actualHeight: actualBoxHeight,
-        isTop: false,
-      );
-      triangleOffset = setTrianglePosition(dropdownOffset);
+          isTop: true,
+          sidePadding: sidePadding,
+          inputBox: inputBox,
+          inputPosition: inputPosition,
+          actualBoxHeight: actualBoxHeight);
+      triangleOffset = setTrianglePosition(
+          dropdownBoxOffset: dropdownOffset, sidePadding: sidePadding);
 
       if (widget.screenHeight < actualBoxHeight + dropdownOffset.dy) {
         setState(() {
@@ -177,34 +196,34 @@ class _DropdownBodyState extends State<DropdownBody>
         });
       }
     } else {
-      // bottom
+      // position dropbox bottom
       dropdownOffset = setDropdownPosition(
-        type: 'dropdownBoxAlign',
-        alignment: widget.dropdownBoxAlign,
-        width: widget.dropdownBoxWidth,
-        gap: widget.gap,
-        actualHeight: actualBoxHeight,
-        isTop: true,
-      );
-      triangleOffset = setTrianglePosition(dropdownOffset +
-          Offset(0, widget.dropdownBoxHeight + widget.triangleHeight));
+          isTop: false,
+          sidePadding: sidePadding,
+          inputBox: inputBox,
+          inputPosition: inputPosition,
+          actualBoxHeight: actualBoxHeight);
+      Offset bottomOffset = dropdownOffset +
+          Offset(0, widget.dropdownBoxHeight + widget.triangleHeight);
+      triangleOffset = setTrianglePosition(
+          dropdownBoxOffset: bottomOffset, sidePadding: sidePadding);
       setState(() {
+        // triangle upsideDown
         upsideDown = true;
-        if (widget.dropdownBoxHeight >
-            widget.screenHeight -
-                (widget.screenHeight - getPositionDy()) -
-                widget.gap -
-                10) {
-          widget.dropdownBoxHeight = widget.screenHeight -
-              (widget.screenHeight - getPositionDy()) -
-              widget.gap -
-              10;
+        double extraHeight = widget.screenHeight -
+            (widget.screenHeight - inputPosition.dy) -
+            widget.gap -
+            10;
+        if (widget.dropdownBoxHeight > extraHeight) {
+          widget.dropdownBoxHeight = extraHeight;
           dropdownOffset = Offset(dropdownOffset.dx, 10);
         }
       });
     }
+  }
 
-    // 애니메이션 셋팅
+  void setAnimation() {
+    // dropdownBox height
     _animationController = AnimationController(
       duration: au.isAnimation(
           status: widget.isAnimation, duration: Duration(milliseconds: 100)),
@@ -223,55 +242,53 @@ class _DropdownBodyState extends State<DropdownBody>
       parent: _triangleController,
       curve: Curves.easeIn,
     );
+    // each of items animation
     for (var i = 0; i < widget.dropdownIsSelected.length; i++) {
-      _DCController.add(AnimationController(
+      AnimationController animationControllerElement = AnimationController(
           vsync: this,
           duration: au.isAnimation(
               status: widget.isAnimation,
-              duration: Duration(milliseconds: 300))));
-      _paddingController.add(AnimationController(
-          vsync: this,
-          duration: au.isAnimation(
-              status: widget.isAnimation,
-              duration: Duration(milliseconds: 300))));
+              duration: Duration(milliseconds: 300)));
+      _DCController.add(
+          animationControllerElement); // selected, unselected decorationBox, textStyle
+      _paddingController.add(animationControllerElement);
       _paddingAnimation.add(EdgeInsetsTween(
               begin: widget.dropdownItemPadding,
               end: widget.selectedItemPadding)
           .animate(CurvedAnimation(
-              parent: _paddingController[i], curve: Curves.easeOutCubic)));
+              parent: _paddingController[i], curve: Curves.easeIn)));
     }
     selectedDecorationTween = DecorationTween(
         begin: BoxDecoration(color: Colors.transparent),
         end: widget.selectedItemBD);
     selectedTSTween = TextStyleTween(
         begin: widget.unselectedItemTS, end: widget.selectedItemTS);
+  }
 
-    // scroll 위치 셋팅
-    currentIndex = widget.dropdownList.indexWhere(
-        (dropdownItem) => mapEquals(dropdownItem, widget.selectedItem));
+  void setScrollPosition(int currentIndex) {
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
       await animationForward();
       if (currentIndex != -1) {
+        double totalHeight = widget.dropdownList.length *
+                (widget.dropdownItemHeight + widget.dropdownItemGap) +
+            widget.dropdownItemTopGap +
+            widget.dropdownItemBottomGap;
         double scrollPosition = currentIndex *
                 (widget.dropdownItemHeight + widget.dropdownItemGap) +
             widget.dropdownItemTopGap -
             widget.dropdownItemGap;
-        if (currentIndex == 0) {
-          scrollPosition = 0;
-        }
         double overScrollPosition = ((widget.dropdownItemHeight *
                     widget.dropdownList.length) +
                 (widget.dropdownItemGap * (widget.dropdownList.length - 1)) +
                 widget.dropdownItemTopGap) -
             widget.dropdownBoxHeight +
             widget.dropdownItemBottomGap;
+        if (currentIndex == 0) {
+          scrollPosition = 0;
+        }
         if (overScrollPosition < scrollPosition) {
           scrollPosition = overScrollPosition;
         }
-        double totalHeight = widget.dropdownList.length *
-                (widget.dropdownItemHeight + widget.dropdownItemGap) +
-            widget.dropdownItemTopGap +
-            widget.dropdownItemBottomGap;
         if (totalHeight < widget.dropdownBoxHeight) {
           scrollPosition = 0;
         }
@@ -289,12 +306,6 @@ class _DropdownBodyState extends State<DropdownBody>
         _paddingController[currentIndex].forward();
       }
     });
-
-    super.initState();
-  }
-
-  void dispose() {
-    super.dispose();
   }
 
   Future animationForward() async {
@@ -318,60 +329,41 @@ class _DropdownBodyState extends State<DropdownBody>
   }
 
   Offset setDropdownPosition(
-      {required String alignment,
-      required double width,
-      required String type,
-      required double gap,
-      required bool isTop,
-      required double actualHeight}) {
-    dynamic inputBox = widget.inputKey.currentContext!.findRenderObject();
-    Offset inputPosition = inputBox!.localToGlobal(Offset.zero);
-
+      {required bool isTop,
+      required double sidePadding,
+      required dynamic inputBox,
+      required Offset inputPosition,
+      required double actualBoxHeight}) {
     double value = 0;
-    double sidePadding =
-        widget.dropdownBoxPadding.right + widget.dropdownBoxPadding.left;
 
-    switch (alignment.toLowerCase()) {
+    switch (widget.dropdownBoxAlign.toLowerCase()) {
       case 'left':
         value = 0;
         break;
       case 'right':
         value = inputBox.size.width -
-            (width + sidePadding) -
+            (widget.dropdownBoxWidth + sidePadding) -
             widget.triangleBorder.width * 2;
         break;
       case 'center':
-        value = (inputBox.size.width - (width + sidePadding)) * 0.5 -
-            widget.triangleBorder.width;
+        value =
+            (inputBox.size.width - (widget.dropdownBoxWidth + sidePadding)) *
+                    0.5 -
+                widget.triangleBorder.width;
         break;
       default:
-        throw 'type of $type has to be String.(right, left, center)';
+        throw 'type of dropdownBoxAlign has to be String.(right, left, center)';
     }
-    print('${inputPosition.dx}');
     return Offset(
         inputPosition.dx + value,
         isTop
-            ? inputPosition.dy - (gap + actualHeight)
-            : inputPosition.dy + inputBox.size.height + gap);
+            ? inputPosition.dy + inputBox.size.height + widget.gap
+            : inputPosition.dy - (widget.gap + actualBoxHeight));
   }
 
-  double getHalfHeightPosition() {
-    dynamic inputBox = widget.inputKey.currentContext!.findRenderObject();
-    Offset inputPosition = inputBox!.localToGlobal(Offset.zero);
-
-    return inputPosition.dy + (inputBox.size.height * 0.5);
-  }
-
-  double getPositionDy() {
-    dynamic inputBox = widget.inputKey.currentContext!.findRenderObject();
-    Offset inputPosition = inputBox!.localToGlobal(Offset.zero);
-    return inputPosition.dy;
-  }
-
-  Offset setTrianglePosition(Offset dropdownBoxOffset) {
+  Offset setTrianglePosition(
+      {required Offset dropdownBoxOffset, required double sidePadding}) {
     double value = 0;
-    double sidePadding =
-        widget.dropdownBoxPadding.right + widget.dropdownBoxPadding.left;
 
     switch (widget.triangleAlign.toLowerCase()) {
       case 'left':
@@ -390,11 +382,6 @@ class _DropdownBodyState extends State<DropdownBody>
       default:
         throw 'type of triangleAlign has to be String.(right, left, center)';
     }
-    print('${dropdownBoxOffset.dx}');
-    // print('${widget.dropdownBoxWidth}');
-    // print('${sidePadding}');
-    // print('$value');
-    // print('${dropdownOffset.dx + widget.dropdownBoxWidth + sidePadding}');
 
     return Offset(dropdownBoxOffset.dx + value, dropdownBoxOffset.dy);
   }
