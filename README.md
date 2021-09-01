@@ -71,20 +71,20 @@ List dropdownItemList = [
     'label': 'apple',
     'value': 'apple',
     'icon': Container(        // if you want to use icon, you have to declare key as 'icon'
-      key: UniqueKey(),       // you have to use UniqueKey()
-      width: 20,
-      height: 20,
-      child: SvgPicture.asset(          // I recommend to use this library
-        'assets/apple.svg',
-      ),
-    ),
+       key: UniqueKey(),       // you have to use UniqueKey()
+       height: 20,
+       width: 20,
+       child: SvgPicture.asset(          // I recommend to use this library, if you want to use svg extension
+         'assets/apple.svg',
+       ),
+     ),
     'selectedIcon': Container(          // if you want to use different icon when user select item, you have to declare key as 'selectedIcon'
       key: UniqueKey(),
       width: 20,
       height: 20,
       child: SvgPicture.asset(
         'assets/apple.svg',
-        color: Colors.white.withOpacity(0.7),
+        color: Color(0xFF6FCC76),
       ),
     ),
   }
