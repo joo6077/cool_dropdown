@@ -112,7 +112,6 @@ List dropdownItemList = [
 | dropdownIconRotationValue| double        |0.5| Rotation value of the dropdownIcon animation |
 | placeholder         | String        | null    |                                      |
 | placeholderTS       | TextStyle     |below code|                                      |
-
 | defaultValue        | Map           | null    | Default selected value               |
 | gap        | double           | 30    | Gap between the dropdown and dropdownBox               |
 
