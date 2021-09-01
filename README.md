@@ -32,7 +32,7 @@ command:
 pubspec.yaml:
 ```dart
 dependencies:
-  cool_dropdown: ^1.0.4
+  cool_dropdown: ^(latest)
 ```
 
 ## Usage
