@@ -1,6 +1,6 @@
 # Cool drop down
 <div align="center">
-<a href="https://pub.dev/packages/cool_dropdown/changelog" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/pub-v1.0.1-orange.svg"></a>
+<a href="https://pub.dev/packages/cool_dropdown/changelog" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/pub-v1.0.5-orange.svg"></a>
 <a href="https://pub.dev/packages/cool_dropdown" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/build-passing-6FCC76.svg"></a>
 <a href="https://opensource.org/licenses/MIT" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/license-MIT-blueviolet.svg"></a>
 <a href="https://flutter.dev/" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/platform-flutter-ff69b4.svg"></a>
@@ -24,6 +24,37 @@
 ## Options map
 <img src="https://github.com/joo6077/cool_dropdown/blob/master/screenshots/dropdown_description.png?raw=true" height="500"/>
 
+## Installing
+command:
+```dart
+ $ flutter pub add cool_dropdown
+```
+pubspec.yaml
+```dart
+dependencies:
+  cool_dropdown: ^1.0.4
+```
+
+## Usage
+```dart
+import 'package:cool_dropdown/cool_dropdown.dart';
+
+List dropdownItemList = [
+  {'label': 'apple', 'value': 'apple'},
+  {'label': 'banana', 'value': 'banana'},
+  {'label': 'grape', 'value': 'grape'},
+  {'label': 'pineapple', 'value': 'pineapple'},
+  {'label': 'grape fruit', 'value': 'grape fruit'},
+  {'label': 'kiwi', 'value': 'kiwi'},
+];
+
+CoolDropdown(
+              dropdownList: dropdownItemList,
+              onChange: (_) {},
+              defaultValue: dropdownItemList[3],
+              // placeholder: 'insert...',
+            )
+```
 
 ## Important options 
 
