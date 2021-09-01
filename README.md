@@ -57,7 +57,7 @@ List dropdownItemList = [
       ),
     ),
   }
-]
+];
 ```
 
 ## Dropdown options
@@ -109,7 +109,7 @@ dropdownTS = TextStyle(
 dropdownPadding = const EdgeInsets.only(left: 10, right: 10);
 ```
 ```dart
-dropdownAlign = Alignment.centerLeft
+dropdownAlign = Alignment.centerLeft;
 ```
 ```dart
 placeholderTS = TextStyle(color: Colors.grey.withOpacity(0.7), fontSize: 20);
@@ -152,29 +152,29 @@ dropdownBoxBD = BoxDecoration(
               offset: Offset(0, 1),
             ),
           ],
-        )
+        );
 ```
 ```dart
-dropdownBoxPadding = const EdgeInsets.only(left: 10, right: 10)
+dropdownBoxPadding = const EdgeInsets.only(left: 10, right: 10);
 ```
 ```dart
-dropdownItemPadding = const EdgeInsets.only(left: 10, right: 10)
+dropdownItemPadding = const EdgeInsets.only(left: 10, right: 10);
 ```
 ```dart
 selectedItemBD = BoxDecoration(
           color: Color(0XFFEFFAF0),
           borderRadius: BorderRadius.circular(10),
-        )
+        );
 ```
 ```dart
 selectedItemTS = TextStyle(color: Color(0xFF6FCC76), fontSize: 20);
 ```
 ```dart
-selectedItemPadding = const EdgeInsets.only(left: 10, right: 10)
+selectedItemPadding = const EdgeInsets.only(left: 10, right: 10);
 ```
 ```dart
 unselectedItemTS = TextStyle(
             fontSize: 20,
             color: Colors.black,
-          )
+          );
 ```
