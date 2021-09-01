@@ -7,7 +7,7 @@
 </div>
 
 ## Features
- - All customizable css
+ - All customizable css(font, fontsize. color, icon, dropdown box decoration...)
  - Auto scroll to selected item position
  - dropdownBox is automatically placed. It's based on the position of the dropdown on the screen.(top/bottom)
  - Support triangle arrow
