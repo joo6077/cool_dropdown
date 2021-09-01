@@ -29,7 +29,7 @@ command:
 ```dart
  $ flutter pub add cool_dropdown
 ```
-pubspec.yaml
+pubspec.yaml:
 ```dart
 dependencies:
   cool_dropdown: ^1.0.4
