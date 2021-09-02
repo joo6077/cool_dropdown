@@ -1,13 +1,13 @@
 # Cool drop down
 <div align="center">
-<a href="https://pub.dev/packages/cool_dropdown/changelog" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/pub-v1.0.1-orange.svg"></a>
+<a href="https://pub.dev/packages/cool_dropdown/changelog" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/pub-v1.0.5-orange.svg"></a>
 <a href="https://pub.dev/packages/cool_dropdown" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/build-passing-6FCC76.svg"></a>
 <a href="https://opensource.org/licenses/MIT" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/license-MIT-blueviolet.svg"></a>
 <a href="https://flutter.dev/" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/platform-flutter-ff69b4.svg"></a>
 </div>
 
 ## Features
- - All customizable css
+ - All customizable css(font, fontsize. color, icon, dropdown box decoration...)
  - Auto scroll to selected item position
  - dropdownBox is automatically placed. It's based on the position of the dropdown on the screen.(top/bottom)
  - Support triangle arrow
@@ -24,6 +24,37 @@
 ## Options map
 <img src="https://github.com/joo6077/cool_dropdown/blob/master/screenshots/dropdown_description.png?raw=true" height="500"/>
 
+## Installing
+command:
+```dart
+ $ flutter pub add cool_dropdown
+```
+pubspec.yaml:
+```dart
+dependencies:
+  cool_dropdown: ^(latest)
+```
+
+## Usage
+```dart
+import 'package:cool_dropdown/cool_dropdown.dart';
+
+List dropdownItemList = [
+  {'label': 'apple', 'value': 'apple'},
+  {'label': 'banana', 'value': 'banana'},
+  {'label': 'grape', 'value': 'grape'},
+  {'label': 'pineapple', 'value': 'pineapple'},
+  {'label': 'grape fruit', 'value': 'grape fruit'},
+  {'label': 'kiwi', 'value': 'kiwi'},
+];
+
+CoolDropdown(
+              dropdownList: dropdownItemList,
+              onChange: (_) {},
+              defaultValue: dropdownItemList[3],
+              // placeholder: 'insert...',
+            )
+```
 
 ## Important options 
 
@@ -40,24 +71,24 @@ List dropdownItemList = [
     'label': 'apple',
     'value': 'apple',
     'icon': Container(        // if you want to use icon, you have to declare key as 'icon'
-      key: UniqueKey(),       // you have to use UniqueKey()
-      width: 20,
-      height: 20,
-      child: SvgPicture.asset(          // I recommend to use this library
-        'assets/apple.svg',
-      ),
-    ),
+       key: UniqueKey(),       // you have to use UniqueKey()
+       height: 20,
+       width: 20,
+       child: SvgPicture.asset(          // I recommend to use this library, if you want to use svg extension
+         'assets/apple.svg',
+       ),
+     ),
     'selectedIcon': Container(          // if you want to use different icon when user select item, you have to declare key as 'selectedIcon'
       key: UniqueKey(),
       width: 20,
       height: 20,
       child: SvgPicture.asset(
         'assets/apple.svg',
-        color: Colors.white.withOpacity(0.7),
+        color: Color(0xFF6FCC76),
       ),
     ),
   }
-]
+];
 ```
 
 ## Dropdown options
@@ -81,7 +112,6 @@ List dropdownItemList = [
 | dropdownIconRotationValue| double        |0.5| Rotation value of the dropdownIcon animation |
 | placeholder         | String        | null    |                                      |
 | placeholderTS       | TextStyle     |below code|                                      |
-
 | defaultValue        | Map           | null    | Default selected value               |
 | gap        | double           | 30    | Gap between the dropdown and dropdownBox               |
 
@@ -109,7 +139,7 @@ dropdownTS = TextStyle(
 dropdownPadding = const EdgeInsets.only(left: 10, right: 10);
 ```
 ```dart
-dropdownAlign = Alignment.centerLeft
+dropdownAlign = Alignment.centerLeft;
 ```
 ```dart
 placeholderTS = TextStyle(color: Colors.grey.withOpacity(0.7), fontSize: 20);
@@ -152,29 +182,29 @@ dropdownBoxBD = BoxDecoration(
               offset: Offset(0, 1),
             ),
           ],
-        )
+        );
 ```
 ```dart
-dropdownBoxPadding = const EdgeInsets.only(left: 10, right: 10)
+dropdownBoxPadding = const EdgeInsets.only(left: 10, right: 10);
 ```
 ```dart
-dropdownItemPadding = const EdgeInsets.only(left: 10, right: 10)
+dropdownItemPadding = const EdgeInsets.only(left: 10, right: 10);
 ```
 ```dart
 selectedItemBD = BoxDecoration(
           color: Color(0XFFEFFAF0),
           borderRadius: BorderRadius.circular(10),
-        )
+        );
 ```
 ```dart
 selectedItemTS = TextStyle(color: Color(0xFF6FCC76), fontSize: 20);
 ```
 ```dart
-selectedItemPadding = const EdgeInsets.only(left: 10, right: 10)
+selectedItemPadding = const EdgeInsets.only(left: 10, right: 10);
 ```
 ```dart
 unselectedItemTS = TextStyle(
             fontSize: 20,
             color: Colors.black,
-          )
+          );
 ```
