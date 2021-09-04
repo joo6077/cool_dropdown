@@ -21,3 +21,7 @@
 ## [1.0.5] - 2021.09.02
 
 - Edit readme
+
+## [1.1.0] - 2021.09.04
+
+- Bug fixed: When user tap Android back button, close the dropdown when it's opened.
