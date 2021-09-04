@@ -40,7 +40,7 @@ dependencies:
 import 'package:cool_dropdown/cool_dropdown.dart';
 
 List dropdownItemList = [
-  {'label': 'apple', 'value': 'apple'},
+  {'label': 'apple', 'value': 'apple'}, // label is required and unique
   {'label': 'banana', 'value': 'banana'},
   {'label': 'grape', 'value': 'grape'},
   {'label': 'pineapple', 'value': 'pineapple'},
