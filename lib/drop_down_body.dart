@@ -4,6 +4,7 @@ import 'package:cool_dropdown/utils/animation_util.dart';
 import 'package:cool_dropdown/utils/extension_util.dart';
 
 class DropdownBody extends StatefulWidget {
+  Key key;
   GlobalKey inputKey;
   late Function closeDropdown;
   late BuildContext bodyContext;
@@ -62,7 +63,8 @@ class DropdownBody extends StatefulWidget {
   late List triangleBoxShadows;
 
   DropdownBody(
-      {required this.inputKey,
+      {required this.key,
+      required this.inputKey,
       required this.dropdownList,
       required this.onChange,
       required this.closeDropdown,
@@ -120,10 +122,10 @@ class DropdownBody extends StatefulWidget {
   }
 
   @override
-  _DropdownBodyState createState() => _DropdownBodyState();
+  DropdownBodyState createState() => DropdownBodyState();
 }
 
-class _DropdownBodyState extends State<DropdownBody>
+class DropdownBodyState extends State<DropdownBody>
     with TickerProviderStateMixin {
   Offset dropdownOffset = Offset(0, 0);
   Offset triangleOffset = Offset(0, 0);
@@ -386,299 +388,307 @@ class _DropdownBodyState extends State<DropdownBody>
     return Offset(dropdownBoxOffset.dx + value, dropdownBoxOffset.dy);
   }
 
+  void closeAnimation() {}
+
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        await animationReverse();
-        widget.closeDropdown();
-        return false;
-      },
-      child: Stack(
-        children: <Widget>[
-          GestureDetector(
-            onPanDown: (_) async {
-              await animationReverse();
-              widget.closeDropdown();
-            },
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              color: Colors.transparent,
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Stack(
+          children: <Widget>[
+            GestureDetector(
+              onPanDown: (_) async {
+                await animationReverse();
+                widget.closeDropdown();
+              },
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                color: Colors.transparent,
+              ),
             ),
-          ),
-          // triangle shadow
-          if (widget.isTriangle && widget.triangleBoxShadows.length > 0)
-            ...widget.triangleBoxShadows
-                .map((boxShadow) => Positioned(
-                      top: upsideDown
-                          ? triangleOffset.dy -
-                              widget.triangleHeight +
-                              boxShadow.spreadRadius +
-                              boxShadow.offset.dy -
-                              0.5
-                          : triangleOffset.dy -
-                              (widget.triangleHeight +
-                                  boxShadow.spreadRadius * 2) +
-                              boxShadow.offset.dy +
-                              0.5,
-                      left: triangleOffset.dx +
-                          widget.triangleLeft -
-                          (boxShadow.spreadRadius / 2) +
-                          boxShadow.offset.dx,
-                      child: SizeTransition(
-                        sizeFactor: triangleAnimation,
-                        axisAlignment: -1,
-                        child: Container(
-                          width: widget.triangleWidth + boxShadow.spreadRadius,
-                          height:
-                              widget.triangleHeight + boxShadow.spreadRadius,
-                          child: CustomPaint(
-                            painter: TrianglePainter(
-                              strokeColor: boxShadow.color,
-                              strokeWidth: 1,
-                              paintingStyle: PaintingStyle.fill,
-                              upsideDown: upsideDown,
-                              blurRadius: boxShadow.blurRadius,
+            // triangle shadow
+            if (widget.isTriangle && widget.triangleBoxShadows.length > 0)
+              ...widget.triangleBoxShadows
+                  .map((boxShadow) => Positioned(
+                        top: upsideDown
+                            ? triangleOffset.dy -
+                                widget.triangleHeight +
+                                boxShadow.spreadRadius +
+                                boxShadow.offset.dy -
+                                0.5
+                            : triangleOffset.dy -
+                                (widget.triangleHeight +
+                                    boxShadow.spreadRadius * 2) +
+                                boxShadow.offset.dy +
+                                0.5,
+                        left: triangleOffset.dx +
+                            widget.triangleLeft -
+                            (boxShadow.spreadRadius / 2) +
+                            boxShadow.offset.dx,
+                        child: SizeTransition(
+                          sizeFactor: triangleAnimation,
+                          axisAlignment: -1,
+                          child: Container(
+                            width:
+                                widget.triangleWidth + boxShadow.spreadRadius,
+                            height:
+                                widget.triangleHeight + boxShadow.spreadRadius,
+                            child: CustomPaint(
+                              painter: TrianglePainter(
+                                strokeColor: boxShadow.color,
+                                strokeWidth: 1,
+                                paintingStyle: PaintingStyle.fill,
+                                upsideDown: upsideDown,
+                                blurRadius: boxShadow.blurRadius,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ))
-                .toList(),
-          // box
-          Positioned(
-            top: dropdownOffset.dy,
-            left: dropdownOffset.dx,
-            child: Container(
-              decoration: widget.dropdownBoxBD,
-              padding: widget.dropdownBoxPadding,
-              child: ClipRRect(
-                borderRadius: widget.dropdownBoxBD.borderRadius != null
-                    ? widget.dropdownBoxBD.borderRadius as BorderRadius
-                    : BorderRadius.zero,
-                child: AnimatedBuilder(
-                  animation: _animationController,
-                  builder: (BuildContext context, Widget? _) {
-                    return Container(
-                        width: widget.dropdownBoxWidth,
-                        height: animateHeight.value,
-                        child: ListView.builder(
-                            padding: EdgeInsets.zero,
-                            physics: ScrollPhysics(),
-                            controller: _scrollController,
-                            itemCount: widget.dropdownList.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Column(
-                                children: [
-                                  if (index == 0)
-                                    Container(
-                                      height: widget.dropdownItemTopGap,
-                                    ),
-                                  GestureDetector(
-                                    onTap: () async {
-                                      setState(() {
-                                        isTap = true;
-                                        for (var i = 0;
-                                            i < widget.dropdownList.length;
-                                            i++) {
-                                          if (index == i) {
-                                            widget.dropdownIsSelected[i] = true;
-                                          } else {
-                                            widget.dropdownIsSelected[i] =
-                                                false;
-                                          }
-                                        }
-                                      });
-                                      if (currentIndex != -1) {
-                                        if (currentIndex != index) {
-                                          _paddingController[currentIndex]
-                                              .reverse();
-                                          _DCController[currentIndex].reverse();
-                                        }
-                                      }
-                                      _paddingController[index].forward();
-                                      await _DCController[index].forward();
-
-                                      await animationReverse();
-                                      widget.getSelectedItem(
-                                          widget.dropdownList[index]);
-                                      widget
-                                          .onChange(widget.dropdownList[index]);
-                                      widget.closeDropdown();
-                                    },
-                                    child: DecoratedBoxTransition(
-                                      decoration: selectedDecorationTween
-                                          .animate(_DCController[index]),
-                                      child: Container(
-                                        padding: _paddingAnimation[index].value,
-                                        height: widget.dropdownItemHeight,
-                                        child: Align(
-                                          alignment: widget.dropdownItemAlign,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                widget.dropdownItemMainAxis,
-                                            children: [
-                                              if (widget.isDropdownBoxLabel)
-                                                DefaultTextStyleTransition(
-                                                  child: Flexible(
-                                                    child: Container(
-                                                      child: Text(
-                                                        widget.dropdownList[
-                                                            index]['label'],
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  style:
-                                                      selectedTSTween.animate(
-                                                          _DCController[index]),
-                                                ),
-                                              if (widget.isDropdownBoxLabel)
-                                                SizedBox(
-                                                  width: widget.labelIconGap,
-                                                ),
-                                              (widget.dropdownList[index]
-                                                              ['icon'] !=
-                                                          null &&
-                                                      widget.dropdownList[index]
-                                                              [
-                                                              'selectedIcon'] !=
-                                                          null)
-                                                  ? AnimatedSwitcher(
-                                                      duration: au.isAnimation(
-                                                          status: widget
-                                                              .isAnimation,
-                                                          duration: Duration(
-                                                              milliseconds:
-                                                                  300)),
-                                                      transitionBuilder:
-                                                          (Widget child,
-                                                              Animation<double>
-                                                                  animation) {
-                                                        return FadeTransition(
-                                                            child: child,
-                                                            opacity: animation);
-                                                      },
-                                                      child: Container(
-                                                        child: widget
-                                                                    .dropdownIsSelected[
-                                                                index]
-                                                            ? widget.dropdownList[
-                                                                        index][
-                                                                    'selectedIcon']
-                                                                as Widget
-                                                            : widget.dropdownList[
-                                                                        index]
-                                                                    ['icon']
-                                                                as Widget,
-                                                      ),
-                                                    )
-                                                  : widget.dropdownList[index]
-                                                              ['icon'] !=
-                                                          null
-                                                      ? Container(
-                                                          child: widget
-                                                                  .dropdownList[
-                                                              index]['icon'])
-                                                      : Container(),
-                                            ].isReverse(
-                                                widget.dropdownItemReverse),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  if (index != widget.dropdownList.length - 1)
-                                    Container(
-                                      height: widget.dropdownItemGap,
-                                    ),
-                                  if (index == widget.dropdownList.length - 1)
-                                    Container(
-                                      height: widget.dropdownItemBottomGap,
-                                    )
-                                ],
-                              );
-                            }));
-                  },
-                ),
-              ),
-            ),
-          ),
-          // block box
-          if (isTap)
+                      ))
+                  .toList(),
+            // box
             Positioned(
               top: dropdownOffset.dy,
               left: dropdownOffset.dx,
               child: Container(
-                width: widget.dropdownBoxWidth +
-                    widget.dropdownBoxPadding.right +
-                    widget.dropdownBoxPadding.left,
-                height: widget.dropdownBoxHeight,
-                color: Colors.transparent,
-              ),
-            ),
-          // triangle border
-          if (widget.isTriangle)
-            Positioned(
-              top: upsideDown
-                  ? triangleOffset.dy -
-                      widget.triangleHeight +
-                      widget.triangleBorder.width * 2
-                  : triangleOffset.dy -
-                      (widget.triangleHeight + widget.triangleBorder.width),
-              left: triangleOffset.dx +
-                  widget.triangleLeft -
-                  (widget.triangleBorder.width / 2),
-              child: SizeTransition(
-                sizeFactor: triangleAnimation,
-                axisAlignment: -1,
-                child: Container(
-                  width: widget.triangleWidth + widget.triangleBorder.width,
-                  height: widget.triangleHeight + widget.triangleBorder.width,
-                  child: CustomPaint(
-                    painter: TrianglePainter(
-                      strokeColor: widget.triangleBorder.color,
-                      strokeWidth: 1,
-                      paintingStyle: PaintingStyle.fill,
-                      upsideDown: upsideDown,
-                    ),
+                decoration: widget.dropdownBoxBD,
+                padding: widget.dropdownBoxPadding,
+                child: ClipRRect(
+                  borderRadius: widget.dropdownBoxBD.borderRadius != null
+                      ? widget.dropdownBoxBD.borderRadius as BorderRadius
+                      : BorderRadius.zero,
+                  child: AnimatedBuilder(
+                    animation: _animationController,
+                    builder: (BuildContext context, Widget? _) {
+                      return Container(
+                          width: widget.dropdownBoxWidth,
+                          height: animateHeight.value,
+                          child: ListView.builder(
+                              padding: EdgeInsets.zero,
+                              physics: ScrollPhysics(),
+                              controller: _scrollController,
+                              itemCount: widget.dropdownList.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Column(
+                                  children: [
+                                    if (index == 0)
+                                      Container(
+                                        height: widget.dropdownItemTopGap,
+                                      ),
+                                    GestureDetector(
+                                      onTap: () async {
+                                        setState(() {
+                                          isTap = true;
+                                          for (var i = 0;
+                                              i < widget.dropdownList.length;
+                                              i++) {
+                                            if (index == i) {
+                                              widget.dropdownIsSelected[i] =
+                                                  true;
+                                            } else {
+                                              widget.dropdownIsSelected[i] =
+                                                  false;
+                                            }
+                                          }
+                                        });
+                                        if (currentIndex != -1) {
+                                          if (currentIndex != index) {
+                                            _paddingController[currentIndex]
+                                                .reverse();
+                                            _DCController[currentIndex]
+                                                .reverse();
+                                          }
+                                        }
+                                        _paddingController[index].forward();
+                                        await _DCController[index].forward();
+
+                                        await animationReverse();
+                                        widget.getSelectedItem(
+                                            widget.dropdownList[index]);
+                                        widget.onChange(
+                                            widget.dropdownList[index]);
+                                        widget.closeDropdown();
+                                      },
+                                      child: DecoratedBoxTransition(
+                                        decoration: selectedDecorationTween
+                                            .animate(_DCController[index]),
+                                        child: Container(
+                                          padding:
+                                              _paddingAnimation[index].value,
+                                          height: widget.dropdownItemHeight,
+                                          child: Align(
+                                            alignment: widget.dropdownItemAlign,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  widget.dropdownItemMainAxis,
+                                              children: [
+                                                if (widget.isDropdownBoxLabel)
+                                                  DefaultTextStyleTransition(
+                                                    child: Flexible(
+                                                      child: Container(
+                                                        child: Text(
+                                                          widget.dropdownList[
+                                                              index]['label'],
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    style: selectedTSTween
+                                                        .animate(_DCController[
+                                                            index]),
+                                                  ),
+                                                if (widget.isDropdownBoxLabel)
+                                                  SizedBox(
+                                                    width: widget.labelIconGap,
+                                                  ),
+                                                (widget.dropdownList[index]
+                                                                ['icon'] !=
+                                                            null &&
+                                                        widget.dropdownList[
+                                                                    index][
+                                                                'selectedIcon'] !=
+                                                            null)
+                                                    ? AnimatedSwitcher(
+                                                        duration: au.isAnimation(
+                                                            status: widget
+                                                                .isAnimation,
+                                                            duration: Duration(
+                                                                milliseconds:
+                                                                    300)),
+                                                        transitionBuilder:
+                                                            (Widget child,
+                                                                Animation<
+                                                                        double>
+                                                                    animation) {
+                                                          return FadeTransition(
+                                                              child: child,
+                                                              opacity:
+                                                                  animation);
+                                                        },
+                                                        child: Container(
+                                                          child: widget
+                                                                      .dropdownIsSelected[
+                                                                  index]
+                                                              ? widget.dropdownList[
+                                                                          index]
+                                                                      [
+                                                                      'selectedIcon']
+                                                                  as Widget
+                                                              : widget.dropdownList[
+                                                                          index]
+                                                                      ['icon']
+                                                                  as Widget,
+                                                        ),
+                                                      )
+                                                    : widget.dropdownList[index]
+                                                                ['icon'] !=
+                                                            null
+                                                        ? Container(
+                                                            child: widget
+                                                                    .dropdownList[
+                                                                index]['icon'])
+                                                        : Container(),
+                                              ].isReverse(
+                                                  widget.dropdownItemReverse),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    if (index != widget.dropdownList.length - 1)
+                                      Container(
+                                        height: widget.dropdownItemGap,
+                                      ),
+                                    if (index == widget.dropdownList.length - 1)
+                                      Container(
+                                        height: widget.dropdownItemBottomGap,
+                                      )
+                                  ],
+                                );
+                              }));
+                    },
                   ),
                 ),
               ),
             ),
-          // triangle
-          if (widget.isTriangle)
-            Positioned(
-              top: upsideDown
-                  ? triangleOffset.dy -
-                      widget.triangleHeight +
-                      widget.triangleBorder.width -
-                      0.5
-                  : triangleOffset.dy -
-                      widget.triangleHeight +
-                      widget.triangleBorder.width +
-                      0.5,
-              left: triangleOffset.dx + widget.triangleLeft,
-              child: SizeTransition(
-                sizeFactor: triangleAnimation,
-                axisAlignment: -1,
+            // block box
+            if (isTap)
+              Positioned(
+                top: dropdownOffset.dy,
+                left: dropdownOffset.dx,
                 child: Container(
-                  width: widget.triangleWidth,
-                  height: widget.triangleHeight,
-                  child: CustomPaint(
-                    painter: TrianglePainter(
-                      strokeColor: widget.dropdownBoxBD.color as Color,
-                      strokeWidth: 1,
-                      paintingStyle: PaintingStyle.fill,
-                      upsideDown: upsideDown,
+                  width: widget.dropdownBoxWidth +
+                      widget.dropdownBoxPadding.right +
+                      widget.dropdownBoxPadding.left,
+                  height: widget.dropdownBoxHeight,
+                  color: Colors.transparent,
+                ),
+              ),
+            // triangle border
+            if (widget.isTriangle)
+              Positioned(
+                top: upsideDown
+                    ? triangleOffset.dy -
+                        widget.triangleHeight +
+                        widget.triangleBorder.width * 2
+                    : triangleOffset.dy -
+                        (widget.triangleHeight + widget.triangleBorder.width),
+                left: triangleOffset.dx +
+                    widget.triangleLeft -
+                    (widget.triangleBorder.width / 2),
+                child: SizeTransition(
+                  sizeFactor: triangleAnimation,
+                  axisAlignment: -1,
+                  child: Container(
+                    width: widget.triangleWidth + widget.triangleBorder.width,
+                    height: widget.triangleHeight + widget.triangleBorder.width,
+                    child: CustomPaint(
+                      painter: TrianglePainter(
+                        strokeColor: widget.triangleBorder.color,
+                        strokeWidth: 1,
+                        paintingStyle: PaintingStyle.fill,
+                        upsideDown: upsideDown,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-        ],
+            // triangle
+            if (widget.isTriangle)
+              Positioned(
+                top: upsideDown
+                    ? triangleOffset.dy -
+                        widget.triangleHeight +
+                        widget.triangleBorder.width -
+                        0.5
+                    : triangleOffset.dy -
+                        widget.triangleHeight +
+                        widget.triangleBorder.width +
+                        0.5,
+                left: triangleOffset.dx + widget.triangleLeft,
+                child: SizeTransition(
+                  sizeFactor: triangleAnimation,
+                  axisAlignment: -1,
+                  child: Container(
+                    width: widget.triangleWidth,
+                    height: widget.triangleHeight,
+                    child: CustomPaint(
+                      painter: TrianglePainter(
+                        strokeColor: widget.dropdownBoxBD.color as Color,
+                        strokeWidth: 1,
+                        paintingStyle: PaintingStyle.fill,
+                        upsideDown: upsideDown,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

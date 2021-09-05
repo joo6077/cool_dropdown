@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:cool_dropdown/utils/animation_util.dart';
 import 'package:cool_dropdown/utils/extension_util.dart';
 import 'package:cool_dropdown/drop_down_body.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class CoolDropdown extends StatefulWidget {
   List dropdownList;
@@ -179,17 +178,7 @@ class CoolDropdown extends StatefulWidget {
     this.placeholderTS = placeholderTS ??
         TextStyle(color: Colors.grey.withOpacity(0.7), fontSize: 20);
     // Icon Container 셋팅
-    this.dropdownIcon = dropdownIcon != null
-        ? dropdownIcon
-        : Container(
-            width: 10,
-            height: 10,
-            child: SvgPicture.asset(
-              'assets/dropdown-arrow.svg',
-              semanticsLabel: 'Acme Logo',
-              color: Colors.grey.withOpacity(0.7),
-            ),
-          );
+    this.dropdownIcon = dropdownIcon ?? Container();
   }
 
   @override
@@ -198,6 +187,7 @@ class CoolDropdown extends StatefulWidget {
 
 class _CoolDropdownState extends State<CoolDropdown>
     with TickerProviderStateMixin {
+  GlobalKey<DropdownBodyState> dropdownBodyChild = GlobalKey();
   GlobalKey inputKey = GlobalKey();
   Offset triangleOffset = Offset(0, 0);
   late OverlayEntry _overlayEntry;
@@ -206,82 +196,80 @@ class _CoolDropdownState extends State<CoolDropdown>
   late AnimationController sizeController;
   late Animation<double> textWidth;
   AnimationUtil au = AnimationUtil();
+  late bool isOpen = false;
 
   openDropdown() {
+    isOpen = true;
     this._overlayEntry = this._createOverlayEntry();
     Overlay.of(inputKey.currentContext!)!.insert(this._overlayEntry);
     rotationController.forward();
   }
 
   void closeDropdown() {
+    isOpen = false;
     this._overlayEntry.remove();
     rotationController.reverse();
   }
 
   OverlayEntry _createOverlayEntry() {
     return OverlayEntry(
-      builder: (BuildContext context) => MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
-          backgroundColor: Colors.transparent,
-          body: DropdownBody(
-            inputKey: inputKey,
-            onChange: widget.onChange,
-            dropdownList: widget.dropdownList,
-            dropdownItemReverse: widget.dropdownItemReverse,
-            isTriangle: widget.isTriangle,
-            dropdownWidth: widget.dropdownWidth,
-            dropdownHeight: widget.dropdownHeight,
-            dropdownBoxWidth: widget.dropdownBoxWidth,
-            dropdownBoxHeight: widget.dropdownBoxHeight,
-            dropdownItemHeight: widget.dropdownItemHeight,
-            dropdownAlign: widget.dropdownAlign,
-            dropdownBoxAlign: widget.dropdownBoxAlign,
-            triangleAlign: widget.triangleAlign,
-            dropdownItemAlign: widget.dropdownItemAlign,
-            dropdownItemPadding: widget.dropdownItemPadding,
-            dropdownBoxPadding: widget.dropdownBoxPadding,
-            selectedItemPadding: widget.selectedItemPadding,
-            dropdownBD: widget.dropdownBD,
-            dropdownBoxBD: widget.dropdownBoxBD,
-            selectedItemBD: widget.selectedItemBD,
-            selectedItemTS: widget.selectedItemTS,
-            unselectedItemTS: widget.unselectedItemTS,
-            dropdownItemGap: widget.dropdownItemGap,
-            dropdownItemTopGap: widget.dropdownItemTopGap,
-            dropdownItemBottomGap: widget.dropdownItemBottomGap,
-            gap: widget.gap,
-            labelIconGap: widget.labelIconGap,
-            triangleWidth: widget.triangleWidth,
-            triangleHeight: widget.triangleHeight,
-            triangleLeft: widget.triangleLeft,
-            isDropdownLabel: widget.isDropdownLabel,
-            closeDropdown: () {
-              closeDropdown();
-            },
-            getSelectedItem: (selectedItem) async {
-              sizeController = AnimationController(
-                vsync: this,
-                duration: au.isAnimation(
-                    status: widget.isAnimation,
-                    duration: Duration(milliseconds: 150)),
-              );
-              textWidth = CurvedAnimation(
-                parent: sizeController,
-                curve: Curves.fastOutSlowIn,
-              );
-              setState(() {
-                this.selectedItem = selectedItem;
-              });
-              await sizeController.forward();
-            },
-            selectedItem: selectedItem,
-            isAnimation: widget.isAnimation,
-            dropdownItemMainAxis: widget.dropdownItemMainAxis,
-            bodyContext: context,
-            isDropdownBoxLabel: widget.isDropdownBoxLabel,
-          ),
-        ),
+      builder: (BuildContext context) => DropdownBody(
+        key: dropdownBodyChild,
+        inputKey: inputKey,
+        onChange: widget.onChange,
+        dropdownList: widget.dropdownList,
+        dropdownItemReverse: widget.dropdownItemReverse,
+        isTriangle: widget.isTriangle,
+        dropdownWidth: widget.dropdownWidth,
+        dropdownHeight: widget.dropdownHeight,
+        dropdownBoxWidth: widget.dropdownBoxWidth,
+        dropdownBoxHeight: widget.dropdownBoxHeight,
+        dropdownItemHeight: widget.dropdownItemHeight,
+        dropdownAlign: widget.dropdownAlign,
+        dropdownBoxAlign: widget.dropdownBoxAlign,
+        triangleAlign: widget.triangleAlign,
+        dropdownItemAlign: widget.dropdownItemAlign,
+        dropdownItemPadding: widget.dropdownItemPadding,
+        dropdownBoxPadding: widget.dropdownBoxPadding,
+        selectedItemPadding: widget.selectedItemPadding,
+        dropdownBD: widget.dropdownBD,
+        dropdownBoxBD: widget.dropdownBoxBD,
+        selectedItemBD: widget.selectedItemBD,
+        selectedItemTS: widget.selectedItemTS,
+        unselectedItemTS: widget.unselectedItemTS,
+        dropdownItemGap: widget.dropdownItemGap,
+        dropdownItemTopGap: widget.dropdownItemTopGap,
+        dropdownItemBottomGap: widget.dropdownItemBottomGap,
+        gap: widget.gap,
+        labelIconGap: widget.labelIconGap,
+        triangleWidth: widget.triangleWidth,
+        triangleHeight: widget.triangleHeight,
+        triangleLeft: widget.triangleLeft,
+        isDropdownLabel: widget.isDropdownLabel,
+        closeDropdown: () {
+          closeDropdown();
+        },
+        getSelectedItem: (selectedItem) async {
+          sizeController = AnimationController(
+            vsync: this,
+            duration: au.isAnimation(
+                status: widget.isAnimation,
+                duration: Duration(milliseconds: 150)),
+          );
+          textWidth = CurvedAnimation(
+            parent: sizeController,
+            curve: Curves.fastOutSlowIn,
+          );
+          setState(() {
+            this.selectedItem = selectedItem;
+          });
+          await sizeController.forward();
+        },
+        selectedItem: selectedItem,
+        isAnimation: widget.isAnimation,
+        dropdownItemMainAxis: widget.dropdownItemMainAxis,
+        bodyContext: context,
+        isDropdownBoxLabel: widget.isDropdownBoxLabel,
       ),
     );
   }
@@ -323,70 +311,80 @@ class _CoolDropdownState extends State<CoolDropdown>
         child: widget.dropdownIcon);
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        openDropdown();
+    return WillPopScope(
+      onWillPop: () async {
+        if (isOpen) {
+          await dropdownBodyChild.currentState!.animationReverse();
+          closeDropdown();
+          return Future.value(false);
+        } else {
+          return Future.value(true);
+        }
       },
-      child: Stack(
-        children: [
-          Container(
-            key: inputKey,
-            width: widget.dropdownWidth,
-            height: widget.dropdownHeight,
-            padding: widget.dropdownPadding,
-            decoration: widget.dropdownBD,
-            child: Align(
-              alignment: widget.dropdownAlign,
-              child: widget.isDropdownIconLabel
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      verticalDirection: VerticalDirection.down,
-                      children: [
-                        Expanded(
-                          child: SizeTransition(
-                            sizeFactor: textWidth,
-                            axisAlignment: -1,
-                            child: Row(
-                              mainAxisAlignment: widget.dropdownMainAxis,
-                              children: [
-                                if (widget.isDropdownLabel)
-                                  Flexible(
-                                    child: Container(
-                                      child: Text(
-                                        selectedItem['label'] ??
-                                            widget.placeholder,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: selectedItem['label'] != null
-                                            ? widget.dropdownTS
-                                            : widget.placeholderTS,
+      child: GestureDetector(
+        onTap: () {
+          openDropdown();
+        },
+        child: Stack(
+          children: [
+            Container(
+              key: inputKey,
+              width: widget.dropdownWidth,
+              height: widget.dropdownHeight,
+              padding: widget.dropdownPadding,
+              decoration: widget.dropdownBD,
+              child: Align(
+                alignment: widget.dropdownAlign,
+                child: widget.isDropdownIconLabel
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        verticalDirection: VerticalDirection.down,
+                        children: [
+                          Expanded(
+                            child: SizeTransition(
+                              sizeFactor: textWidth,
+                              axisAlignment: -1,
+                              child: Row(
+                                mainAxisAlignment: widget.dropdownMainAxis,
+                                children: [
+                                  if (widget.isDropdownLabel)
+                                    Flexible(
+                                      child: Container(
+                                        child: Text(
+                                          selectedItem['label'] ??
+                                              widget.placeholder,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: selectedItem['label'] != null
+                                              ? widget.dropdownTS
+                                              : widget.placeholderTS,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                if (widget.isDropdownLabel)
-                                  SizedBox(
-                                    width: widget.labelIconGap,
-                                  ),
-                                if (selectedItem['icon'] != null)
-                                  selectedItem['icon'] as Widget,
-                              ].isReverse(widget.dropdownItemReverse),
+                                  if (widget.isDropdownLabel)
+                                    SizedBox(
+                                      width: widget.labelIconGap,
+                                    ),
+                                  if (selectedItem['icon'] != null)
+                                    selectedItem['icon'] as Widget,
+                                ].isReverse(widget.dropdownItemReverse),
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          width: widget.dropdownIconLeftGap,
-                        ),
-                        widget.dropdownIconRotation
-                            ? rotationIcon()
-                            : widget.dropdownIcon
-                      ].isReverse(widget.dropdownReverse),
-                    )
-                  : rotationIcon(),
+                          SizedBox(
+                            width: widget.dropdownIconLeftGap,
+                          ),
+                          widget.dropdownIconRotation
+                              ? rotationIcon()
+                              : widget.dropdownIcon
+                        ].isReverse(widget.dropdownReverse),
+                      )
+                    : rotationIcon(),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

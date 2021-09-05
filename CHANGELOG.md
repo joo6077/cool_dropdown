@@ -25,3 +25,7 @@
 ## [1.1.0] - 2021.09.04
 
 - Bug fixed: When user tap Android back button, close the dropdown when it's opened.
+
+## [1.2.0] - 2021.09.05
+
+- Bug fixed: When user tap Android back button on pop screen, close the dropdown when it's opened.

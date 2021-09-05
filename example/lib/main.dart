@@ -101,6 +101,15 @@ class _MyAppState extends State<MyApp> {
                 onChange: (selectedItem) {
                   print(selectedItem);
                 },
+                dropdownIcon: Container(
+                  width: 10,
+                  height: 10,
+                  child: SvgPicture.asset(
+                    'assets/dropdown-arrow.svg',
+                    semanticsLabel: 'Acme Logo',
+                    color: Colors.grey.withOpacity(0.7),
+                  ),
+                ),
                 // dropdownBoxBD: BoxDecoration(
                 //     color: Colors.white, border: Border.all(width: 20)),
               ),
@@ -119,6 +128,15 @@ class _MyAppState extends State<MyApp> {
                 dropdownItemMainAxis: MainAxisAlignment.start,
                 dropdownMainAxis: MainAxisAlignment.start,
                 labelIconGap: 20,
+                dropdownIcon: Container(
+                  width: 10,
+                  height: 10,
+                  child: SvgPicture.asset(
+                    'assets/dropdown-arrow.svg',
+                    semanticsLabel: 'Acme Logo',
+                    color: Colors.grey.withOpacity(0.7),
+                  ),
+                ),
               ),
             ),
             SizedBox(
@@ -177,3 +195,57 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+
+// Android back button check
+
+
+// import 'package:flutter/material.dart';
+// import 'package:cool_dropdown/cool_dropdown.dart';
+// import 'package:example/other_screen.dart';
+
+// void main() {
+//   runApp(MyApp());
+// }
+
+// class MyApp extends StatefulWidget {
+//   // This widget is the root of your application.
+//   @override
+//   _MyAppState createState() => _MyAppState();
+// }
+
+// class _MyAppState extends State<MyApp> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       home: NewWidget(),
+//       debugShowCheckedModeBanner: false,
+//     );
+//   }
+// }
+
+// class NewWidget extends StatelessWidget {
+//   const NewWidget({
+//     Key key,
+//   }) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: Column(
+//         children: [
+//           Container(
+//             child: CoolDropdown(dropdownList: [
+//               {'label': 'apple', 'value': 'apple'}
+//             ], onChange: (_) {}),
+//           ),
+//           ElevatedButton(
+//               onPressed: () {
+//                 Navigator.push(context,
+//                     MaterialPageRoute(builder: (context) => OtherScreen()));
+//               },
+//               child: Text('click'))
+//         ],
+//       ),
+//     );
+//   }
+// }

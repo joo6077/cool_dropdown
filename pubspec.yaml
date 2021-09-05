@@ -1,6 +1,6 @@
 name: cool_dropdown
 description: Customizable cool dropdown UI ✨ You can customize selected item, BoxDecoration of the dropdownBox, and dropdown input.
-version: 1.1.0
+version: 1.2.0
 homepage: https://github.com/joo6077/cool_dropdown
 
 environment:
@@ -10,7 +10,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_svg: ^0.22.0
 
 dev_dependencies:
   flutter_test:
