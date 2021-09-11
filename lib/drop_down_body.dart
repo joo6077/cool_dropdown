@@ -15,24 +15,24 @@ class DropdownBody extends StatefulWidget {
   Function onChange;
   Function getSelectedItem;
   bool isTriangle;
-  bool isDropdownLabel;
-  bool isDropdownBoxLabel;
+  bool isResultLabel;
+  bool isdropdownLabel;
   late Map selectedItem;
   late Widget dropdownIcon;
   bool isAnimation;
 
   // size
+  double resultWidth;
+  double resultHeight;
   double dropdownWidth;
   double dropdownHeight;
-  double dropdownBoxWidth;
-  double dropdownBoxHeight;
   double dropdownItemHeight;
   double triangleWidth;
   double triangleHeight;
 
   // align
-  Alignment dropdownAlign;
-  String dropdownBoxAlign;
+  Alignment resultAlign;
+  String dropdownAlign;
   Alignment dropdownItemAlign;
   String triangleAlign;
   double triangleLeft;
@@ -41,12 +41,12 @@ class DropdownBody extends StatefulWidget {
 
   // padding
   EdgeInsets dropdownItemPadding;
-  EdgeInsets dropdownBoxPadding;
+  EdgeInsets dropdownPadding;
   EdgeInsets selectedItemPadding;
 
   // style
+  late BoxDecoration resultBD;
   late BoxDecoration dropdownBD;
-  late BoxDecoration dropdownBoxBD;
   late BoxDecoration selectedItemBD;
   late BorderSide triangleBorder;
   late TextStyle selectedItemTS;
@@ -72,21 +72,21 @@ class DropdownBody extends StatefulWidget {
       required this.selectedItem,
       required this.dropdownItemReverse,
       required this.isTriangle,
+      required this.resultWidth,
+      required this.resultHeight,
       required this.dropdownWidth,
       required this.dropdownHeight,
-      required this.dropdownBoxWidth,
-      required this.dropdownBoxHeight,
       required this.dropdownItemHeight,
+      required this.resultAlign,
       required this.dropdownAlign,
-      required this.dropdownBoxAlign,
       required this.triangleAlign,
       required this.dropdownItemAlign,
       required this.dropdownItemMainAxis,
       required this.dropdownItemPadding,
-      required this.dropdownBoxPadding,
+      required this.dropdownPadding,
       required this.selectedItemPadding,
+      required this.resultBD,
       required this.dropdownBD,
-      required this.dropdownBoxBD,
       required this.selectedItemBD,
       required this.selectedItemTS,
       required this.unselectedItemTS,
@@ -98,9 +98,9 @@ class DropdownBody extends StatefulWidget {
       required this.triangleWidth,
       required this.triangleHeight,
       required this.isAnimation,
-      required this.isDropdownLabel,
+      required this.isResultLabel,
       required this.bodyContext,
-      required this.isDropdownBoxLabel,
+      required this.isdropdownLabel,
       triangleBorder,
       required this.triangleLeft}) {
     // dropdown list 초기화
@@ -108,15 +108,15 @@ class DropdownBody extends StatefulWidget {
       this.dropdownIsSelected.add(false);
     }
     // 삼각형 border 셋팅
-    this.triangleBorder = this.dropdownBoxBD.border != null
-        ? this.dropdownBoxBD.border!.top
+    this.triangleBorder = this.dropdownBD.border != null
+        ? this.dropdownBD.border!.top
         : BorderSide(
             color: Colors.transparent,
             width: 0,
             style: BorderStyle.none,
           );
     // 그림자 셋팅
-    triangleBoxShadows = this.dropdownBoxBD.boxShadow ?? [];
+    triangleBoxShadows = this.dropdownBD.boxShadow ?? [];
     // screenHeight 셋팅
     this.screenHeight = MediaQuery.of(this.bodyContext).size.height;
   }
@@ -171,13 +171,13 @@ class DropdownBodyState extends State<DropdownBody>
     dynamic inputBox = widget.inputKey.currentContext!.findRenderObject();
     Offset inputPosition = inputBox!.localToGlobal(Offset.zero);
 
-    double actualBoxHeight = widget.dropdownBoxHeight +
-        widget.dropdownBoxPadding.top +
-        widget.dropdownBoxPadding.bottom;
+    double actualBoxHeight = widget.dropdownHeight +
+        widget.dropdownPadding.top +
+        widget.dropdownPadding.bottom;
     double inputCenterPosition =
         inputPosition.dy + (inputBox.size.height * 0.5);
     double sidePadding =
-        widget.dropdownBoxPadding.right + widget.dropdownBoxPadding.left;
+        widget.dropdownPadding.right + widget.dropdownPadding.left;
     isTop = (inputCenterPosition < widget.screenHeight * 0.5);
 
     if (isTop) {
@@ -189,11 +189,11 @@ class DropdownBodyState extends State<DropdownBody>
           inputPosition: inputPosition,
           actualBoxHeight: actualBoxHeight);
       triangleOffset = setTrianglePosition(
-          dropdownBoxOffset: dropdownOffset, sidePadding: sidePadding);
+          dropdownOffset: dropdownOffset, sidePadding: sidePadding);
 
       if (widget.screenHeight < actualBoxHeight + dropdownOffset.dy) {
         setState(() {
-          widget.dropdownBoxHeight =
+          widget.dropdownHeight =
               widget.screenHeight - dropdownOffset.dy - 10;
         });
       }
@@ -206,9 +206,9 @@ class DropdownBodyState extends State<DropdownBody>
           inputPosition: inputPosition,
           actualBoxHeight: actualBoxHeight);
       Offset bottomOffset = dropdownOffset +
-          Offset(0, widget.dropdownBoxHeight + widget.triangleHeight);
+          Offset(0, widget.dropdownHeight + widget.triangleHeight);
       triangleOffset = setTrianglePosition(
-          dropdownBoxOffset: bottomOffset, sidePadding: sidePadding);
+          dropdownOffset: bottomOffset, sidePadding: sidePadding);
       setState(() {
         // triangle upsideDown
         upsideDown = true;
@@ -216,8 +216,8 @@ class DropdownBodyState extends State<DropdownBody>
             (widget.screenHeight - inputPosition.dy) -
             widget.gap -
             10;
-        if (widget.dropdownBoxHeight > extraHeight) {
-          widget.dropdownBoxHeight = extraHeight;
+        if (widget.dropdownHeight > extraHeight) {
+          widget.dropdownHeight = extraHeight;
           dropdownOffset = Offset(dropdownOffset.dx, 10);
         }
       });
@@ -225,7 +225,7 @@ class DropdownBodyState extends State<DropdownBody>
   }
 
   void setAnimation() {
-    // dropdownBox height
+    // dropdown height
     _animationController = AnimationController(
       duration: au.isAnimation(
           status: widget.isAnimation, duration: Duration(milliseconds: 100)),
@@ -239,7 +239,7 @@ class DropdownBodyState extends State<DropdownBody>
     Animation<double> curve =
         CurvedAnimation(parent: _animationController, curve: Curves.easeIn);
     animateHeight =
-        Tween<double>(begin: 0, end: widget.dropdownBoxHeight).animate(curve);
+        Tween<double>(begin: 0, end: widget.dropdownHeight).animate(curve);
     triangleAnimation = CurvedAnimation(
       parent: _triangleController,
       curve: Curves.easeIn,
@@ -283,7 +283,7 @@ class DropdownBodyState extends State<DropdownBody>
                     widget.dropdownList.length) +
                 (widget.dropdownItemGap * (widget.dropdownList.length - 1)) +
                 widget.dropdownItemTopGap) -
-            widget.dropdownBoxHeight +
+            widget.dropdownHeight +
             widget.dropdownItemBottomGap;
         if (currentIndex == 0) {
           scrollPosition = 0;
@@ -291,7 +291,7 @@ class DropdownBodyState extends State<DropdownBody>
         if (overScrollPosition < scrollPosition) {
           scrollPosition = overScrollPosition;
         }
-        if (totalHeight < widget.dropdownBoxHeight) {
+        if (totalHeight < widget.dropdownHeight) {
           scrollPosition = 0;
         }
         _scrollController.animateTo(scrollPosition,
@@ -338,23 +338,23 @@ class DropdownBodyState extends State<DropdownBody>
       required double actualBoxHeight}) {
     double value = 0;
 
-    switch (widget.dropdownBoxAlign.toLowerCase()) {
+    switch (widget.dropdownAlign.toLowerCase()) {
       case 'left':
         value = 0;
         break;
       case 'right':
         value = inputBox.size.width -
-            (widget.dropdownBoxWidth + sidePadding) -
+            (widget.dropdownWidth + sidePadding) -
             widget.triangleBorder.width * 2;
         break;
       case 'center':
         value =
-            (inputBox.size.width - (widget.dropdownBoxWidth + sidePadding)) *
+            (inputBox.size.width - (widget.dropdownWidth + sidePadding)) *
                     0.5 -
                 widget.triangleBorder.width;
         break;
       default:
-        throw 'type of dropdownBoxAlign has to be String.(right, left, center)';
+        throw 'type of dropdownAlign has to be String.(right, left, center)';
     }
     return Offset(
         inputPosition.dx + value,
@@ -364,7 +364,7 @@ class DropdownBodyState extends State<DropdownBody>
   }
 
   Offset setTrianglePosition(
-      {required Offset dropdownBoxOffset, required double sidePadding}) {
+      {required Offset dropdownOffset, required double sidePadding}) {
     double value = 0;
 
     switch (widget.triangleAlign.toLowerCase()) {
@@ -372,12 +372,12 @@ class DropdownBodyState extends State<DropdownBody>
         value = widget.triangleBorder.width;
         break;
       case 'right':
-        value = (widget.dropdownBoxWidth + sidePadding) -
+        value = (widget.dropdownWidth + sidePadding) -
             widget.triangleWidth -
             widget.triangleBorder.width;
         break;
       case 'center':
-        value = (widget.dropdownBoxWidth + sidePadding - widget.triangleWidth) *
+        value = (widget.dropdownWidth + sidePadding - widget.triangleWidth) *
                 0.5 +
             widget.triangleBorder.width;
         break;
@@ -385,7 +385,7 @@ class DropdownBodyState extends State<DropdownBody>
         throw 'type of triangleAlign has to be String.(right, left, center)';
     }
 
-    return Offset(dropdownBoxOffset.dx + value, dropdownBoxOffset.dy);
+    return Offset(dropdownOffset.dx + value, dropdownOffset.dy);
   }
 
   void closeAnimation() {}
@@ -454,17 +454,17 @@ class DropdownBodyState extends State<DropdownBody>
               top: dropdownOffset.dy,
               left: dropdownOffset.dx,
               child: Container(
-                decoration: widget.dropdownBoxBD,
-                padding: widget.dropdownBoxPadding,
+                decoration: widget.dropdownBD,
+                padding: widget.dropdownPadding,
                 child: ClipRRect(
-                  borderRadius: widget.dropdownBoxBD.borderRadius != null
-                      ? widget.dropdownBoxBD.borderRadius as BorderRadius
+                  borderRadius: widget.dropdownBD.borderRadius != null
+                      ? widget.dropdownBD.borderRadius as BorderRadius
                       : BorderRadius.zero,
                   child: AnimatedBuilder(
                     animation: _animationController,
                     builder: (BuildContext context, Widget? _) {
                       return Container(
-                          width: widget.dropdownBoxWidth,
+                          width: widget.dropdownWidth,
                           height: animateHeight.value,
                           child: ListView.builder(
                               padding: EdgeInsets.zero,
@@ -525,7 +525,7 @@ class DropdownBodyState extends State<DropdownBody>
                                               mainAxisAlignment:
                                                   widget.dropdownItemMainAxis,
                                               children: [
-                                                if (widget.isDropdownBoxLabel)
+                                                if (widget.isdropdownLabel)
                                                   DefaultTextStyleTransition(
                                                     child: Flexible(
                                                       child: Container(
@@ -541,7 +541,7 @@ class DropdownBodyState extends State<DropdownBody>
                                                         .animate(_DCController[
                                                             index]),
                                                   ),
-                                                if (widget.isDropdownBoxLabel)
+                                                if (widget.isdropdownLabel)
                                                   SizedBox(
                                                     width: widget.labelIconGap,
                                                   ),
@@ -621,10 +621,10 @@ class DropdownBodyState extends State<DropdownBody>
                 top: dropdownOffset.dy,
                 left: dropdownOffset.dx,
                 child: Container(
-                  width: widget.dropdownBoxWidth +
-                      widget.dropdownBoxPadding.right +
-                      widget.dropdownBoxPadding.left,
-                  height: widget.dropdownBoxHeight,
+                  width: widget.dropdownWidth +
+                      widget.dropdownPadding.right +
+                      widget.dropdownPadding.left,
+                  height: widget.dropdownHeight,
                   color: Colors.transparent,
                 ),
               ),
@@ -678,7 +678,7 @@ class DropdownBodyState extends State<DropdownBody>
                     height: widget.triangleHeight,
                     child: CustomPaint(
                       painter: TrianglePainter(
-                        strokeColor: widget.dropdownBoxBD.color as Color,
+                        strokeColor: widget.dropdownBD.color as Color,
                         strokeWidth: 1,
                         paintingStyle: PaintingStyle.fill,
                         upsideDown: upsideDown,

@@ -1,15 +1,15 @@
 # Cool drop down
 <div align="center">
-<a href="https://pub.dev/packages/cool_dropdown/changelog" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/pub-v1.1.0-orange.svg"></a>
+<a href="https://pub.dev/packages/cool_dropdown/changelog" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/pub-v1.3.0-orange.svg"></a>
 <a href="https://pub.dev/packages/cool_dropdown" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/build-passing-6FCC76.svg"></a>
 <a href="https://opensource.org/licenses/MIT" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/license-MIT-blueviolet.svg"></a>
 <a href="https://flutter.dev/" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/platform-flutter-ff69b4.svg"></a>
 </div>
 
 ## Features
- - All customizable css(font, fontsize. color, icon, dropdown box decoration...)
+ - All customizable css(font, fontsize. color, icon, result, dropdown decoration...)
  - Auto scroll to selected item position
- - dropdownBox is automatically placed. It's based on the position of the dropdown on the screen.(top/bottom)
+ - dropdown is automatically placed. It's based on the position of the result on the screen.(top/bottom)
  - Support triangle arrow
  - Support overflow ellipsis
  - "COOL"
@@ -91,32 +91,32 @@ List dropdownItemList = [
 ];
 ```
 
-## Dropdown options
+## Result options(dropdown<v1.2.0> -> result<v1.3.0>)
 | option                | Type          | Default | Description                          |
 |---------------------|---------------|--------:|--------------------------------------|
-| dropdownWidth       | double        | 220     |                                      |
-| dropdownHeight      | double        | 50      |                                      |
-| dropdownBD          | BoxDecoration |below code| BoxDeocoration of the dropdown           |
-| dropdownTS          | TextStyle     |below code| TextStyle of the dropdown                |
-| dropdownPadding     | EdgeInsets    |below code| Padding of the dropdown                  |
-| dropdownAlign       | Alignment     |below code| Alignment of the dropdown in row         |
-| dropdownMainAxis       | MainAxisAlignment     | MainAxisAlignment.start| MainAxisAlignment of the dropdown in row         |
-| dropdownReverse     | bool          | false   | Reverse order of the dropdown by row |
+| resultWidth       | double        | 220     |                                      |
+| resultHeight      | double        | 50      |                                      |
+| resultBD          | BoxDecoration |below code| BoxDeocoration of the result           |
+| resultTS          | TextStyle     |below code| TextStyle of the result                |
+| resultPadding     | EdgeInsets    |below code| Padding of the result                  |
+| resultAlign       | Alignment     |below code| Alignment of the result in row         |
+| resultMainAxis       | MainAxisAlignment     | MainAxisAlignment.start| MainAxisAlignment of the result in row         |
+| resultReverse     | bool          | false   | Reverse order of the result by row |
 | labelIconGap        | double        | 10      | Gap between the label and icon           |
-| isDropdownLabel        | bool        | true      | Show/hide the label of the dropdown          |
-| isDropdownBoxLabel        | bool        | true      | Show/hide the label of the dropdownBox         |
-| isDropdownIconLabel        | bool        | true      | Show/hide the label and icon of the dropdown          |
-| dropdownIconLeftGap | double        | 10      | Gap left side of the dropdown and icon   |
-| dropdownIcon        | Widget        |below code| Icon of the dropdown at right            |
-| dropdownIconRotation| bool        |true| Rotation animation of the dropdownIcon             |
-| dropdownIconRotationValue| double        |0.5| Rotation value of the dropdownIcon animation |
+| isResultLabel        | bool        | true      | Show/hide the label of the result          |
+| isResultBoxLabel        | bool        | true      | Show/hide the label of the dropdown         |
+| isResultIconLabel        | bool        | true      | Show/hide the label and icon of the result          |
+| resultIconLeftGap | double        | 10      | Gap left side of the result and icon   |
+| resultIcon        | Widget        |below code| Icon of the result at right            |
+| resultIconRotation| bool        |true| Rotation animation of the resultIcon             |
+| resultIconRotationValue| double        |0.5| Rotation value of the resultIcon animation |
 | placeholder         | String        | null    |                                      |
 | placeholderTS       | TextStyle     |below code|                                      |
 | defaultValue        | Map           | null    | Default selected value               |
-| gap        | double           | 30    | Gap between the dropdown and dropdownBox               |
+| gap        | double           | 30    | Gap between the result and dropdown               |
 
 ```dart
-dropdownBD = BoxDecoration(
+resultBD = BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
           boxShadow: [
@@ -130,34 +130,34 @@ dropdownBD = BoxDecoration(
         );
 ```
 ```dart
-dropdownTS = TextStyle(
+resultTS = TextStyle(
             fontSize: 20,
             color: Colors.black,
           );
 ```
 ```dart
-dropdownPadding = const EdgeInsets.only(left: 10, right: 10);
+resultPadding = const EdgeInsets.only(left: 10, right: 10);
 ```
 ```dart
-dropdownAlign = Alignment.centerLeft;
+resultAlign = Alignment.centerLeft;
 ```
 ```dart
 placeholderTS = TextStyle(color: Colors.grey.withOpacity(0.7), fontSize: 20);
 ```
 
-## DropdownBox & triangle options
+## Dropdown & triangle options(dropdownBox<v1.2.0> -> dropdown<v1.3.0>)
 | option                  | Type          | Default    | Description                                           |
 |-----------------------|---------------|-----------:|-------------------------------------------------------|
-| dropdownBoxWidth      | double        | 200        |                                                       |
-| dropdownBoxHeight     | double        | 300        |                                                       |
-| dropdownBoxBD         | BoxDecoration | below code | BoxDecoration of the dropdownBox                      |
-| dropdownBoxPadding    | EdgeInsets    | below code | Padding of the dropdownBox                            |
-| dropdownBoxAlign      | String        | 'center'   | Only 'left', 'center', 'right' available              |
-| dropdownItemHeight    | double        | 50         | Height of items in the dropdownBox                    |
-| dropdownItemGap       | double        | 5          | Gaps between items in the dropdownBox                 |
-| dropdownItemTopGap    | double        | 10         | Gap between the first item and the dropdownBox top    |
-| dropdownItemBottomGap | double        | 10         | Gap between the last item and the dropdownBox bottom  |
-| dropdownItemPadding   | EdgeInsets    | below code | Padding of dropdownBox                                |
+| dropdownWidth      | double        | 200        |                                                       |
+| dropdownHeight     | double        | 300        |                                                       |
+| dropdownBD         | BoxDecoration | below code | BoxDecoration of the dropdown                      |
+| dropdownPadding    | EdgeInsets    | below code | Padding of the dropdown                            |
+| dropdownAlign      | String        | 'center'   | Only 'left', 'center', 'right' available              |
+| dropdownItemHeight    | double        | 50         | Height of items in the dropdown                    |
+| dropdownItemGap       | double        | 5          | Gaps between items in the dropdown                 |
+| dropdownItemTopGap    | double        | 10         | Gap between the first item and the dropdown top    |
+| dropdownItemBottomGap | double        | 10         | Gap between the last item and the dropdown bottom  |
+| dropdownItemPadding   | EdgeInsets    | below code | Padding of dropdown                                |
 | dropdownItemReverse   | bool          | false      | reverse order(label, icon) of the dropdownItem by row |
 | dropdownItemMainAxis       | MainAxisAlignment     | MainAxisAlignment.start| MainAxisAlignment of dropdown in row         |
 | isTriangle            | bool          | true       | show/hide triangle arrow                              |
@@ -171,7 +171,7 @@ placeholderTS = TextStyle(color: Colors.grey.withOpacity(0.7), fontSize: 20);
 | unselectedItemTS      | TextStyle     | below code | TextStyle of unselectedItem                           |
           
 ```dart
-dropdownBoxBD = BoxDecoration(
+dropdownBD = BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: Colors.white,
           boxShadow: [
@@ -185,7 +185,7 @@ dropdownBoxBD = BoxDecoration(
         );
 ```
 ```dart
-dropdownBoxPadding = const EdgeInsets.only(left: 10, right: 10);
+dropdownPadding = const EdgeInsets.only(left: 10, right: 10);
 ```
 ```dart
 dropdownItemPadding = const EdgeInsets.only(left: 10, right: 10);

@@ -101,7 +101,7 @@ class _MyAppState extends State<MyApp> {
                 onChange: (selectedItem) {
                   print(selectedItem);
                 },
-                dropdownIcon: Container(
+                resultIcon: Container(
                   width: 10,
                   height: 10,
                   child: SvgPicture.asset(
@@ -110,7 +110,7 @@ class _MyAppState extends State<MyApp> {
                     color: Colors.grey.withOpacity(0.7),
                   ),
                 ),
-                // dropdownBoxBD: BoxDecoration(
+                // dropdownBD: BoxDecoration(
                 //     color: Colors.white, border: Border.all(width: 20)),
               ),
             ),
@@ -119,16 +119,16 @@ class _MyAppState extends State<MyApp> {
             ),
             Center(
               child: CoolDropdown(
-                dropdownWidth: 70,
-                // dropdownIcon: Container(), // if you don't want to use Icon you can set empty Container
+                resultWidth: 70,
+                // resultIcon: Container(), // if you don't want to use Icon you can set empty Container
                 dropdownList: dropdownItemList,
-                isDropdownLabel: false,
+                isResultLabel: false,
                 onChange: (a) {},
                 dropdownItemReverse: true,
                 dropdownItemMainAxis: MainAxisAlignment.start,
-                dropdownMainAxis: MainAxisAlignment.start,
+                resultMainAxis: MainAxisAlignment.start,
                 labelIconGap: 20,
-                dropdownIcon: Container(
+                resultIcon: Container(
                   width: 10,
                   height: 10,
                   child: SvgPicture.asset(
@@ -147,13 +147,13 @@ class _MyAppState extends State<MyApp> {
                 dropdownList: pokemonsMap,
                 dropdownItemPadding: EdgeInsets.zero,
                 onChange: (dropdownItem) {},
-                dropdownHeight: 50,
+                resultHeight: 50,
+                resultWidth: 50,
                 dropdownWidth: 50,
-                dropdownBoxWidth: 50,
-                dropdownBoxHeight: 200,
+                dropdownHeight: 200,
                 dropdownItemHeight: 30,
                 dropdownItemGap: 10,
-                dropdownIcon: Container(
+                resultIcon: Container(
                   width: 25,
                   height: 25,
                   child: Container(
@@ -164,16 +164,16 @@ class _MyAppState extends State<MyApp> {
                     ),
                   ),
                 ),
-                dropdownIconLeftGap: 0,
+                resultIconLeftGap: 0,
+                resultPadding: EdgeInsets.zero,
+                resultIconRotation: true,
+                resultIconRotationValue: 1,
+                isdropdownLabel: false,
+                isResultLabel: false,
+                isResultIconLabel: false,
                 dropdownPadding: EdgeInsets.zero,
-                dropdownIconRotation: true,
-                dropdownIconRotationValue: 1,
-                isDropdownBoxLabel: false,
-                isDropdownLabel: false,
-                isDropdownIconLabel: false,
-                dropdownBoxPadding: EdgeInsets.zero,
-                dropdownAlign: Alignment.center,
-                dropdownMainAxis: MainAxisAlignment.center,
+                resultAlign: Alignment.center,
+                resultMainAxis: MainAxisAlignment.center,
                 dropdownItemMainAxis: MainAxisAlignment.center,
                 selectedItemBD: BoxDecoration(
                     border: Border(
@@ -182,7 +182,7 @@ class _MyAppState extends State<MyApp> {
                 triangleWidth: 10,
                 triangleHeight: 10,
                 triangleAlign: 'center',
-                dropdownBoxAlign: 'center',
+                dropdownAlign: 'center',
                 gap: 20,
               ),
             ),
