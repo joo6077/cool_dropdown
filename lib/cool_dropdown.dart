@@ -6,6 +6,7 @@ import 'package:cool_dropdown/utils/extension_util.dart';
 import 'package:cool_dropdown/drop_down_body.dart';
 
 class CoolDropdown extends StatefulWidget {
+  late Key key;
   List dropdownList;
   Function onChange;
   String placeholder;
@@ -14,7 +15,7 @@ class CoolDropdown extends StatefulWidget {
   bool isAnimation;
   bool isResultIconLabel;
   bool isResultLabel;
-  bool isdropdownLabel; // late
+  bool isDropdownLabel; // late
   bool resultIconRotation;
   late Widget resultIcon;
   double resultIconRotationValue;
@@ -62,52 +63,55 @@ class CoolDropdown extends StatefulWidget {
   double dropdownItemBottomGap;
   double resultIconLeftGap;
 
-  CoolDropdown(
-      {required this.dropdownList,
-      required this.onChange,
-      resultIcon,
-      placeholderTS,
-      this.dropdownItemReverse = false,
-      this.resultReverse = false,
-      this.resultIconRotation = true,
-      this.isTriangle = true,
-      this.isResultLabel = true,
-      this.placeholder = '',
-      this.resultWidth = 220,
-      this.resultHeight = 50,
-      this.dropdownWidth = 200,
-      this.dropdownHeight = 300,
-      this.dropdownItemHeight = 50,
-      this.resultAlign = Alignment.centerLeft,
-      this.dropdownAlign = 'center',
-      this.triangleAlign = 'center',
-      this.dropdownItemAlign = Alignment.centerLeft,
-      this.dropdownItemMainAxis = MainAxisAlignment.spaceBetween,
-      this.resultMainAxis = MainAxisAlignment.spaceBetween,
-      this.resultPadding = const EdgeInsets.only(left: 10, right: 10),
-      this.dropdownItemPadding = const EdgeInsets.only(left: 10, right: 10),
-      this.dropdownPadding = const EdgeInsets.only(left: 10, right: 10),
-      this.selectedItemPadding = const EdgeInsets.only(left: 10, right: 10),
-      resultBD,
-      dropdownBD,
-      selectedItemBD,
-      selectedItemTS,
-      unselectedItemTS,
-      resultTS,
-      this.labelIconGap = 10,
-      this.dropdownItemGap = 5,
-      this.dropdownItemTopGap = 10,
-      this.dropdownItemBottomGap = 10,
-      this.resultIconLeftGap = 10,
-      this.gap = 30,
-      this.triangleWidth = 20,
-      this.triangleHeight = 20,
-      this.triangleLeft = 0,
-      this.isAnimation = true,
-      this.isResultIconLabel = true,
-      this.resultIconRotationValue = 0.5,
-      this.isdropdownLabel = true,
-      defaultValue}) {
+  CoolDropdown({
+    required this.dropdownList,
+    required this.onChange,
+    resultIcon,
+    placeholderTS,
+    this.dropdownItemReverse = false,
+    this.resultReverse = false,
+    this.resultIconRotation = true,
+    this.isTriangle = true,
+    this.isResultLabel = true,
+    this.placeholder = '',
+    this.resultWidth = 220,
+    this.resultHeight = 50,
+    this.dropdownWidth = 200,
+    this.dropdownHeight = 300,
+    this.dropdownItemHeight = 50,
+    this.resultAlign = Alignment.centerLeft,
+    this.dropdownAlign = 'center',
+    this.triangleAlign = 'center',
+    this.dropdownItemAlign = Alignment.centerLeft,
+    this.dropdownItemMainAxis = MainAxisAlignment.spaceBetween,
+    this.resultMainAxis = MainAxisAlignment.spaceBetween,
+    this.resultPadding = const EdgeInsets.only(left: 10, right: 10),
+    this.dropdownItemPadding = const EdgeInsets.only(left: 10, right: 10),
+    this.dropdownPadding = const EdgeInsets.only(left: 10, right: 10),
+    this.selectedItemPadding = const EdgeInsets.only(left: 10, right: 10),
+    resultBD,
+    dropdownBD,
+    selectedItemBD,
+    selectedItemTS,
+    unselectedItemTS,
+    resultTS,
+    this.labelIconGap = 10,
+    this.dropdownItemGap = 5,
+    this.dropdownItemTopGap = 10,
+    this.dropdownItemBottomGap = 10,
+    this.resultIconLeftGap = 10,
+    this.gap = 30,
+    this.triangleWidth = 20,
+    this.triangleHeight = 20,
+    this.triangleLeft = 0,
+    this.isAnimation = true,
+    this.isResultIconLabel = true,
+    this.resultIconRotationValue = 0.5,
+    this.isDropdownLabel = true,
+    defaultValue,
+    key,
+  }) {
+    key = this.key;
     // 기본값 셋팅
     if (defaultValue != null) {
       print('.. $defaultValue');
@@ -268,7 +272,7 @@ class _CoolDropdownState extends State<CoolDropdown>
         isAnimation: widget.isAnimation,
         dropdownItemMainAxis: widget.dropdownItemMainAxis,
         bodyContext: context,
-        isdropdownLabel: widget.isdropdownLabel,
+        isDropdownLabel: widget.isDropdownLabel,
       ),
     );
   }
@@ -288,6 +292,11 @@ class _CoolDropdownState extends State<CoolDropdown>
       curve: Curves.fastOutSlowIn,
     );
     // placeholder 셋팅
+
+    super.initState();
+  }
+
+  void setDefaultValue() {
     setState(() {
       sizeController = AnimationController(
         vsync: this,
@@ -300,7 +309,6 @@ class _CoolDropdownState extends State<CoolDropdown>
       this.selectedItem = widget.defaultValue;
       sizeController.forward();
     });
-    super.initState();
   }
 
   RotationTransition rotationIcon() {

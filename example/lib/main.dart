@@ -168,7 +168,7 @@ class _MyAppState extends State<MyApp> {
                 resultPadding: EdgeInsets.zero,
                 resultIconRotation: true,
                 resultIconRotationValue: 1,
-                isdropdownLabel: false,
+                isDropdownLabel: false,
                 isResultLabel: false,
                 isResultIconLabel: false,
                 dropdownPadding: EdgeInsets.zero,
@@ -197,7 +197,6 @@ class _MyAppState extends State<MyApp> {
 }
 
 // Android back button check
-
 
 // import 'package:flutter/material.dart';
 // import 'package:cool_dropdown/cool_dropdown.dart';

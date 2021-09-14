@@ -29,6 +29,11 @@
 ## [1.2.0] - 2021.09.05
 
 - Bug fixed: When user tap Android back button on pop screen, close the dropdown when it's opened.
+
 ## [1.3.0] - 2021.09.11
 
 - Options' names are changed. (dropdown -> result, dropdownBox -> dropdown)
+
+## [1.3.1] - 2021.09.14
+
+- Add 'key' property

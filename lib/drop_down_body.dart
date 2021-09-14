@@ -16,7 +16,7 @@ class DropdownBody extends StatefulWidget {
   Function getSelectedItem;
   bool isTriangle;
   bool isResultLabel;
-  bool isdropdownLabel;
+  bool isDropdownLabel;
   late Map selectedItem;
   late Widget dropdownIcon;
   bool isAnimation;
@@ -100,7 +100,7 @@ class DropdownBody extends StatefulWidget {
       required this.isAnimation,
       required this.isResultLabel,
       required this.bodyContext,
-      required this.isdropdownLabel,
+      required this.isDropdownLabel,
       triangleBorder,
       required this.triangleLeft}) {
     // dropdown list 초기화
@@ -193,8 +193,7 @@ class DropdownBodyState extends State<DropdownBody>
 
       if (widget.screenHeight < actualBoxHeight + dropdownOffset.dy) {
         setState(() {
-          widget.dropdownHeight =
-              widget.screenHeight - dropdownOffset.dy - 10;
+          widget.dropdownHeight = widget.screenHeight - dropdownOffset.dy - 10;
         });
       }
     } else {
@@ -349,8 +348,7 @@ class DropdownBodyState extends State<DropdownBody>
         break;
       case 'center':
         value =
-            (inputBox.size.width - (widget.dropdownWidth + sidePadding)) *
-                    0.5 -
+            (inputBox.size.width - (widget.dropdownWidth + sidePadding)) * 0.5 -
                 widget.triangleBorder.width;
         break;
       default:
@@ -377,9 +375,9 @@ class DropdownBodyState extends State<DropdownBody>
             widget.triangleBorder.width;
         break;
       case 'center':
-        value = (widget.dropdownWidth + sidePadding - widget.triangleWidth) *
-                0.5 +
-            widget.triangleBorder.width;
+        value =
+            (widget.dropdownWidth + sidePadding - widget.triangleWidth) * 0.5 +
+                widget.triangleBorder.width;
         break;
       default:
         throw 'type of triangleAlign has to be String.(right, left, center)';
@@ -525,7 +523,7 @@ class DropdownBodyState extends State<DropdownBody>
                                               mainAxisAlignment:
                                                   widget.dropdownItemMainAxis,
                                               children: [
-                                                if (widget.isdropdownLabel)
+                                                if (widget.isDropdownLabel)
                                                   DefaultTextStyleTransition(
                                                     child: Flexible(
                                                       child: Container(
@@ -541,7 +539,7 @@ class DropdownBodyState extends State<DropdownBody>
                                                         .animate(_DCController[
                                                             index]),
                                                   ),
-                                                if (widget.isdropdownLabel)
+                                                if (widget.isDropdownLabel)
                                                   SizedBox(
                                                     width: widget.labelIconGap,
                                                   ),
