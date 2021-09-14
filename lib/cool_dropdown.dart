@@ -6,7 +6,6 @@ import 'package:cool_dropdown/utils/extension_util.dart';
 import 'package:cool_dropdown/drop_down_body.dart';
 
 class CoolDropdown extends StatefulWidget {
-  late Key key;
   List dropdownList;
   Function onChange;
   String placeholder;
@@ -109,9 +108,7 @@ class CoolDropdown extends StatefulWidget {
     this.resultIconRotationValue = 0.5,
     this.isDropdownLabel = true,
     defaultValue,
-    key,
   }) {
-    key = this.key;
     // 기본값 셋팅
     if (defaultValue != null) {
       print('.. $defaultValue');
@@ -292,7 +289,7 @@ class _CoolDropdownState extends State<CoolDropdown>
       curve: Curves.fastOutSlowIn,
     );
     // placeholder 셋팅
-
+    setDefaultValue();
     super.initState();
   }
 

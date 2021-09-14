@@ -36,4 +36,8 @@
 
 ## [1.3.1] - 2021.09.14
 
-- Add 'key' property
+- Add 'key' property.
+
+## [1.3.2] - 2021.09.15
+
+- Discard 'key' property, bug fixed: defaultValue doesn't work.
