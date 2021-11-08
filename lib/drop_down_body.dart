@@ -24,7 +24,7 @@ class DropdownBody extends StatefulWidget {
   // size
   double resultWidth;
   double resultHeight;
-  double dropdownWidth;
+  double? dropdownWidth;
   double dropdownHeight;
   double dropdownItemHeight;
   double triangleWidth;
@@ -74,7 +74,7 @@ class DropdownBody extends StatefulWidget {
       required this.isTriangle,
       required this.resultWidth,
       required this.resultHeight,
-      required this.dropdownWidth,
+      this.dropdownWidth,
       required this.dropdownHeight,
       required this.dropdownItemHeight,
       required this.resultAlign,
@@ -119,6 +119,8 @@ class DropdownBody extends StatefulWidget {
     triangleBoxShadows = this.dropdownBD.boxShadow ?? [];
     // screenHeight 셋팅
     this.screenHeight = MediaQuery.of(this.bodyContext).size.height;
+    // dropdownWidth setting
+    this.dropdownWidth = this.dropdownWidth ?? this.resultWidth;
   }
 
   @override
@@ -343,13 +345,13 @@ class DropdownBodyState extends State<DropdownBody>
         break;
       case 'right':
         value = inputBox.size.width -
-            (widget.dropdownWidth + sidePadding) -
+            (widget.dropdownWidth! + sidePadding) -
             widget.triangleBorder.width * 2;
         break;
       case 'center':
-        value =
-            (inputBox.size.width - (widget.dropdownWidth + sidePadding)) * 0.5 -
-                widget.triangleBorder.width;
+        value = (inputBox.size.width - (widget.dropdownWidth! + sidePadding)) *
+                0.5 -
+            widget.triangleBorder.width;
         break;
       default:
         throw 'type of dropdownAlign has to be String.(right, left, center)';
@@ -370,13 +372,13 @@ class DropdownBodyState extends State<DropdownBody>
         value = widget.triangleBorder.width;
         break;
       case 'right':
-        value = (widget.dropdownWidth + sidePadding) -
+        value = (widget.dropdownWidth! + sidePadding) -
             widget.triangleWidth -
             widget.triangleBorder.width;
         break;
       case 'center':
         value =
-            (widget.dropdownWidth + sidePadding - widget.triangleWidth) * 0.5 +
+            (widget.dropdownWidth! + sidePadding - widget.triangleWidth) * 0.5 +
                 widget.triangleBorder.width;
         break;
       default:
@@ -619,7 +621,7 @@ class DropdownBodyState extends State<DropdownBody>
                 top: dropdownOffset.dy,
                 left: dropdownOffset.dx,
                 child: Container(
-                  width: widget.dropdownWidth +
+                  width: widget.dropdownWidth! +
                       widget.dropdownPadding.right +
                       widget.dropdownPadding.left,
                   height: widget.dropdownHeight,

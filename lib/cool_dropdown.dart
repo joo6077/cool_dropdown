@@ -22,7 +22,7 @@ class CoolDropdown extends StatefulWidget {
   // size
   double resultWidth;
   double resultHeight;
-  double dropdownWidth; // late
+  double? dropdownWidth; // late
   double dropdownHeight; // late
   double dropdownItemHeight;
   double triangleWidth;
@@ -75,7 +75,7 @@ class CoolDropdown extends StatefulWidget {
     this.placeholder = '',
     this.resultWidth = 220,
     this.resultHeight = 50,
-    this.dropdownWidth = 200,
+    this.dropdownWidth,
     this.dropdownHeight = 300,
     this.dropdownItemHeight = 50,
     this.resultAlign = Alignment.centerLeft,

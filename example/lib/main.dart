@@ -188,6 +188,12 @@ class _MyAppState extends State<MyApp> {
             ),
             SizedBox(
               height: 400,
+            ),
+            CoolDropdown(
+              dropdownList: pokemonsMap,
+              onChange: (_) {},
+              resultWidth: 500,
+              // dropdownWidth: 300,
             )
           ],
         ),
