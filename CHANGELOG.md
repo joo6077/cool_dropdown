@@ -41,3 +41,9 @@
 ## [1.3.2] - 2021.09.15
 
 - Discard 'key' property, bug fixed: defaultValue doesn't work.
+
+## [1.4.0] - 2021.11.08
+
+- Change the default dropdownWidth 200 -> based on the resultWidth
+- Add new Function to return boolean whether the dropdown open/close. It's called "onOpen"
+- Add iconSize for default dropdown arrow icon

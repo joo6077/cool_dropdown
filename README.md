@@ -1,7 +1,7 @@
 # Cool drop down
 
 <div align="center">
-<a href="https://pub.dev/packages/cool_dropdown/changelog" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/pub-v1.3.2-orange.svg"></a>
+<a href="https://pub.dev/packages/cool_dropdown/changelog" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/pub-v1.4.0-orange.svg"></a>
 <a href="https://pub.dev/packages/cool_dropdown" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/build-passing-6FCC76.svg"></a>
 <a href="https://opensource.org/licenses/MIT" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/license-MIT-blueviolet.svg"></a>
 <a href="https://flutter.dev/" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/platform-flutter-ff69b4.svg"></a>
@@ -70,6 +70,7 @@ CoolDropdown(
 | option       | Type      |  Default | Description                                                                                                                                                                                            |
 | ------------ | --------- | -------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | onChange     | Function  | required | when user selects one of the values, it's triggered. You <span style="color:#333333">must</span> put one parameter in the Function. (ex. onChange: (a) {}).Then, you will get return selectedItem Map. |
+| onOpen       | Function  | null | it returns parameter boolean depending on open/close the dropdown (ex. onOpen: (a) {}). |
 | dropdownList | List<Map> | required | You have to declare a key, "label", all elements of the List                                                                                                                                           |
 | isAnimation  | bool      |     true | turn on/off animation                                                                                                                                                                                  |
 
@@ -107,7 +108,7 @@ List dropdownItemList = [
 | ----------------------- | ----------------- | ----------------------: | ------------------------------------------ |
 | resultWidth             | double            |                     220 |                                            |
 | resultHeight            | double            |                      50 |                                            |
-| resultBD                | BoxDecoration     |              below code | BoxDeocoration of the result               |
+| resultBD                | BoxDecoration     |              below code | BoxDecoration of the result                |
 | resultTS                | TextStyle         |              below code | TextStyle of the result                    |
 | resultPadding           | EdgeInsets        |              below code | Padding of the result                      |
 | resultAlign             | Alignment         |              below code | Alignment of the result in row             |
@@ -118,13 +119,14 @@ List dropdownItemList = [
 | isResultBoxLabel        | bool              |                    true | Show/hide the label of the dropdown        |
 | isResultIconLabel       | bool              |                    true | Show/hide the label and icon of the result |
 | resultIconLeftGap       | double            |                      10 | Gap left side of the result and icon       |
-| resultIcon              | Widget            |              below code | Icon of the result at right                |
+| resultIcon              | Widget            |     dropdown arrow icon | Icon of the result at right                |
 | resultIconRotation      | bool              |                    true | Rotation animation of the resultIcon       |
 | resultIconRotationValue | double            |                     0.5 | Rotation value of the resultIcon animation |
 | placeholder             | String            |                    null |                                            |
 | placeholderTS           | TextStyle         |              below code |                                            |
 | defaultValue            | Map               |                    null | Default selected value                     |
 | gap                     | double            |                      30 | Gap between the result and dropdown        |
+| iconSize                | double            |                      10 | the size of the dropdown arrow icon        |
 
 ```dart
 resultBD = BoxDecoration(
@@ -164,7 +166,7 @@ placeholderTS = TextStyle(color: Colors.grey.withOpacity(0.7), fontSize: 20);
 
 | option                | Type              |                 Default | Description                                           |
 | --------------------- | ----------------- | ----------------------: | ----------------------------------------------------- |
-| dropdownWidth         | double            |                     200 |                                                       |
+| dropdownWidth         | double            |based on the resultWidth |                                                       |
 | dropdownHeight        | double            |                     300 |                                                       |
 | dropdownBD            | BoxDecoration     |              below code | BoxDecoration of the dropdown                         |
 | dropdownPadding       | EdgeInsets        |              below code | Padding of the dropdown                               |

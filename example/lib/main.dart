@@ -101,6 +101,9 @@ class _MyAppState extends State<MyApp> {
                 onChange: (selectedItem) {
                   print(selectedItem);
                 },
+                onOpen: (isOpen) {
+                  print('$isOpen');
+                },
                 resultIcon: Container(
                   width: 10,
                   height: 10,
@@ -127,6 +130,7 @@ class _MyAppState extends State<MyApp> {
                 dropdownItemReverse: true,
                 dropdownItemMainAxis: MainAxisAlignment.start,
                 resultMainAxis: MainAxisAlignment.start,
+                dropdownWidth: 200,
                 labelIconGap: 20,
                 resultIcon: Container(
                   width: 10,
@@ -189,12 +193,6 @@ class _MyAppState extends State<MyApp> {
             SizedBox(
               height: 400,
             ),
-            CoolDropdown(
-              dropdownList: pokemonsMap,
-              onChange: (_) {},
-              resultWidth: 500,
-              // dropdownWidth: 300,
-            )
           ],
         ),
       ),

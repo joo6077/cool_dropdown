@@ -8,6 +8,7 @@ import 'package:cool_dropdown/drop_down_body.dart';
 class CoolDropdown extends StatefulWidget {
   List dropdownList;
   Function onChange;
+  Function? onOpen;
   String placeholder;
   late Map defaultValue;
   bool isTriangle;
@@ -27,6 +28,7 @@ class CoolDropdown extends StatefulWidget {
   double dropdownItemHeight;
   double triangleWidth;
   double triangleHeight;
+  double iconSize;
 
   // align
   Alignment resultAlign;
@@ -65,6 +67,7 @@ class CoolDropdown extends StatefulWidget {
   CoolDropdown({
     required this.dropdownList,
     required this.onChange,
+    this.onOpen,
     resultIcon,
     placeholderTS,
     this.dropdownItemReverse = false,
@@ -107,6 +110,7 @@ class CoolDropdown extends StatefulWidget {
     this.isResultIconLabel = true,
     this.resultIconRotationValue = 0.5,
     this.isDropdownLabel = true,
+    this.iconSize = 10,
     defaultValue,
   }) {
     // 기본값 셋팅
@@ -178,7 +182,16 @@ class CoolDropdown extends StatefulWidget {
     this.placeholderTS = placeholderTS ??
         TextStyle(color: Colors.grey.withOpacity(0.7), fontSize: 20);
     // Icon Container 셋팅
-    this.resultIcon = resultIcon ?? Container();
+    this.resultIcon = resultIcon ??
+        Container(
+          width: this.iconSize,
+          height: this.iconSize,
+          child: CustomPaint(
+            size: Size(
+                this.iconSize * 0.01, (this.iconSize * 0.01 * 1).toDouble()),
+            painter: DropdownArrow(),
+          ),
+        );
   }
 
   @override
@@ -198,8 +211,11 @@ class _CoolDropdownState extends State<CoolDropdown>
   AnimationUtil au = AnimationUtil();
   late bool isOpen = false;
 
-  openDropdown() {
+  void openDropdown() {
     isOpen = true;
+    if (widget.onOpen != null) {
+      widget.onOpen!(isOpen);
+    }
     this._overlayEntry = this._createOverlayEntry();
     Overlay.of(inputKey.currentContext!)!.insert(this._overlayEntry);
     rotationController.forward();
@@ -207,6 +223,9 @@ class _CoolDropdownState extends State<CoolDropdown>
 
   void closeDropdown() {
     isOpen = false;
+    if (widget.onOpen != null) {
+      widget.onOpen!(isOpen);
+    }
     this._overlayEntry.remove();
     rotationController.reverse();
   }
@@ -391,5 +410,77 @@ class _CoolDropdownState extends State<CoolDropdown>
         ),
       ),
     );
+  }
+}
+
+//Copy this CustomPainter code to the Bottom of the File
+class DropdownArrow extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    Path path_0 = Path();
+    path_0.moveTo(size.width * 0.4178592, size.height * 0.7748810);
+    path_0.cubicTo(
+        size.width * 0.4404533,
+        size.height * 0.7974752,
+        size.width * 0.4702912,
+        size.height * 0.8087602,
+        size.width * 0.5001371,
+        size.height * 0.8087602);
+    path_0.cubicTo(
+        size.width * 0.5299831,
+        size.height * 0.8087602,
+        size.width * 0.5598290,
+        size.height * 0.7974752,
+        size.width * 0.5824151,
+        size.height * 0.7748810);
+    path_0.lineTo(size.width * 0.9639590, size.height * 0.3933371);
+    path_0.cubicTo(
+        size.width * 1.008325,
+        size.height * 0.3489715,
+        size.width * 1.013173,
+        size.height * 0.2755667,
+        size.width * 0.9704122,
+        size.height * 0.2295878);
+    path_0.cubicTo(
+        size.width * 0.9252400,
+        size.height * 0.1803824,
+        size.width * 0.8486085,
+        size.height * 0.1787691,
+        size.width * 0.8018311,
+        size.height * 0.2255546);
+    path_0.lineTo(size.width * 0.5566105, size.height * 0.4699685);
+    path_0.cubicTo(
+        size.width * 0.5251593,
+        size.height * 0.5014278,
+        size.width * 0.4743325,
+        size.height * 0.5014278,
+        size.width * 0.4428733,
+        size.height * 0.4699685);
+    path_0.lineTo(size.width * 0.1984593, size.height * 0.2255546);
+    path_0.cubicTo(
+        size.width * 0.1516657,
+        size.height * 0.1787691,
+        size.width * 0.07503428,
+        size.height * 0.1795757,
+        size.width * 0.02987013,
+        size.height * 0.2295878);
+    path_0.cubicTo(
+        size.width * -0.01288215,
+        size.height * 0.2755667,
+        size.width * -0.008848915,
+        size.height * 0.3489715,
+        size.width * 0.03632330,
+        size.height * 0.3933371);
+    path_0.lineTo(size.width * 0.4178592, size.height * 0.7748810);
+    path_0.close();
+
+    Paint paint_0_fill = Paint()..style = PaintingStyle.fill;
+    paint_0_fill.color = Colors.grey.withOpacity(0.7);
+    canvas.drawPath(path_0, paint_0_fill);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
   }
 }
