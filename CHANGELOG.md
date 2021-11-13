@@ -47,3 +47,6 @@
 - Change the default dropdownWidth 200 -> based on the resultWidth
 - Add new Function to return boolean whether the dropdown open/close. It's called "onOpen"
 - Add iconSize for default dropdown arrow icon
+## [1.4.1] - 2021.11.14
+
+- Add cool datepicker example.
