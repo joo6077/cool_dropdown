@@ -3,7 +3,7 @@
 <div align="center">
  
 [![pub package version](https://img.shields.io/pub/v/cool_dropdown)](https://pub.dev/packages/cool_dropdown)
-<a href="https://pub.dev/packages/cool_datepicker" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/pub-cool_datepicker-6771e4.svg"></a>
+<a href="https://pub.dev/packages/cool_datepicker" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/pub-cool_dropdown-6771e4.svg"></a>
 <a href="https://pub.dev/packages/cool_dropdown" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/build-passing-6FCC76.svg"></a>
 <a href="https://opensource.org/licenses/MIT" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/license-MIT-blueviolet.svg"></a>
 <a href="https://flutter.dev/" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/platform-flutter-ff69b4.svg"></a>
