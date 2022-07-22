@@ -1,7 +1,7 @@
-import 'package:cool_dropdown/utils/animation_util.dart';
-import 'package:cool_dropdown/utils/extension_util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:cool_dropdown/utils/animation_util.dart';
+import 'package:cool_dropdown/utils/extension_util.dart';
 
 class DropdownBody extends StatefulWidget {
   Key key;
@@ -127,7 +127,8 @@ class DropdownBody extends StatefulWidget {
   DropdownBodyState createState() => DropdownBodyState();
 }
 
-class DropdownBodyState extends State<DropdownBody> with TickerProviderStateMixin {
+class DropdownBodyState extends State<DropdownBody>
+    with TickerProviderStateMixin {
   Offset dropdownOffset = Offset(0, 0);
   Offset triangleOffset = Offset(0, 0);
   String selectedLabel = '';
@@ -154,7 +155,8 @@ class DropdownBodyState extends State<DropdownBody> with TickerProviderStateMixi
 
   @override
   void initState() {
-    currentIndex = widget.dropdownList.indexWhere((dropdownItem) => mapEquals(dropdownItem, widget.selectedItem));
+    currentIndex = widget.dropdownList.indexWhere(
+        (dropdownItem) => mapEquals(dropdownItem, widget.selectedItem));
     setOffset();
     setAnimation();
     setScrollPosition(currentIndex);
@@ -171,9 +173,13 @@ class DropdownBodyState extends State<DropdownBody> with TickerProviderStateMixi
     dynamic inputBox = widget.inputKey.currentContext!.findRenderObject();
     Offset inputPosition = inputBox!.localToGlobal(Offset.zero);
 
-    double actualBoxHeight = widget.dropdownHeight + widget.dropdownPadding.top + widget.dropdownPadding.bottom;
-    double inputCenterPosition = inputPosition.dy + (inputBox.size.height * 0.5);
-    double sidePadding = widget.dropdownPadding.right + widget.dropdownPadding.left;
+    double actualBoxHeight = widget.dropdownHeight +
+        widget.dropdownPadding.top +
+        widget.dropdownPadding.bottom;
+    double inputCenterPosition =
+        inputPosition.dy + (inputBox.size.height * 0.5);
+    double sidePadding =
+        widget.dropdownPadding.right + widget.dropdownPadding.left;
     isTop = (inputCenterPosition < widget.screenHeight * 0.5);
 
     if (isTop) {
@@ -184,7 +190,8 @@ class DropdownBodyState extends State<DropdownBody> with TickerProviderStateMixi
           inputBox: inputBox,
           inputPosition: inputPosition,
           actualBoxHeight: actualBoxHeight);
-      triangleOffset = setTrianglePosition(dropdownOffset: dropdownOffset, sidePadding: sidePadding);
+      triangleOffset = setTrianglePosition(
+          dropdownOffset: dropdownOffset, sidePadding: sidePadding);
 
       if (widget.screenHeight < actualBoxHeight + dropdownOffset.dy) {
         setState(() {
@@ -199,12 +206,17 @@ class DropdownBodyState extends State<DropdownBody> with TickerProviderStateMixi
           inputBox: inputBox,
           inputPosition: inputPosition,
           actualBoxHeight: actualBoxHeight);
-      Offset bottomOffset = dropdownOffset + Offset(0, widget.dropdownHeight + widget.triangleHeight);
-      triangleOffset = setTrianglePosition(dropdownOffset: bottomOffset, sidePadding: sidePadding);
+      Offset bottomOffset = dropdownOffset +
+          Offset(0, widget.dropdownHeight + widget.triangleHeight);
+      triangleOffset = setTrianglePosition(
+          dropdownOffset: bottomOffset, sidePadding: sidePadding);
       setState(() {
         // triangle upsideDown
         upsideDown = true;
-        double extraHeight = widget.screenHeight - (widget.screenHeight - inputPosition.dy) - widget.gap - 10;
+        double extraHeight = widget.screenHeight -
+            (widget.screenHeight - inputPosition.dy) -
+            widget.gap -
+            10;
         if (widget.dropdownHeight > extraHeight) {
           widget.dropdownHeight = extraHeight;
           dropdownOffset = Offset(dropdownOffset.dx, 10);
@@ -216,15 +228,19 @@ class DropdownBodyState extends State<DropdownBody> with TickerProviderStateMixi
   void setAnimation() {
     // dropdown height
     _animationController = AnimationController(
-      duration: au.isAnimation(status: widget.isAnimation, duration: Duration(milliseconds: 100)),
+      duration: au.isAnimation(
+          status: widget.isAnimation, duration: Duration(milliseconds: 100)),
       vsync: this,
     );
     _triangleController = AnimationController(
-      duration: au.isAnimation(status: widget.isAnimation, duration: Duration(milliseconds: 50)),
+      duration: au.isAnimation(
+          status: widget.isAnimation, duration: Duration(milliseconds: 50)),
       vsync: this,
     );
-    Animation<double> curve = CurvedAnimation(parent: _animationController, curve: Curves.easeIn);
-    animateHeight = Tween<double>(begin: 0, end: widget.dropdownHeight).animate(curve);
+    Animation<double> curve =
+        CurvedAnimation(parent: _animationController, curve: Curves.easeIn);
+    animateHeight =
+        Tween<double>(begin: 0, end: widget.dropdownHeight).animate(curve);
     triangleAnimation = CurvedAnimation(
       parent: _triangleController,
       curve: Curves.easeIn,
@@ -232,27 +248,40 @@ class DropdownBodyState extends State<DropdownBody> with TickerProviderStateMixi
     // each of items animation
     for (var i = 0; i < widget.dropdownIsSelected.length; i++) {
       AnimationController animationControllerElement = AnimationController(
-          vsync: this, duration: au.isAnimation(status: widget.isAnimation, duration: Duration(milliseconds: 300)));
-      _DCController.add(animationControllerElement); // selected, unselected decorationBox, textStyle
+          vsync: this,
+          duration: au.isAnimation(
+              status: widget.isAnimation,
+              duration: Duration(milliseconds: 300)));
+      _DCController.add(
+          animationControllerElement); // selected, unselected decorationBox, textStyle
       _paddingController.add(animationControllerElement);
-      _paddingAnimation.add(EdgeInsetsTween(begin: widget.dropdownItemPadding, end: widget.selectedItemPadding)
-          .animate(CurvedAnimation(parent: _paddingController[i], curve: Curves.easeIn)));
+      _paddingAnimation.add(EdgeInsetsTween(
+              begin: widget.dropdownItemPadding,
+              end: widget.selectedItemPadding)
+          .animate(CurvedAnimation(
+              parent: _paddingController[i], curve: Curves.easeIn)));
     }
-    selectedDecorationTween = DecorationTween(begin: BoxDecoration(color: Colors.transparent), end: widget.selectedItemBD);
-    selectedTSTween = TextStyleTween(begin: widget.unselectedItemTS, end: widget.selectedItemTS);
+    selectedDecorationTween = DecorationTween(
+        begin: BoxDecoration(color: Colors.transparent),
+        end: widget.selectedItemBD);
+    selectedTSTween = TextStyleTween(
+        begin: widget.unselectedItemTS, end: widget.selectedItemTS);
   }
 
   void setScrollPosition(int currentIndex) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await animationForward();
       if (currentIndex != -1) {
-        double totalHeight = widget.dropdownList.length * (widget.dropdownItemHeight + widget.dropdownItemGap) +
+        double totalHeight = widget.dropdownList.length *
+                (widget.dropdownItemHeight + widget.dropdownItemGap) +
             widget.dropdownItemTopGap +
             widget.dropdownItemBottomGap;
-        double scrollPosition = currentIndex * (widget.dropdownItemHeight + widget.dropdownItemGap) +
+        double scrollPosition = currentIndex *
+                (widget.dropdownItemHeight + widget.dropdownItemGap) +
             widget.dropdownItemTopGap -
             widget.dropdownItemGap;
-        double overScrollPosition = ((widget.dropdownItemHeight * widget.dropdownList.length) +
+        double overScrollPosition = ((widget.dropdownItemHeight *
+                    widget.dropdownList.length) +
                 (widget.dropdownItemGap * (widget.dropdownList.length - 1)) +
                 widget.dropdownItemTopGap) -
             widget.dropdownHeight +
@@ -267,7 +296,10 @@ class DropdownBodyState extends State<DropdownBody> with TickerProviderStateMixi
           scrollPosition = 0;
         }
         _scrollController.animateTo(scrollPosition,
-            duration: au.isAnimation(status: widget.isAnimation, duration: Duration(milliseconds: 300)), curve: Curves.easeInOut);
+            duration: au.isAnimation(
+                status: widget.isAnimation,
+                duration: Duration(milliseconds: 300)),
+            curve: Curves.easeInOut);
 
         setState(() {
           widget.dropdownIsSelected[currentIndex] = true;
@@ -312,19 +344,27 @@ class DropdownBodyState extends State<DropdownBody> with TickerProviderStateMixi
         value = 0;
         break;
       case 'right':
-        value = inputBox.size.width - (widget.dropdownWidth! + sidePadding) - widget.triangleBorder.width * 2;
+        value = inputBox.size.width -
+            (widget.dropdownWidth! + sidePadding) -
+            widget.triangleBorder.width * 2;
         break;
       case 'center':
-        value = (inputBox.size.width - (widget.dropdownWidth! + sidePadding)) * 0.5 - widget.triangleBorder.width;
+        value = (inputBox.size.width - (widget.dropdownWidth! + sidePadding)) *
+                0.5 -
+            widget.triangleBorder.width;
         break;
       default:
         throw 'type of dropdownAlign has to be String.(right, left, center)';
     }
-    return Offset(inputPosition.dx + value,
-        isTop ? inputPosition.dy + inputBox.size.height + widget.gap : inputPosition.dy - (widget.gap + actualBoxHeight));
+    return Offset(
+        inputPosition.dx + value,
+        isTop
+            ? inputPosition.dy + inputBox.size.height + widget.gap
+            : inputPosition.dy - (widget.gap + actualBoxHeight));
   }
 
-  Offset setTrianglePosition({required Offset dropdownOffset, required double sidePadding}) {
+  Offset setTrianglePosition(
+      {required Offset dropdownOffset, required double sidePadding}) {
     double value = 0;
 
     switch (widget.triangleAlign.toLowerCase()) {
@@ -332,10 +372,14 @@ class DropdownBodyState extends State<DropdownBody> with TickerProviderStateMixi
         value = widget.triangleBorder.width;
         break;
       case 'right':
-        value = (widget.dropdownWidth! + sidePadding) - widget.triangleWidth - widget.triangleBorder.width;
+        value = (widget.dropdownWidth! + sidePadding) -
+            widget.triangleWidth -
+            widget.triangleBorder.width;
         break;
       case 'center':
-        value = (widget.dropdownWidth! + sidePadding - widget.triangleWidth) * 0.5 + widget.triangleBorder.width;
+        value =
+            (widget.dropdownWidth! + sidePadding - widget.triangleWidth) * 0.5 +
+                widget.triangleBorder.width;
         break;
       default:
         throw 'type of triangleAlign has to be String.(right, left, center)';
@@ -370,18 +414,28 @@ class DropdownBodyState extends State<DropdownBody> with TickerProviderStateMixi
               ...widget.triangleBoxShadows
                   .map((boxShadow) => Positioned(
                         top: upsideDown
-                            ? triangleOffset.dy - widget.triangleHeight + boxShadow.spreadRadius + boxShadow.offset.dy - 0.5
+                            ? triangleOffset.dy -
+                                widget.triangleHeight +
+                                boxShadow.spreadRadius +
+                                boxShadow.offset.dy -
+                                0.5
                             : triangleOffset.dy -
-                                (widget.triangleHeight + boxShadow.spreadRadius * 2) +
+                                (widget.triangleHeight +
+                                    boxShadow.spreadRadius * 2) +
                                 boxShadow.offset.dy +
                                 0.5,
-                        left: triangleOffset.dx + widget.triangleLeft - (boxShadow.spreadRadius / 2) + boxShadow.offset.dx,
+                        left: triangleOffset.dx +
+                            widget.triangleLeft -
+                            (boxShadow.spreadRadius / 2) +
+                            boxShadow.offset.dx,
                         child: SizeTransition(
                           sizeFactor: triangleAnimation,
                           axisAlignment: -1,
                           child: Container(
-                            width: widget.triangleWidth + boxShadow.spreadRadius,
-                            height: widget.triangleHeight + boxShadow.spreadRadius,
+                            width:
+                                widget.triangleWidth + boxShadow.spreadRadius,
+                            height:
+                                widget.triangleHeight + boxShadow.spreadRadius,
                             child: CustomPaint(
                               painter: TrianglePainter(
                                 strokeColor: boxShadow.color,
@@ -403,8 +457,9 @@ class DropdownBodyState extends State<DropdownBody> with TickerProviderStateMixi
                 decoration: widget.dropdownBD,
                 padding: widget.dropdownPadding,
                 child: ClipRRect(
-                  borderRadius:
-                      widget.dropdownBD.borderRadius != null ? widget.dropdownBD.borderRadius as BorderRadius : BorderRadius.zero,
+                  borderRadius: widget.dropdownBD.borderRadius != null
+                      ? widget.dropdownBD.borderRadius as BorderRadius
+                      : BorderRadius.zero,
                   child: AnimatedBuilder(
                     animation: _animationController,
                     builder: (BuildContext context, Widget? _) {
@@ -427,72 +482,118 @@ class DropdownBodyState extends State<DropdownBody> with TickerProviderStateMixi
                                       onTap: () async {
                                         setState(() {
                                           isTap = true;
-                                          for (var i = 0; i < widget.dropdownList.length; i++) {
+                                          for (var i = 0;
+                                              i < widget.dropdownList.length;
+                                              i++) {
                                             if (index == i) {
-                                              widget.dropdownIsSelected[i] = true;
+                                              widget.dropdownIsSelected[i] =
+                                                  true;
                                             } else {
-                                              widget.dropdownIsSelected[i] = false;
+                                              widget.dropdownIsSelected[i] =
+                                                  false;
                                             }
                                           }
                                         });
                                         if (currentIndex != -1) {
                                           if (currentIndex != index) {
-                                            _paddingController[currentIndex].reverse();
-                                            _DCController[currentIndex].reverse();
+                                            _paddingController[currentIndex]
+                                                .reverse();
+                                            _DCController[currentIndex]
+                                                .reverse();
                                           }
                                         }
                                         _paddingController[index].forward();
                                         await _DCController[index].forward();
 
                                         await animationReverse();
-                                        widget.getSelectedItem(widget.dropdownList[index]);
-                                        widget.onChange(widget.dropdownList[index]);
+                                        widget.getSelectedItem(
+                                            widget.dropdownList[index]);
+                                        widget.onChange(
+                                            widget.dropdownList[index]);
                                         widget.closeDropdown();
                                       },
                                       child: DecoratedBoxTransition(
-                                        decoration: selectedDecorationTween.animate(_DCController[index]),
+                                        decoration: selectedDecorationTween
+                                            .animate(_DCController[index]),
                                         child: Container(
-                                          padding: _paddingAnimation[index].value,
+                                          padding:
+                                              _paddingAnimation[index].value,
                                           height: widget.dropdownItemHeight,
                                           child: Align(
                                             alignment: widget.dropdownItemAlign,
                                             child: Row(
-                                              mainAxisAlignment: widget.dropdownItemMainAxis,
+                                              mainAxisAlignment:
+                                                  widget.dropdownItemMainAxis,
                                               children: [
                                                 if (widget.isDropdownLabel)
                                                   DefaultTextStyleTransition(
                                                     child: Flexible(
                                                       child: Container(
                                                         child: Text(
-                                                          widget.dropdownList[index]['label'],
-                                                          overflow: TextOverflow.ellipsis,
+                                                          widget.dropdownList[
+                                                              index]['label'],
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
                                                         ),
                                                       ),
                                                     ),
-                                                    style: selectedTSTween.animate(_DCController[index]),
+                                                    style: selectedTSTween
+                                                        .animate(_DCController[
+                                                            index]),
                                                   ),
                                                 if (widget.isDropdownLabel)
                                                   SizedBox(
                                                     width: widget.labelIconGap,
                                                   ),
-                                                (widget.dropdownList[index]['icon'] != null &&
-                                                        widget.dropdownList[index]['selectedIcon'] != null)
+                                                (widget.dropdownList[index]
+                                                                ['icon'] !=
+                                                            null &&
+                                                        widget.dropdownList[
+                                                                    index][
+                                                                'selectedIcon'] !=
+                                                            null)
                                                     ? AnimatedSwitcher(
                                                         duration: au.isAnimation(
-                                                            status: widget.isAnimation, duration: Duration(milliseconds: 300)),
-                                                        transitionBuilder: (Widget child, Animation<double> animation) {
-                                                          return FadeTransition(child: child, opacity: animation);
+                                                            status: widget
+                                                                .isAnimation,
+                                                            duration: Duration(
+                                                                milliseconds:
+                                                                    300)),
+                                                        transitionBuilder:
+                                                            (Widget child,
+                                                                Animation<
+                                                                        double>
+                                                                    animation) {
+                                                          return FadeTransition(
+                                                              child: child,
+                                                              opacity:
+                                                                  animation);
                                                         },
                                                         child: Container(
-                                                          child: widget.dropdownIsSelected[index]
-                                                              ? widget.dropdownList[index]['selectedIcon'] as Widget
-                                                              : widget.dropdownList[index]['icon'] as Widget,
+                                                          child: widget
+                                                                      .dropdownIsSelected[
+                                                                  index]
+                                                              ? widget.dropdownList[
+                                                                          index]
+                                                                      [
+                                                                      'selectedIcon']
+                                                                  as Widget
+                                                              : widget.dropdownList[
+                                                                          index]
+                                                                      ['icon']
+                                                                  as Widget,
                                                         ),
                                                       )
-                                                    : widget.dropdownList[index]['icon'] != null
-                                                        ? Container(child: widget.dropdownList[index]['icon'])
+                                                    : widget.dropdownList[index]
+                                                                ['icon'] !=
+                                                            null
+                                                        ? Container(
+                                                            child: widget
+                                                                    .dropdownList[
+                                                                index]['icon'])
                                                         : Container(),
-                                              ].isReverse(widget.dropdownItemReverse),
+                                              ].isReverse(
+                                                  widget.dropdownItemReverse),
                                             ),
                                           ),
                                         ),
@@ -520,7 +621,9 @@ class DropdownBodyState extends State<DropdownBody> with TickerProviderStateMixi
                 top: dropdownOffset.dy,
                 left: dropdownOffset.dx,
                 child: Container(
-                  width: widget.dropdownWidth! + widget.dropdownPadding.right + widget.dropdownPadding.left,
+                  width: widget.dropdownWidth! +
+                      widget.dropdownPadding.right +
+                      widget.dropdownPadding.left,
                   height: widget.dropdownHeight,
                   color: Colors.transparent,
                 ),
@@ -529,9 +632,14 @@ class DropdownBodyState extends State<DropdownBody> with TickerProviderStateMixi
             if (widget.isTriangle)
               Positioned(
                 top: upsideDown
-                    ? triangleOffset.dy - widget.triangleHeight + widget.triangleBorder.width * 2
-                    : triangleOffset.dy - (widget.triangleHeight + widget.triangleBorder.width),
-                left: triangleOffset.dx + widget.triangleLeft - (widget.triangleBorder.width / 2),
+                    ? triangleOffset.dy -
+                        widget.triangleHeight +
+                        widget.triangleBorder.width * 2
+                    : triangleOffset.dy -
+                        (widget.triangleHeight + widget.triangleBorder.width),
+                left: triangleOffset.dx +
+                    widget.triangleLeft -
+                    (widget.triangleBorder.width / 2),
                 child: SizeTransition(
                   sizeFactor: triangleAnimation,
                   axisAlignment: -1,
@@ -553,8 +661,14 @@ class DropdownBodyState extends State<DropdownBody> with TickerProviderStateMixi
             if (widget.isTriangle)
               Positioned(
                 top: upsideDown
-                    ? triangleOffset.dy - widget.triangleHeight + widget.triangleBorder.width - 0.5
-                    : triangleOffset.dy - widget.triangleHeight + widget.triangleBorder.width + 0.5,
+                    ? triangleOffset.dy -
+                        widget.triangleHeight +
+                        widget.triangleBorder.width -
+                        0.5
+                    : triangleOffset.dy -
+                        widget.triangleHeight +
+                        widget.triangleBorder.width +
+                        0.5,
                 left: triangleOffset.dx + widget.triangleLeft,
                 child: SizeTransition(
                   sizeFactor: triangleAnimation,
