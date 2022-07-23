@@ -50,3 +50,7 @@
 ## [1.4.1] - 2021.11.14
 
 - Add cool datepicker example.
+## [1.4.2] - 2022.07.23
+
+- null aware fix.
+- upgrade android version.
