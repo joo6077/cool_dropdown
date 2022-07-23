@@ -269,7 +269,7 @@ class DropdownBodyState extends State<DropdownBody>
   }
 
   void setScrollPosition(int currentIndex) {
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await animationForward();
       if (currentIndex != -1) {
         double totalHeight = widget.dropdownList.length *
