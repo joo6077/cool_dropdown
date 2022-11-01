@@ -17,6 +17,7 @@ class CoolDropdown extends StatefulWidget {
   bool isResultLabel;
   bool isDropdownLabel; // late
   bool resultIconRotation;
+  bool useSelectedIconInResult;
   late Widget resultIcon;
   double resultIconRotationValue;
 
@@ -75,6 +76,7 @@ class CoolDropdown extends StatefulWidget {
     this.resultIconRotation = true,
     this.isTriangle = true,
     this.isResultLabel = true,
+    this.useSelectedIconInResult = false,
     this.placeholder = '',
     this.resultWidth = 220,
     this.resultHeight = 50,
@@ -389,8 +391,10 @@ class _CoolDropdownState extends State<CoolDropdown>
                                     SizedBox(
                                       width: widget.labelIconGap,
                                     ),
-                                  if (selectedItem['icon'] != null)
+                                  if (!widget.useSelectedIconInResult && selectedItem['icon'] != null)
                                     selectedItem['icon'] as Widget,
+                                  if (widget.useSelectedIconInResult && selectedItem['selectedIcon'] != null)
+                                    selectedItem['selectedIcon'] as Widget,
                                 ].isReverse(widget.dropdownItemReverse),
                               ),
                             ),
