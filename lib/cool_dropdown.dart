@@ -1,68 +1,69 @@
 library cool_dropdown;
 
-import 'package:flutter/material.dart';
+import 'package:cool_dropdown/drop_down_body.dart';
+import 'package:cool_dropdown/drop_down_params.dart';
 import 'package:cool_dropdown/utils/animation_util.dart';
 import 'package:cool_dropdown/utils/extension_util.dart';
-import 'package:cool_dropdown/drop_down_body.dart';
+import 'package:flutter/material.dart';
 
-class CoolDropdown extends StatefulWidget {
-  List dropdownList;
-  Function onChange;
-  Function? onOpen;
-  String placeholder;
-  late Map defaultValue;
-  bool isTriangle;
-  bool isAnimation;
-  bool isResultIconLabel;
-  bool isResultLabel;
-  bool isDropdownLabel; // late
-  bool resultIconRotation;
-  late Widget resultIcon;
-  double resultIconRotationValue;
+class CoolDropdown<ValueType> extends StatefulWidget {
+  final List<DropDownParams<ValueType>> dropdownList;
+  final void Function(DropDownParams<ValueType>) onChange;
+  final void Function(bool)? onOpen;
+  final String placeholder;
+  final DropDownParams<ValueType>? defaultValue;
+  final bool isTriangle;
+  final bool isAnimation;
+  final bool isResultIconLabel;
+  final bool isResultLabel;
+  final bool isDropdownLabel; // late
+  final bool resultIconRotation;
+  late final Widget resultIcon;
+  final double resultIconRotationValue;
 
   // size
-  double resultWidth;
-  double resultHeight;
-  double? dropdownWidth; // late
-  double dropdownHeight; // late
-  double dropdownItemHeight;
-  double triangleWidth;
-  double triangleHeight;
-  double iconSize;
+  final double resultWidth;
+  final double resultHeight;
+  final double? dropdownWidth; // late
+  final double dropdownHeight; // late
+  final double dropdownItemHeight;
+  final double triangleWidth;
+  final double triangleHeight;
+  final double iconSize;
 
   // align
-  Alignment resultAlign;
-  String dropdownAlign; // late
-  Alignment dropdownItemAlign;
-  String triangleAlign;
-  double triangleLeft;
-  bool dropdownItemReverse;
-  bool resultReverse;
-  MainAxisAlignment resultMainAxis;
-  MainAxisAlignment dropdownItemMainAxis;
+  final Alignment resultAlign;
+  final String dropdownAlign; // late
+  final Alignment dropdownItemAlign;
+  final String triangleAlign;
+  final double triangleLeft;
+  final bool dropdownItemReverse;
+  final bool resultReverse;
+  final MainAxisAlignment resultMainAxis;
+  final MainAxisAlignment dropdownItemMainAxis;
 
   // padding
-  EdgeInsets resultPadding;
-  EdgeInsets dropdownItemPadding;
-  EdgeInsets dropdownPadding; // late
-  EdgeInsets selectedItemPadding;
+  final EdgeInsets resultPadding;
+  final EdgeInsets dropdownItemPadding;
+  final EdgeInsets dropdownPadding; // late
+  final EdgeInsets selectedItemPadding;
 
   // style
-  late BoxDecoration resultBD;
-  late BoxDecoration dropdownBD; // late
-  late BoxDecoration selectedItemBD;
-  late TextStyle selectedItemTS;
-  late TextStyle unselectedItemTS;
-  late TextStyle resultTS;
-  late TextStyle placeholderTS;
+  late final BoxDecoration resultBD;
+  late final BoxDecoration dropdownBD; // late
+  late final BoxDecoration selectedItemBD;
+  late final TextStyle selectedItemTS;
+  late final TextStyle unselectedItemTS;
+  late final TextStyle resultTS;
+  late final TextStyle placeholderTS;
 
   // gap
-  double gap;
-  double labelIconGap;
-  double dropdownItemGap;
-  double dropdownItemTopGap;
-  double dropdownItemBottomGap;
-  double resultIconLeftGap;
+  final double gap;
+  final double labelIconGap;
+  final double dropdownItemGap;
+  final double dropdownItemTopGap;
+  final double dropdownItemBottomGap;
+  final double resultIconLeftGap;
 
   CoolDropdown({
     required this.dropdownList,
@@ -111,23 +112,16 @@ class CoolDropdown extends StatefulWidget {
     this.resultIconRotationValue = 0.5,
     this.isDropdownLabel = true,
     this.iconSize = 10,
-    defaultValue,
+    this.defaultValue,
   }) {
-    // 기본값 셋팅
-    if (defaultValue != null) {
-      print('.. $defaultValue');
-      this.defaultValue = defaultValue;
-    } else {
-      this.defaultValue = {};
-    }
     // label unique 체크
     for (var i = 0; i < dropdownList.length; i++) {
-      if (dropdownList[i]['label'] == null) {
+      if (dropdownList[i].label.isEmpty) {
         throw '"label" must be initialized.';
       }
       for (var j = 0; j < dropdownList.length; j++) {
         if (i != j) {
-          if (dropdownList[i]['label'] == dropdownList[j]['label']) {
+          if (dropdownList[i].label == dropdownList[j].label) {
             throw 'label is duplicated. Labels have to be unique.';
           }
         }
@@ -195,16 +189,16 @@ class CoolDropdown extends StatefulWidget {
   }
 
   @override
-  _CoolDropdownState createState() => _CoolDropdownState();
+  _CoolDropdownState createState() => _CoolDropdownState<ValueType>();
 }
 
-class _CoolDropdownState extends State<CoolDropdown>
+class _CoolDropdownState<ValueType> extends State<CoolDropdown<ValueType>>
     with TickerProviderStateMixin {
   GlobalKey<DropdownBodyState> dropdownBodyChild = GlobalKey();
   GlobalKey inputKey = GlobalKey();
   Offset triangleOffset = Offset(0, 0);
   late OverlayEntry _overlayEntry;
-  late Map selectedItem;
+  DropDownParams<ValueType>? selectedItem;
   late AnimationController rotationController;
   late AnimationController sizeController;
   late Animation<double> textWidth;
@@ -232,7 +226,7 @@ class _CoolDropdownState extends State<CoolDropdown>
 
   OverlayEntry _createOverlayEntry() {
     return OverlayEntry(
-      builder: (BuildContext context) => DropdownBody(
+      builder: (BuildContext context) => DropdownBody<ValueType>(
         key: dropdownBodyChild,
         inputKey: inputKey,
         onChange: widget.onChange,
@@ -371,15 +365,15 @@ class _CoolDropdownState extends State<CoolDropdown>
                               axisAlignment: -1,
                               child: Row(
                                 mainAxisAlignment: widget.resultMainAxis,
-                                children: [
+                                children: <Widget>[
                                   if (widget.isResultLabel)
                                     Flexible(
                                       child: Container(
                                         child: Text(
-                                          selectedItem['label'] ??
+                                          selectedItem?.label ??
                                               widget.placeholder,
                                           overflow: TextOverflow.ellipsis,
-                                          style: selectedItem['label'] != null
+                                          style: selectedItem?.label != null
                                               ? widget.resultTS
                                               : widget.placeholderTS,
                                         ),
@@ -389,8 +383,8 @@ class _CoolDropdownState extends State<CoolDropdown>
                                     SizedBox(
                                       width: widget.labelIconGap,
                                     ),
-                                  if (selectedItem['icon'] != null)
-                                    selectedItem['icon'] as Widget,
+                                  if (selectedItem?.icon != null)
+                                    selectedItem!.icon!,
                                 ].isReverse(widget.dropdownItemReverse),
                               ),
                             ),

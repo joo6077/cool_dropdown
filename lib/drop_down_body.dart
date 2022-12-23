@@ -1,43 +1,43 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:cool_dropdown/drop_down_params.dart';
 import 'package:cool_dropdown/utils/animation_util.dart';
 import 'package:cool_dropdown/utils/extension_util.dart';
+import 'package:flutter/material.dart';
 
-class DropdownBody extends StatefulWidget {
-  Key key;
-  GlobalKey inputKey;
-  late Function closeDropdown;
-  late BuildContext bodyContext;
+class DropdownBody<ValueType> extends StatefulWidget {
+  final Key key;
+  final GlobalKey inputKey;
+  final void Function() closeDropdown;
+  final BuildContext bodyContext;
   late double screenHeight;
 
-  List dropdownList;
-  List dropdownIsSelected = [];
-  Function onChange;
-  Function getSelectedItem;
-  bool isTriangle;
-  bool isResultLabel;
-  bool isDropdownLabel;
-  late Map selectedItem;
-  late Widget dropdownIcon;
-  bool isAnimation;
+  final List<DropDownParams<ValueType>> dropdownList;
+  final List<bool> dropdownIsSelected = [];
+  final void Function(DropDownParams<ValueType>) onChange;
+  final void Function(DropDownParams<ValueType>) getSelectedItem;
+  final bool isTriangle;
+  final bool isResultLabel;
+  final bool isDropdownLabel;
+  final DropDownParams<ValueType>? selectedItem;
+  late final Widget dropdownIcon;
+  final bool isAnimation;
 
   // size
-  double resultWidth;
-  double resultHeight;
+  final double resultWidth;
+  final double resultHeight;
   double? dropdownWidth;
   double dropdownHeight;
-  double dropdownItemHeight;
-  double triangleWidth;
-  double triangleHeight;
+  final double dropdownItemHeight;
+  final double triangleWidth;
+  final double triangleHeight;
 
   // align
-  Alignment resultAlign;
-  String dropdownAlign;
-  Alignment dropdownItemAlign;
-  String triangleAlign;
-  double triangleLeft;
-  bool dropdownItemReverse;
-  MainAxisAlignment dropdownItemMainAxis;
+  final Alignment resultAlign;
+  final String dropdownAlign;
+  final Alignment dropdownItemAlign;
+  final String triangleAlign;
+  final double triangleLeft;
+  final bool dropdownItemReverse;
+  final MainAxisAlignment dropdownItemMainAxis;
 
   // padding
   EdgeInsets dropdownItemPadding;
@@ -60,7 +60,7 @@ class DropdownBody extends StatefulWidget {
   double dropdownItemBottomGap;
 
   // triangleBox Shadow
-  late List triangleBoxShadows;
+  late List<BoxShadow> triangleBoxShadows;
 
   DropdownBody(
       {required this.key,
@@ -124,10 +124,10 @@ class DropdownBody extends StatefulWidget {
   }
 
   @override
-  DropdownBodyState createState() => DropdownBodyState();
+  DropdownBodyState<ValueType> createState() => DropdownBodyState();
 }
 
-class DropdownBodyState extends State<DropdownBody>
+class DropdownBodyState<ValueType> extends State<DropdownBody<ValueType>>
     with TickerProviderStateMixin {
   Offset dropdownOffset = Offset(0, 0);
   Offset triangleOffset = Offset(0, 0);
@@ -142,7 +142,6 @@ class DropdownBodyState extends State<DropdownBody>
   late AnimationController _triangleController;
   List<AnimationController> _DCController = [];
   List<AnimationController> _paddingController = [];
-  List<Animation> _swicherController = [];
   List<Animation<EdgeInsets>> _paddingAnimation = [];
   late Animation<double> animateHeight;
   late Animation<double> triangleAnimation;
@@ -156,7 +155,8 @@ class DropdownBodyState extends State<DropdownBody>
   @override
   void initState() {
     currentIndex = widget.dropdownList.indexWhere(
-        (dropdownItem) => mapEquals(dropdownItem, widget.selectedItem));
+      (dropdownItem) => dropdownItem == widget.selectedItem,
+    );
     setOffset();
     setAnimation();
     setScrollPosition(currentIndex);
@@ -530,8 +530,10 @@ class DropdownBodyState extends State<DropdownBody>
                                                     child: Flexible(
                                                       child: Container(
                                                         child: Text(
-                                                          widget.dropdownList[
-                                                              index]['label'],
+                                                          widget
+                                                              .dropdownList[
+                                                                  index]
+                                                              .label,
                                                           overflow: TextOverflow
                                                               .ellipsis,
                                                         ),
@@ -546,11 +548,12 @@ class DropdownBodyState extends State<DropdownBody>
                                                     width: widget.labelIconGap,
                                                   ),
                                                 (widget.dropdownList[index]
-                                                                ['icon'] !=
+                                                                .icon !=
                                                             null &&
-                                                        widget.dropdownList[
-                                                                    index][
-                                                                'selectedIcon'] !=
+                                                        widget
+                                                                .dropdownList[
+                                                                    index]
+                                                                .selectedIcon !=
                                                             null)
                                                     ? AnimatedSwitcher(
                                                         duration: au.isAnimation(
@@ -570,27 +573,26 @@ class DropdownBodyState extends State<DropdownBody>
                                                                   animation);
                                                         },
                                                         child: Container(
-                                                          child: widget
-                                                                      .dropdownIsSelected[
-                                                                  index]
-                                                              ? widget.dropdownList[
-                                                                          index]
-                                                                      [
-                                                                      'selectedIcon']
-                                                                  as Widget
-                                                              : widget.dropdownList[
-                                                                          index]
-                                                                      ['icon']
-                                                                  as Widget,
-                                                        ),
+                                                            child: widget
+                                                                        .dropdownIsSelected[
+                                                                    index]
+                                                                ? widget
+                                                                    .dropdownList[
+                                                                        index]
+                                                                    .selectedIcon
+                                                                : widget
+                                                                    .dropdownList[
+                                                                        index]
+                                                                    .icon),
                                                       )
                                                     : widget.dropdownList[index]
-                                                                ['icon'] !=
+                                                                .icon !=
                                                             null
                                                         ? Container(
                                                             child: widget
-                                                                    .dropdownList[
-                                                                index]['icon'])
+                                                                .dropdownList[
+                                                                    index]
+                                                                .icon)
                                                         : Container(),
                                               ].isReverse(
                                                   widget.dropdownItemReverse),
