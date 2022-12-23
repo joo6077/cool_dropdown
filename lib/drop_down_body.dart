@@ -4,40 +4,40 @@ import 'package:cool_dropdown/utils/extension_util.dart';
 import 'package:flutter/material.dart';
 
 class DropdownBody<ValueType> extends StatefulWidget {
-  Key key;
-  GlobalKey inputKey;
-  late void Function() closeDropdown;
-  late BuildContext bodyContext;
+  final Key key;
+  final GlobalKey inputKey;
+  final void Function() closeDropdown;
+  final BuildContext bodyContext;
   late double screenHeight;
 
   final List<DropDownParams<ValueType>> dropdownList;
-  final List dropdownIsSelected = [];
+  final List<bool> dropdownIsSelected = [];
   final void Function(DropDownParams<ValueType>) onChange;
   final void Function(DropDownParams<ValueType>) getSelectedItem;
   final bool isTriangle;
   final bool isResultLabel;
   final bool isDropdownLabel;
-  DropDownParams<ValueType>? selectedItem;
+  final DropDownParams<ValueType>? selectedItem;
   late final Widget dropdownIcon;
   final bool isAnimation;
 
   // size
-  double resultWidth;
-  double resultHeight;
+  final double resultWidth;
+  final double resultHeight;
   double? dropdownWidth;
   double dropdownHeight;
-  double dropdownItemHeight;
-  double triangleWidth;
-  double triangleHeight;
+  final double dropdownItemHeight;
+  final double triangleWidth;
+  final double triangleHeight;
 
   // align
-  Alignment resultAlign;
-  String dropdownAlign;
-  Alignment dropdownItemAlign;
-  String triangleAlign;
-  double triangleLeft;
-  bool dropdownItemReverse;
-  MainAxisAlignment dropdownItemMainAxis;
+  final Alignment resultAlign;
+  final String dropdownAlign;
+  final Alignment dropdownItemAlign;
+  final String triangleAlign;
+  final double triangleLeft;
+  final bool dropdownItemReverse;
+  final MainAxisAlignment dropdownItemMainAxis;
 
   // padding
   EdgeInsets dropdownItemPadding;
@@ -60,7 +60,7 @@ class DropdownBody<ValueType> extends StatefulWidget {
   double dropdownItemBottomGap;
 
   // triangleBox Shadow
-  late List triangleBoxShadows;
+  late List<BoxShadow> triangleBoxShadows;
 
   DropdownBody(
       {required this.key,
@@ -124,10 +124,10 @@ class DropdownBody<ValueType> extends StatefulWidget {
   }
 
   @override
-  DropdownBodyState createState() => DropdownBodyState();
+  DropdownBodyState<ValueType> createState() => DropdownBodyState();
 }
 
-class DropdownBodyState extends State<DropdownBody>
+class DropdownBodyState<ValueType> extends State<DropdownBody<ValueType>>
     with TickerProviderStateMixin {
   Offset dropdownOffset = Offset(0, 0);
   Offset triangleOffset = Offset(0, 0);
