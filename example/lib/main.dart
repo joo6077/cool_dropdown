@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cool_dropdown/cool_dropdown.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 
 void main() {
   runApp(MyApp());
