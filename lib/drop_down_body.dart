@@ -1,63 +1,63 @@
-import 'package:flutter/foundation.dart';
+import 'package:cool_dropdown/models/cool_dropdown_item.dart';
 import 'package:flutter/material.dart';
 import 'package:cool_dropdown/utils/animation_util.dart';
 import 'package:cool_dropdown/utils/extension_util.dart';
 
-class DropdownBody extends StatefulWidget {
-  Key key;
-  GlobalKey inputKey;
-  late Function closeDropdown;
-  late BuildContext bodyContext;
+class DropdownBody<T> extends StatefulWidget {
+  final Key key;
+  final GlobalKey inputKey;
+  final Function closeDropdown;
+  final BuildContext bodyContext;
   late double screenHeight;
 
-  List dropdownList;
-  List dropdownIsSelected = [];
-  Function onChange;
-  Function getSelectedItem;
-  bool isTriangle;
-  bool isResultLabel;
-  bool isDropdownLabel;
-  late Map selectedItem;
+  final List dropdownList;
+  final List dropdownIsSelected = [];
+  final Function onChange;
+  final Function getSelectedItem;
+  final bool isTriangle;
+  final bool isResultLabel;
+  final bool isDropdownLabel;
+  final CoolDropdownItem<T>? selectedItem;
   late Widget dropdownIcon;
-  bool isAnimation;
+  final bool isAnimation;
 
   // size
-  double resultWidth;
-  double resultHeight;
-  double? dropdownWidth;
-  double dropdownHeight;
-  double dropdownItemHeight;
-  double triangleWidth;
-  double triangleHeight;
+  final double resultWidth;
+  final double resultHeight;
+  late double? dropdownWidth;
+  final double dropdownHeight;
+  final double dropdownItemHeight;
+  final double triangleWidth;
+  final double triangleHeight;
 
   // align
-  Alignment resultAlign;
-  String dropdownAlign;
-  Alignment dropdownItemAlign;
-  String triangleAlign;
-  double triangleLeft;
-  bool dropdownItemReverse;
-  MainAxisAlignment dropdownItemMainAxis;
+  final Alignment resultAlign;
+  final String dropdownAlign;
+  final Alignment dropdownItemAlign;
+  final String triangleAlign;
+  final double triangleLeft;
+  final bool dropdownItemReverse;
+  final MainAxisAlignment dropdownItemMainAxis;
 
   // padding
-  EdgeInsets dropdownItemPadding;
-  EdgeInsets dropdownPadding;
-  EdgeInsets selectedItemPadding;
+  final EdgeInsets dropdownItemPadding;
+  final EdgeInsets dropdownPadding;
+  final EdgeInsets selectedItemPadding;
 
   // style
-  late BoxDecoration resultBD;
-  late BoxDecoration dropdownBD;
-  late BoxDecoration selectedItemBD;
+  final BoxDecoration resultBD;
+  final BoxDecoration dropdownBD;
+  final BoxDecoration selectedItemBD;
   late BorderSide triangleBorder;
-  late TextStyle selectedItemTS;
-  late TextStyle unselectedItemTS;
+  final TextStyle selectedItemTS;
+  final TextStyle unselectedItemTS;
 
   // gap
-  double gap;
-  double labelIconGap;
-  double dropdownItemGap;
-  double dropdownItemTopGap;
-  double dropdownItemBottomGap;
+  final double gap;
+  final double labelIconGap;
+  final double dropdownItemGap;
+  final double dropdownItemTopGap;
+  final double dropdownItemBottomGap;
 
   // triangleBox Shadow
   late List triangleBoxShadows;
@@ -101,7 +101,6 @@ class DropdownBody extends StatefulWidget {
       required this.isResultLabel,
       required this.bodyContext,
       required this.isDropdownLabel,
-      triangleBorder,
       required this.triangleLeft}) {
     // dropdown list 초기화
     for (var i = 0; i < this.dropdownList.length; i++) {
@@ -155,8 +154,8 @@ class DropdownBodyState extends State<DropdownBody>
 
   @override
   void initState() {
-    currentIndex = widget.dropdownList.indexWhere(
-        (dropdownItem) => mapEquals(dropdownItem, widget.selectedItem));
+    // currentIndex = widget.dropdownList.indexWhere(
+    //     (dropdownItem) => mapEquals(dropdownItem, widget.selectedItem));
     setOffset();
     setAnimation();
     setScrollPosition(currentIndex);
@@ -195,7 +194,7 @@ class DropdownBodyState extends State<DropdownBody>
 
       if (widget.screenHeight < actualBoxHeight + dropdownOffset.dy) {
         setState(() {
-          widget.dropdownHeight = widget.screenHeight - dropdownOffset.dy - 10;
+          // widget.dropdownHeight = widget.screenHeight - dropdownOffset.dy - 10;
         });
       }
     } else {
@@ -218,7 +217,7 @@ class DropdownBodyState extends State<DropdownBody>
             widget.gap -
             10;
         if (widget.dropdownHeight > extraHeight) {
-          widget.dropdownHeight = extraHeight;
+          // widget.dropdownHeight = extraHeight;
           dropdownOffset = Offset(dropdownOffset.dx, 10);
         }
       });

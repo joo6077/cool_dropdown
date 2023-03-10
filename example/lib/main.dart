@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cool_dropdown/cool_dropdown.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:cool_dropdown/models/cool_dropdown_item.dart';
 
 void main() {
   runApp(MyApp());
@@ -11,7 +12,7 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
-List dropdownItemList = [];
+List<CoolDropdownItem<String>> dropdownItemList = [];
 
 List<String> pokemons = [
   'pikachu',
@@ -36,48 +37,24 @@ List<String> fruits = [
 ];
 
 class _MyAppState extends State<MyApp> {
-  List<Map> pokemonsMap = [];
+  List<CoolDropdownItem> pokemonMap = [];
   @override
   void initState() {
     for (var i = 0; i < pokemons.length; i++) {
-      pokemonsMap.add({
-        'label': '${pokemons[i]}',
-        'value': '${pokemons[i]}',
-        'icon': Container(
-          height: 25,
-          width: 25,
-          child: SvgPicture.asset(
-            'assets/${pokemons[i]}.svg',
-          ),
-        ),
-      });
-    }
-    for (var i = 0; i < fruits.length; i++) {
-      dropdownItemList.add(
-        {
-          'label': fruits[i] == 'melon' ? 'melon sugar high' : '${fruits[i]}',
-          // 'label': '${fruits[i]}',
-          'value': '${fruits[i]}',
-          'icon': Container(
-            key: UniqueKey(),
-            height: 20,
-            width: 20,
-            child: SvgPicture.asset(
-              'assets/${fruits[i]}.svg',
+      pokemonMap.add(
+        CoolDropdownItem<String>(
+            label: '${pokemons[i]}',
+            icon: Container(
+              height: 25,
+              width: 25,
+              child: SvgPicture.asset(
+                'assets/${pokemons[i]}.svg',
+              ),
             ),
-          ),
-          'selectedIcon': Container(
-            key: UniqueKey(),
-            width: 20,
-            height: 20,
-            child: SvgPicture.asset(
-              'assets/${fruits[i]}.svg',
-              color: Color(0xFF6FCC76),
-            ),
-          ),
-        },
+            value: '${pokemons[i]}'),
       );
     }
+    for (var i = 0; i < fruits.length; i++) {}
     super.initState();
   }
 
@@ -121,7 +98,7 @@ class _MyAppState extends State<MyApp> {
               height: 200,
             ),
             Center(
-              child: CoolDropdown(
+              child: CoolDropdown<String>(
                 resultWidth: 70,
                 // resultIcon: Container(), // if you don't want to use Icon you can set empty Container
                 dropdownList: dropdownItemList,
@@ -148,7 +125,7 @@ class _MyAppState extends State<MyApp> {
             ),
             Center(
               child: CoolDropdown(
-                dropdownList: pokemonsMap,
+                dropdownList: pokemonMap,
                 dropdownItemPadding: EdgeInsets.zero,
                 onChange: (dropdownItem) {},
                 resultHeight: 50,

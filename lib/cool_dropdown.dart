@@ -4,71 +4,72 @@ import 'package:flutter/material.dart';
 import 'package:cool_dropdown/utils/animation_util.dart';
 import 'package:cool_dropdown/utils/extension_util.dart';
 import 'package:cool_dropdown/drop_down_body.dart';
+import 'package:cool_dropdown/models/cool_dropdown_item.dart';
 
-class CoolDropdown extends StatefulWidget {
-  List dropdownList;
-  Function onChange;
-  Function? onOpen;
-  String placeholder;
-  late Map defaultValue;
-  bool isTriangle;
-  bool isAnimation;
-  bool isResultIconLabel;
-  bool isResultLabel;
-  bool isDropdownLabel; // late
-  bool resultIconRotation;
-  late Widget resultIcon;
-  double resultIconRotationValue;
+class CoolDropdown<T> extends StatefulWidget {
+  final List<CoolDropdownItem<T>> dropdownList;
+  final Function onChange;
+  final Function? onOpen;
+  final String placeholder;
+  // final Map? defaultValue;
+  final bool isTriangle;
+  final bool isAnimation;
+  final bool isResultIconLabel;
+  final bool isResultLabel;
+  final bool isDropdownLabel; // late
+  final bool resultIconRotation;
+  final Widget? resultIcon;
+  final double resultIconRotationValue;
 
   // size
-  double resultWidth;
-  double resultHeight;
-  double? dropdownWidth; // late
-  double dropdownHeight; // late
-  double dropdownItemHeight;
-  double triangleWidth;
-  double triangleHeight;
-  double iconSize;
+  final double resultWidth;
+  final double resultHeight;
+  final double? dropdownWidth; // late
+  final double dropdownHeight; // late
+  final double dropdownItemHeight;
+  final double triangleWidth;
+  final double triangleHeight;
+  final double iconSize;
 
   // align
-  Alignment resultAlign;
-  String dropdownAlign; // late
-  Alignment dropdownItemAlign;
-  String triangleAlign;
-  double triangleLeft;
-  bool dropdownItemReverse;
-  bool resultReverse;
-  MainAxisAlignment resultMainAxis;
-  MainAxisAlignment dropdownItemMainAxis;
+  final Alignment resultAlign;
+  final String dropdownAlign; // late
+  final Alignment dropdownItemAlign;
+  final String triangleAlign;
+  final double triangleLeft;
+  final bool dropdownItemReverse;
+  final bool resultReverse;
+  final MainAxisAlignment resultMainAxis;
+  final MainAxisAlignment dropdownItemMainAxis;
 
   // padding
-  EdgeInsets resultPadding;
-  EdgeInsets dropdownItemPadding;
-  EdgeInsets dropdownPadding; // late
-  EdgeInsets selectedItemPadding;
+  final EdgeInsets resultPadding;
+  final EdgeInsets dropdownItemPadding;
+  final EdgeInsets dropdownPadding; // late
+  final EdgeInsets selectedItemPadding;
 
   // style
-  late BoxDecoration resultBD;
-  late BoxDecoration dropdownBD; // late
-  late BoxDecoration selectedItemBD;
-  late TextStyle selectedItemTS;
-  late TextStyle unselectedItemTS;
-  late TextStyle resultTS;
-  late TextStyle placeholderTS;
+  late final BoxDecoration resultBD;
+  late final BoxDecoration dropdownBD; // late
+  late final BoxDecoration selectedItemBD;
+  late final TextStyle selectedItemTS;
+  late final TextStyle unselectedItemTS;
+  late final TextStyle resultTS;
+  late final TextStyle placeholderTS;
 
   // gap
-  double gap;
-  double labelIconGap;
-  double dropdownItemGap;
-  double dropdownItemTopGap;
-  double dropdownItemBottomGap;
-  double resultIconLeftGap;
+  final double gap;
+  final double labelIconGap;
+  final double dropdownItemGap;
+  final double dropdownItemTopGap;
+  final double dropdownItemBottomGap;
+  final double resultIconLeftGap;
 
   CoolDropdown({
     required this.dropdownList,
     required this.onChange,
     this.onOpen,
-    resultIcon,
+    this.resultIcon,
     placeholderTS,
     this.dropdownItemReverse = false,
     this.resultReverse = false,
@@ -113,26 +114,6 @@ class CoolDropdown extends StatefulWidget {
     this.iconSize = 10,
     defaultValue,
   }) {
-    // 기본값 셋팅
-    if (defaultValue != null) {
-      print('.. $defaultValue');
-      this.defaultValue = defaultValue;
-    } else {
-      this.defaultValue = {};
-    }
-    // label unique 체크
-    for (var i = 0; i < dropdownList.length; i++) {
-      if (dropdownList[i]['label'] == null) {
-        throw '"label" must be initialized.';
-      }
-      for (var j = 0; j < dropdownList.length; j++) {
-        if (i != j) {
-          if (dropdownList[i]['label'] == dropdownList[j]['label']) {
-            throw 'label is duplicated. Labels have to be unique.';
-          }
-        }
-      }
-    }
     // box decoration 셋팅
     this.resultBD = resultBD ??
         BoxDecoration(
@@ -182,29 +163,29 @@ class CoolDropdown extends StatefulWidget {
     this.placeholderTS = placeholderTS ??
         TextStyle(color: Colors.grey.withOpacity(0.7), fontSize: 20);
     // Icon Container 셋팅
-    this.resultIcon = resultIcon ??
-        Container(
-          width: this.iconSize,
-          height: this.iconSize,
-          child: CustomPaint(
-            size: Size(
-                this.iconSize * 0.01, (this.iconSize * 0.01 * 1).toDouble()),
-            painter: DropdownArrow(),
-          ),
-        );
+    // this.resultIcon = resultIcon ??
+    //     Container(
+    //       width: this.iconSize,
+    //       height: this.iconSize,
+    //       child: CustomPaint(
+    //         size: Size(
+    //             this.iconSize * 0.01, (this.iconSize * 0.01 * 1).toDouble()),
+    //         painter: DropdownArrow(),
+    //       ),
+    //     );
   }
 
   @override
   _CoolDropdownState createState() => _CoolDropdownState();
 }
 
-class _CoolDropdownState extends State<CoolDropdown>
+class _CoolDropdownState<T> extends State<CoolDropdown>
     with TickerProviderStateMixin {
   GlobalKey<DropdownBodyState> dropdownBodyChild = GlobalKey();
   GlobalKey inputKey = GlobalKey();
   Offset triangleOffset = Offset(0, 0);
   late OverlayEntry _overlayEntry;
-  late Map selectedItem;
+  CoolDropdownItem<T>? selectedItem;
   late AnimationController rotationController;
   late AnimationController sizeController;
   late Animation<double> textWidth;
@@ -217,7 +198,7 @@ class _CoolDropdownState extends State<CoolDropdown>
       widget.onOpen!(isOpen);
     }
     this._overlayEntry = this._createOverlayEntry();
-    Overlay.of(inputKey.currentContext!)!.insert(this._overlayEntry);
+    Overlay.of(inputKey.currentContext!).insert(this._overlayEntry);
     rotationController.forward();
   }
 
@@ -232,7 +213,7 @@ class _CoolDropdownState extends State<CoolDropdown>
 
   OverlayEntry _createOverlayEntry() {
     return OverlayEntry(
-      builder: (BuildContext context) => DropdownBody(
+      builder: (BuildContext context) => DropdownBody<T>(
         key: dropdownBodyChild,
         inputKey: inputKey,
         onChange: widget.onChange,
@@ -322,7 +303,7 @@ class _CoolDropdownState extends State<CoolDropdown>
         parent: sizeController,
         curve: Curves.fastOutSlowIn,
       );
-      this.selectedItem = widget.defaultValue;
+      // this.selectedItem = widget.defaultValue;
       sizeController.forward();
     });
   }
@@ -331,7 +312,7 @@ class _CoolDropdownState extends State<CoolDropdown>
     return RotationTransition(
         turns: Tween(begin: 0.0, end: widget.resultIconRotationValue).animate(
             CurvedAnimation(parent: rotationController, curve: Curves.easeIn)),
-        child: widget.resultIcon);
+        child: widget.resultIcon ?? const SizedBox());
   }
 
   @override
@@ -350,137 +331,59 @@ class _CoolDropdownState extends State<CoolDropdown>
         onTap: () {
           openDropdown();
         },
-        child: Stack(
-          children: [
-            Container(
-              key: inputKey,
-              width: widget.resultWidth,
-              height: widget.resultHeight,
-              padding: widget.resultPadding,
-              decoration: widget.resultBD,
-              child: Align(
-                alignment: widget.resultAlign,
-                child: widget.isResultIconLabel
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        verticalDirection: VerticalDirection.down,
-                        children: [
-                          Expanded(
-                            child: SizeTransition(
-                              sizeFactor: textWidth,
-                              axisAlignment: -1,
-                              child: Row(
-                                mainAxisAlignment: widget.resultMainAxis,
-                                children: [
-                                  if (widget.isResultLabel)
-                                    Flexible(
-                                      child: Container(
-                                        child: Text(
-                                          selectedItem['label'] ??
-                                              widget.placeholder,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: selectedItem['label'] != null
-                                              ? widget.resultTS
-                                              : widget.placeholderTS,
-                                        ),
-                                      ),
+        child: Container(
+          key: inputKey,
+          width: widget.resultWidth,
+          height: widget.resultHeight,
+          padding: widget.resultPadding,
+          decoration: widget.resultBD,
+          child: Align(
+            alignment: widget.resultAlign,
+            child: widget.isResultIconLabel
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    verticalDirection: VerticalDirection.down,
+                    children: <Widget>[
+                      Expanded(
+                        child: SizeTransition(
+                          sizeFactor: textWidth,
+                          axisAlignment: -1,
+                          child: Row(
+                            mainAxisAlignment: widget.resultMainAxis,
+                            children: [
+                              if (widget.isResultLabel)
+                                Flexible(
+                                  child: Container(
+                                    child: Text(
+                                      selectedItem?.label ?? widget.placeholder,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: selectedItem != null
+                                          ? widget.resultTS
+                                          : widget.placeholderTS,
                                     ),
-                                  if (widget.isResultLabel)
-                                    SizedBox(
-                                      width: widget.labelIconGap,
-                                    ),
-                                  if (selectedItem['icon'] != null)
-                                    selectedItem['icon'] as Widget,
-                                ].isReverse(widget.dropdownItemReverse),
-                              ),
-                            ),
+                                  ),
+                                ),
+                              if (widget.isResultLabel)
+                                SizedBox(
+                                  width: widget.labelIconGap,
+                                ),
+                              selectedItem?.icon ?? SizedBox(),
+                            ].isReverse(widget.dropdownItemReverse),
                           ),
-                          SizedBox(
-                            width: widget.resultIconLeftGap,
-                          ),
-                          widget.resultIconRotation
-                              ? rotationIcon()
-                              : widget.resultIcon
-                        ].isReverse(widget.resultReverse),
-                      )
-                    : rotationIcon(),
-              ),
-            ),
-          ],
+                        ),
+                      ),
+                      SizedBox(
+                        width: widget.resultIconLeftGap,
+                      ),
+                      widget.resultIconRotation
+                          ? rotationIcon()
+                          : widget.resultIcon!
+                    ].isReverse(widget.resultReverse),
+                  )
+                : rotationIcon(),
+          ),
         ),
       ),
     );
-  }
-}
-
-//Copy this CustomPainter code to the Bottom of the File
-class DropdownArrow extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    Path path_0 = Path();
-    path_0.moveTo(size.width * 0.4178592, size.height * 0.7748810);
-    path_0.cubicTo(
-        size.width * 0.4404533,
-        size.height * 0.7974752,
-        size.width * 0.4702912,
-        size.height * 0.8087602,
-        size.width * 0.5001371,
-        size.height * 0.8087602);
-    path_0.cubicTo(
-        size.width * 0.5299831,
-        size.height * 0.8087602,
-        size.width * 0.5598290,
-        size.height * 0.7974752,
-        size.width * 0.5824151,
-        size.height * 0.7748810);
-    path_0.lineTo(size.width * 0.9639590, size.height * 0.3933371);
-    path_0.cubicTo(
-        size.width * 1.008325,
-        size.height * 0.3489715,
-        size.width * 1.013173,
-        size.height * 0.2755667,
-        size.width * 0.9704122,
-        size.height * 0.2295878);
-    path_0.cubicTo(
-        size.width * 0.9252400,
-        size.height * 0.1803824,
-        size.width * 0.8486085,
-        size.height * 0.1787691,
-        size.width * 0.8018311,
-        size.height * 0.2255546);
-    path_0.lineTo(size.width * 0.5566105, size.height * 0.4699685);
-    path_0.cubicTo(
-        size.width * 0.5251593,
-        size.height * 0.5014278,
-        size.width * 0.4743325,
-        size.height * 0.5014278,
-        size.width * 0.4428733,
-        size.height * 0.4699685);
-    path_0.lineTo(size.width * 0.1984593, size.height * 0.2255546);
-    path_0.cubicTo(
-        size.width * 0.1516657,
-        size.height * 0.1787691,
-        size.width * 0.07503428,
-        size.height * 0.1795757,
-        size.width * 0.02987013,
-        size.height * 0.2295878);
-    path_0.cubicTo(
-        size.width * -0.01288215,
-        size.height * 0.2755667,
-        size.width * -0.008848915,
-        size.height * 0.3489715,
-        size.width * 0.03632330,
-        size.height * 0.3933371);
-    path_0.lineTo(size.width * 0.4178592, size.height * 0.7748810);
-    path_0.close();
-
-    Paint paint_0_fill = Paint()..style = PaintingStyle.fill;
-    paint_0_fill.color = Colors.grey.withOpacity(0.7);
-    canvas.drawPath(path_0, paint_0_fill);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true;
   }
 }

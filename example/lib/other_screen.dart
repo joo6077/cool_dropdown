@@ -14,9 +14,7 @@ class _OtherScreenState extends State<OtherScreen> {
     return Scaffold(
       body: Center(
         child: Container(
-          child: CoolDropdown(dropdownList: [
-            {'label': 'apple', 'value': 'apple'}
-          ], onChange: (_) {}),
+          child: CoolDropdown(dropdownList: [], onChange: (_) {}),
         ),
       ),
     );
