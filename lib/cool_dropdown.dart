@@ -1,6 +1,6 @@
 library cool_dropdown;
 
-import 'package:cool_dropdown/enums/triangle_align.dart';
+import 'package:cool_dropdown/enums/dropdown_arrow_align.dart';
 import 'package:cool_dropdown/enums/dropdown_align.dart';
 import 'package:flutter/material.dart';
 import 'package:cool_dropdown/utils/animation_util.dart';

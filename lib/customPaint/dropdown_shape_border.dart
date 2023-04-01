@@ -1,15 +1,15 @@
 import 'dart:math';
 
-import 'package:cool_dropdown/enums/triangle_align.dart';
+import 'package:cool_dropdown/enums/dropdown_arrow_align.dart';
 import 'package:flutter/material.dart';
 
-class DropdownBodyShapeBorder extends ShapeBorder {
+class DropdownShapeBorder extends ShapeBorder {
   final _Arrow arrow;
   final double radius;
   final bool isArrowDown;
   final DropdownArrowAlign triangleAlign;
 
-  DropdownBodyShapeBorder({
+  DropdownShapeBorder({
     this.arrow = const _Arrow(
       width: 30.0,
       height: 20.0,

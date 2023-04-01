@@ -1,6 +1,6 @@
-import 'package:cool_dropdown/customPaint/dropdown_body_painter.dart';
+import 'package:cool_dropdown/customPaint/dropdown_shape_border.dart';
 import 'package:cool_dropdown/enums/dropdown_align.dart';
-import 'package:cool_dropdown/enums/triangle_align.dart';
+import 'package:cool_dropdown/enums/dropdown_arrow_align.dart';
 import 'package:cool_dropdown/models/cool_dropdown_item.dart';
 import 'package:flutter/material.dart';
 import 'package:cool_dropdown/utils/animation_util.dart';
@@ -405,7 +405,7 @@ class DropdownBodyState extends State<DropdownBody>
               //   spreadRadius: 5,
               // )
             ],
-            shape: DropdownBodyShapeBorder(
+            shape: DropdownShapeBorder(
                 // radius: 10,
                 // arrowHeight: 20,
                 ),
