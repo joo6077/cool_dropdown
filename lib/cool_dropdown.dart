@@ -5,7 +5,7 @@ import 'package:cool_dropdown/enums/dropdown_align.dart';
 import 'package:flutter/material.dart';
 import 'package:cool_dropdown/utils/animation_util.dart';
 import 'package:cool_dropdown/utils/extension_util.dart';
-import 'package:cool_dropdown/dropdown_body.dart';
+import 'package:cool_dropdown/dropdown_widget.dart';
 import 'package:cool_dropdown/models/cool_dropdown_item.dart';
 
 class CoolDropdown<T> extends StatefulWidget {
@@ -183,7 +183,7 @@ class CoolDropdown<T> extends StatefulWidget {
 
 class _CoolDropdownState<T> extends State<CoolDropdown>
     with TickerProviderStateMixin {
-  GlobalKey<DropdownBodyState> dropdownBodyChild = GlobalKey();
+  GlobalKey<DropdownWidgetState> dropdownBodyChild = GlobalKey();
   GlobalKey inputKey = GlobalKey();
   Offset triangleOffset = Offset(0, 0);
   late OverlayEntry _overlayEntry;
@@ -215,7 +215,7 @@ class _CoolDropdownState<T> extends State<CoolDropdown>
 
   OverlayEntry _createOverlayEntry() {
     return OverlayEntry(
-      builder: (BuildContext context) => DropdownBody<T>(
+      builder: (BuildContext context) => DropdownWidget<T>(
         key: dropdownBodyChild,
         inputKey: inputKey,
         onChange: widget.onChange,

@@ -4,9 +4,8 @@ import 'package:cool_dropdown/enums/dropdown_arrow_align.dart';
 import 'package:cool_dropdown/models/cool_dropdown_item.dart';
 import 'package:flutter/material.dart';
 import 'package:cool_dropdown/utils/animation_util.dart';
-import 'package:cool_dropdown/utils/extension_util.dart';
 
-class DropdownBody<T> extends StatefulWidget {
+class DropdownWidget<T> extends StatefulWidget {
   final Key key;
   final GlobalKey inputKey;
   final Function closeDropdown;
@@ -65,7 +64,7 @@ class DropdownBody<T> extends StatefulWidget {
   // triangleBox Shadow
   late List triangleBoxShadows;
 
-  DropdownBody(
+  DropdownWidget(
       {required this.key,
       required this.inputKey,
       required this.dropdownList,
@@ -126,10 +125,10 @@ class DropdownBody<T> extends StatefulWidget {
   }
 
   @override
-  DropdownBodyState createState() => DropdownBodyState();
+  DropdownWidgetState createState() => DropdownWidgetState();
 }
 
-class DropdownBodyState extends State<DropdownBody>
+class DropdownWidgetState extends State<DropdownWidget>
     with TickerProviderStateMixin {
   Offset dropdownOffset = Offset(0, 0);
   Offset triangleOffset = Offset(0, 0);
