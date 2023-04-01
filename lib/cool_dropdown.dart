@@ -1,9 +1,11 @@
 library cool_dropdown;
 
+import 'package:cool_dropdown/enums/triangle_align.dart';
+import 'package:cool_dropdown/enums/dropdown_align.dart';
 import 'package:flutter/material.dart';
 import 'package:cool_dropdown/utils/animation_util.dart';
 import 'package:cool_dropdown/utils/extension_util.dart';
-import 'package:cool_dropdown/drop_down_body.dart';
+import 'package:cool_dropdown/dropdown_body.dart';
 import 'package:cool_dropdown/models/cool_dropdown_item.dart';
 
 class CoolDropdown<T> extends StatefulWidget {
@@ -33,9 +35,9 @@ class CoolDropdown<T> extends StatefulWidget {
 
   // align
   final Alignment resultAlign;
-  final String dropdownAlign; // late
+  final DropdownAlign dropdownAlign; // late
   final Alignment dropdownItemAlign;
-  final String triangleAlign;
+  final TriangleAlign triangleAlign;
   final double triangleLeft;
   final bool dropdownItemReverse;
   final bool resultReverse;
@@ -83,8 +85,8 @@ class CoolDropdown<T> extends StatefulWidget {
     this.dropdownHeight = 300,
     this.dropdownItemHeight = 50,
     this.resultAlign = Alignment.centerLeft,
-    this.dropdownAlign = 'center',
-    this.triangleAlign = 'center',
+    this.dropdownAlign = DropdownAlign.center,
+    this.triangleAlign = TriangleAlign.center,
     this.dropdownItemAlign = Alignment.centerLeft,
     this.dropdownItemMainAxis = MainAxisAlignment.spaceBetween,
     this.resultMainAxis = MainAxisAlignment.spaceBetween,

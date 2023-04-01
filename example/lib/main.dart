@@ -162,8 +162,6 @@ class _MyAppState extends State<MyApp> {
                             color: Colors.black.withOpacity(0.7), width: 3))),
                 triangleWidth: 10,
                 triangleHeight: 10,
-                triangleAlign: 'center',
-                dropdownAlign: 'center',
                 gap: 20,
               ),
             ),
