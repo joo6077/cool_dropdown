@@ -37,7 +37,7 @@ class DropdownBody<T> extends StatefulWidget {
   final Alignment resultAlign;
   final DropdownAlign dropdownAlign;
   final Alignment dropdownItemAlign;
-  final TriangleAlign triangleAlign;
+  final DropdownArrowAlign triangleAlign;
   final double triangleLeft;
   final bool dropdownItemReverse;
   final MainAxisAlignment dropdownItemMainAxis;
@@ -368,15 +368,15 @@ class DropdownBodyState extends State<DropdownBody>
     double value = 0;
 
     switch (widget.triangleAlign) {
-      case TriangleAlign.left:
+      case DropdownArrowAlign.left:
         value = widget.triangleBorder.width;
         break;
-      case TriangleAlign.right:
+      case DropdownArrowAlign.right:
         value = (widget.dropdownWidth! + sidePadding) -
             widget.triangleWidth -
             widget.triangleBorder.width;
         break;
-      case TriangleAlign.center:
+      case DropdownArrowAlign.center:
         value =
             (widget.dropdownWidth! + sidePadding - widget.triangleWidth) * 0.5 +
                 widget.triangleBorder.width;

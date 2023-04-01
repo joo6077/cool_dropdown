@@ -7,7 +7,7 @@ class DropdownBodyShapeBorder extends ShapeBorder {
   final _Arrow arrow;
   final double radius;
   final bool isArrowDown;
-  final TriangleAlign triangleAlign;
+  final DropdownArrowAlign triangleAlign;
 
   DropdownBodyShapeBorder({
     this.arrow = const _Arrow(
@@ -17,7 +17,7 @@ class DropdownBodyShapeBorder extends ShapeBorder {
     ),
     this.radius = 16.0,
     this.isArrowDown = false,
-    this.triangleAlign = TriangleAlign.right,
+    this.triangleAlign = DropdownArrowAlign.right,
   });
 
   @override
@@ -154,19 +154,19 @@ class DropdownBodyShapeBorder extends ShapeBorder {
     final boxRadius = radius;
 
     switch (triangleAlign) {
-      case TriangleAlign.left:
+      case DropdownArrowAlign.left:
         return _ArrowPosition(
           left: boxRadius,
           center: boxRadius + arrow.width / 2,
           right: boxRadius + arrow.width,
         );
-      case TriangleAlign.center:
+      case DropdownArrowAlign.center:
         return _ArrowPosition(
           left: boxWidth / 2 - arrow.width / 2,
           center: boxWidth / 2,
           right: boxWidth / 2 + arrow.width / 2,
         );
-      case TriangleAlign.right:
+      case DropdownArrowAlign.right:
         return _ArrowPosition(
           left: boxWidth - boxRadius - arrow.width,
           center: boxWidth - boxRadius - arrow.width / 2,

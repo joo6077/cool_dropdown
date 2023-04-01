@@ -37,7 +37,7 @@ class CoolDropdown<T> extends StatefulWidget {
   final Alignment resultAlign;
   final DropdownAlign dropdownAlign; // late
   final Alignment dropdownItemAlign;
-  final TriangleAlign triangleAlign;
+  final DropdownArrowAlign triangleAlign;
   final double triangleLeft;
   final bool dropdownItemReverse;
   final bool resultReverse;
@@ -86,7 +86,7 @@ class CoolDropdown<T> extends StatefulWidget {
     this.dropdownItemHeight = 50,
     this.resultAlign = Alignment.centerLeft,
     this.dropdownAlign = DropdownAlign.center,
-    this.triangleAlign = TriangleAlign.center,
+    this.triangleAlign = DropdownArrowAlign.center,
     this.dropdownItemAlign = Alignment.centerLeft,
     this.dropdownItemMainAxis = MainAxisAlignment.spaceBetween,
     this.resultMainAxis = MainAxisAlignment.spaceBetween,

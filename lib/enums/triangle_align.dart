@@ -1,4 +1,4 @@
-enum TriangleAlign {
+enum DropdownArrowAlign {
   left,
   center,
   right,
