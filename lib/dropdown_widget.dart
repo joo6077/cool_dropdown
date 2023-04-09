@@ -64,6 +64,12 @@ class DropdownWidget<T> extends StatefulWidget {
   // triangleBox Shadow
   late List triangleBoxShadows;
 
+  final DropdownArrow arrow = const DropdownArrow(
+    width: 30.0,
+    height: 20.0,
+    borderRadius: .0,
+  );
+
   DropdownWidget(
       {required this.key,
       required this.inputKey,
@@ -131,7 +137,6 @@ class DropdownWidget<T> extends StatefulWidget {
 class DropdownWidgetState extends State<DropdownWidget>
     with TickerProviderStateMixin {
   Offset dropdownOffset = Offset(0, 0);
-  Offset triangleOffset = Offset(0, 0);
   String selectedLabel = '';
   bool isOpen = false;
   bool isSelected = false;
@@ -191,8 +196,6 @@ class DropdownWidgetState extends State<DropdownWidget>
           inputBox: inputBox,
           inputPosition: inputPosition,
           actualBoxHeight: actualBoxHeight);
-      triangleOffset = setTrianglePosition(
-          dropdownOffset: dropdownOffset, sidePadding: sidePadding);
 
       if (widget.screenHeight < actualBoxHeight + dropdownOffset.dy) {
         setState(() {
@@ -207,10 +210,6 @@ class DropdownWidgetState extends State<DropdownWidget>
           inputBox: inputBox,
           inputPosition: inputPosition,
           actualBoxHeight: actualBoxHeight);
-      Offset bottomOffset = dropdownOffset +
-          Offset(0, widget.dropdownHeight + widget.triangleHeight);
-      triangleOffset = setTrianglePosition(
-          dropdownOffset: bottomOffset, sidePadding: sidePadding);
       setState(() {
         // triangle upsideDown
         upsideDown = true;
@@ -362,106 +361,42 @@ class DropdownWidgetState extends State<DropdownWidget>
             : inputPosition.dy - (widget.gap + actualBoxHeight));
   }
 
-  Offset setTrianglePosition(
-      {required Offset dropdownOffset, required double sidePadding}) {
-    double value = 0;
-
-    switch (widget.triangleAlign) {
-      case DropdownArrowAlign.left:
-        value = widget.triangleBorder.width;
-        break;
-      case DropdownArrowAlign.right:
-        value = (widget.dropdownWidth! + sidePadding) -
-            widget.triangleWidth -
-            widget.triangleBorder.width;
-        break;
-      case DropdownArrowAlign.center:
-        value =
-            (widget.dropdownWidth! + sidePadding - widget.triangleWidth) * 0.5 +
-                widget.triangleBorder.width;
-        break;
-    }
-
-    return Offset(dropdownOffset.dx + value, dropdownOffset.dy);
-  }
-
   void closeAnimation() {}
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: Center(
+    return Positioned(
+      left: 10,
+      top: 100,
+      child: Material(
+        color: Colors.transparent,
         child: Container(
-          width: 100,
-          height: 100,
+          width: 200,
+          height: 400,
           decoration: ShapeDecoration(
-            color: Colors.red,
+            color: Colors.white,
             shadows: [
               // BoxShadow(
               //   color: Colors.black,
               //   blurRadius: 10,
               //   spreadRadius: 5,
+              //   offset: Offset(10, 0),
               // )
             ],
             shape: DropdownShapeBorder(
-                // radius: 10,
-                // arrowHeight: 20,
-                ),
+              // radius: 10,
+              // arrowHeight: 20,
+              arrow: widget.arrow,
+              isArrowDown: true,
+            ),
+          ),
+          child: Container(
+            padding: EdgeInsets.only(top: 10),
+            child: Text('data'),
+            color: Colors.amber,
           ),
         ),
       ),
     );
-  }
-}
-
-class TrianglePainter extends CustomPainter {
-  final Color strokeColor;
-  final PaintingStyle paintingStyle;
-  final double strokeWidth;
-  final double blurRadius;
-  final bool upsideDown;
-
-  TrianglePainter(
-      {this.strokeColor = Colors.black,
-      this.strokeWidth = 0,
-      this.paintingStyle = PaintingStyle.stroke,
-      this.blurRadius = 0,
-      this.upsideDown = false});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    Paint paint = Paint()
-      ..color = strokeColor
-      ..strokeWidth = strokeWidth
-      ..style = paintingStyle;
-
-    if (blurRadius != 0) {
-      paint.maskFilter = MaskFilter.blur(BlurStyle.normal, blurRadius);
-    }
-    canvas.drawPath(getTrianglePath(size.width, size.height), paint);
-  }
-
-  Path getTrianglePath(double x, double y) {
-    if (this.upsideDown) {
-      return Path()
-        ..moveTo(0, 0)
-        ..lineTo(x / 2, y)
-        ..lineTo(x, 0)
-        ..lineTo(0, 0);
-    } else {
-      return Path()
-        ..moveTo(0, y)
-        ..lineTo(x / 2, 0)
-        ..lineTo(x, y)
-        ..lineTo(0, y);
-    }
-  }
-
-  @override
-  bool shouldRepaint(TrianglePainter oldDelegate) {
-    return oldDelegate.strokeColor != strokeColor ||
-        oldDelegate.paintingStyle != paintingStyle ||
-        oldDelegate.strokeWidth != strokeWidth;
   }
 }

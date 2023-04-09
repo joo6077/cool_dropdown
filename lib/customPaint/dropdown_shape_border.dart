@@ -4,16 +4,16 @@ import 'package:cool_dropdown/enums/dropdown_arrow_align.dart';
 import 'package:flutter/material.dart';
 
 class DropdownShapeBorder extends ShapeBorder {
-  final _Arrow arrow;
+  final DropdownArrow arrow;
   final double radius;
   final bool isArrowDown;
   final DropdownArrowAlign triangleAlign;
 
   DropdownShapeBorder({
-    this.arrow = const _Arrow(
+    this.arrow = const DropdownArrow(
       width: 30.0,
       height: 20.0,
-      borderRadius: 5.0,
+      borderRadius: .0,
     ),
     this.radius = 16.0,
     this.isArrowDown = false,
@@ -21,9 +21,7 @@ class DropdownShapeBorder extends ShapeBorder {
   });
 
   @override
-  EdgeInsetsGeometry get dimensions => EdgeInsets.only(
-      top: isArrowDown ? arrow.height : 0,
-      bottom: isArrowDown ? 0 : arrow.height);
+  EdgeInsetsGeometry get dimensions => EdgeInsets.zero;
 
   @override
   ShapeBorder scale(double t) => this;
@@ -39,8 +37,8 @@ class DropdownShapeBorder extends ShapeBorder {
   Path getOuterPath(Rect rect, {TextDirection? textDirection}) {
     rect = Rect.fromPoints(rect.topLeft, rect.bottomRight);
     return isArrowDown
-        ? roundedDropdownBodyArrowDownPath(rect)
-        : roundedDropdownBodyArrowUpPath(rect);
+        ? roundedDropdownArrowDownPath(rect)
+        : roundedDropdownArrowUpPath(rect);
   }
 
   Path roundedDropdownBodyPath(Rect rect) {
@@ -67,11 +65,11 @@ class DropdownShapeBorder extends ShapeBorder {
     return path;
   }
 
-  Path roundedDropdownBodyArrowDownPath(Rect rect) {
+  Path roundedDropdownArrowDownPath(Rect rect) {
     rect = Rect.fromPoints(rect.topLeft, rect.bottomRight);
     final boxWidth = rect.width;
     final boxHeight = rect.height;
-    final boxOffset = Offset(rect.topLeft.dx, rect.topLeft.dy - arrow.height);
+    final boxOffset = Offset(rect.topLeft.dx, rect.topLeft.dy);
 
     final arrowPosition = _calcArrowPosition(boxWidth);
 
@@ -107,10 +105,10 @@ class DropdownShapeBorder extends ShapeBorder {
     return path;
   }
 
-  Path roundedDropdownBodyArrowUpPath(Rect rect) {
+  Path roundedDropdownArrowUpPath(Rect rect) {
     final boxWidth = rect.width;
     final boxHeight = rect.height;
-    final boxOffset = Offset(rect.topLeft.dx, rect.topLeft.dy + arrow.height);
+    final boxOffset = Offset(rect.topLeft.dx, rect.topLeft.dy - arrow.height);
 
     final arrowPosition = _calcArrowPosition(boxWidth);
 
@@ -179,12 +177,12 @@ class DropdownShapeBorder extends ShapeBorder {
   Path getInnerPath(Rect rect, {TextDirection? textDirection}) => Path();
 }
 
-class _Arrow {
+class DropdownArrow {
   final double width;
   final double height;
   final double borderRadius;
 
-  const _Arrow({
+  const DropdownArrow({
     required this.width,
     required this.height,
     required this.borderRadius,
