@@ -51,6 +51,12 @@ class _DropdownItemWidgetState extends State<DropdownItemWidget>
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return DecoratedBoxTransition(
       decoration: _decorationBoxTween,

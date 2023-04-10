@@ -3,6 +3,7 @@ import 'package:cool_dropdown/customPaint/dropdown_shape_border.dart';
 import 'package:cool_dropdown/enums/dropdown_align.dart';
 import 'package:cool_dropdown/enums/dropdown_arrow_align.dart';
 import 'package:cool_dropdown/models/cool_dropdown_item.dart';
+import 'package:cool_dropdown/options/dropdown_arrow_options.dart';
 import 'package:cool_dropdown/widgets/dropdown_item_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:cool_dropdown/utils/animation_util.dart';
@@ -66,7 +67,7 @@ class DropdownWidget<T> extends StatefulWidget {
   // triangleBox Shadow
   late List triangleBoxShadows;
 
-  final DropdownArrow arrow = const DropdownArrow(
+  final DropdownArrowOptions arrow = const DropdownArrowOptions(
     width: 30.0,
     height: 20.0,
     borderRadius: .0,

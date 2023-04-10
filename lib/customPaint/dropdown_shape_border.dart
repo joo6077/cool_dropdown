@@ -1,17 +1,18 @@
 import 'dart:math';
 
 import 'package:cool_dropdown/enums/dropdown_arrow_align.dart';
+import 'package:cool_dropdown/options/dropdown_arrow_options.dart';
 import 'package:flutter/material.dart';
 
 class DropdownShapeBorder extends ShapeBorder {
-  final DropdownArrow arrow;
+  final DropdownArrowOptions arrow;
   final double radius;
   final bool isArrowDown;
   final DropdownArrowAlign triangleAlign;
   final BorderSide borderSide;
 
   DropdownShapeBorder({
-    this.arrow = const DropdownArrow(
+    this.arrow = const DropdownArrowOptions(
       width: 30.0,
       height: 20.0,
       borderRadius: .0,
@@ -175,18 +176,6 @@ class DropdownShapeBorder extends ShapeBorder {
 
   @override
   Path getInnerPath(Rect rect, {TextDirection? textDirection}) => Path();
-}
-
-class DropdownArrow {
-  final double width;
-  final double height;
-  final double borderRadius;
-
-  const DropdownArrow({
-    required this.width,
-    required this.height,
-    required this.borderRadius,
-  });
 }
 
 class _ArrowPosition {
