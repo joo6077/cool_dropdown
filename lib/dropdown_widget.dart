@@ -3,6 +3,7 @@ import 'package:cool_dropdown/customPaint/dropdown_shape_border.dart';
 import 'package:cool_dropdown/enums/dropdown_align.dart';
 import 'package:cool_dropdown/enums/dropdown_arrow_align.dart';
 import 'package:cool_dropdown/models/cool_dropdown_item.dart';
+import 'package:cool_dropdown/widgets/dropdown_item_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:cool_dropdown/utils/animation_util.dart';
 
@@ -13,7 +14,7 @@ class DropdownWidget<T> extends StatefulWidget {
   final BuildContext bodyContext;
   late double screenHeight;
 
-  final List dropdownList;
+  final List<CoolDropdownItem> dropdownList;
   final List dropdownIsSelected = [];
   final Function onChange;
   final Function getSelectedItem;
@@ -368,8 +369,6 @@ class DropdownWidgetState extends State<DropdownWidget>
             : inputPosition.dy - (widget.gap + actualBoxHeight));
   }
 
-  void closeAnimation() {}
-
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -391,11 +390,16 @@ class DropdownWidgetState extends State<DropdownWidget>
             left: 100,
             child: GestureDetector(
               onTap: () {},
-              child: ScaleTransition(
-                scale: _dropdownController.rotation,
-                alignment:
-                    Alignment((400 - widget.arrow.height * 0.5 - 16) / 400, -1),
+              child: SizeTransition(
+                sizeFactor: _dropdownController.showDropdown,
+                axisAlignment: -1,
+                // scale: _dropdownController.showDropdown,
+                // alignment:
+                //     Alignment((400 - widget.arrow.height * 0.5 - 16) / 400, -1),
                 child: Container(
+                  margin: EdgeInsets.only(
+                      // top: borderWidth + shadowBlur + shadowSpread > 0,
+                      ),
                   clipBehavior: Clip.antiAlias,
                   padding: EdgeInsets.only(top: widget.arrow.height),
                   width: 200,
@@ -403,22 +407,35 @@ class DropdownWidgetState extends State<DropdownWidget>
                   decoration: ShapeDecoration(
                     color: Colors.white,
                     shadows: [
-                      // BoxShadow(
-                      //   color: Colors.black,
-                      //   blurRadius: 10,
-                      //   spreadRadius: 5,
-                      //   offset: Offset(10, 0),
-                      // )
+                      BoxShadow(
+                        color: Colors.black,
+                        blurRadius: 10,
+                        spreadRadius: 5,
+                        offset: Offset(10, 0),
+                      )
                     ],
                     shape: DropdownShapeBorder(
                       // radius: 10,
                       // arrowHeight: 20,
                       arrow: widget.arrow,
                       isArrowDown: false,
+                      borderSide: BorderSide(
+                        color: Colors.black,
+                        width: 1,
+                      ),
                     ),
                   ),
-                  child: Container(
-                    child: Text('data'),
+                  child: ListView.builder(
+                    padding: EdgeInsets.zero,
+                    itemCount: widget.dropdownList.length,
+                    itemBuilder: (_, index) => DropdownItemWidget(
+                      item: widget.dropdownList[index],
+                      selectedBD: widget.selectedItemBD,
+                      selectedTS: widget.selectedItemTS,
+                      unselectedTS: widget.unselectedItemTS,
+                      alignment: widget.dropdownItemAlign,
+                      padding: widget.selectedItemPadding,
+                    ),
                   ),
                 ),
               ),

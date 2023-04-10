@@ -8,6 +8,7 @@ class DropdownShapeBorder extends ShapeBorder {
   final double radius;
   final bool isArrowDown;
   final DropdownArrowAlign triangleAlign;
+  final BorderSide borderSide;
 
   DropdownShapeBorder({
     this.arrow = const DropdownArrow(
@@ -18,10 +19,11 @@ class DropdownShapeBorder extends ShapeBorder {
     this.radius = 16.0,
     this.isArrowDown = false,
     this.triangleAlign = DropdownArrowAlign.right,
+    this.borderSide = BorderSide.none,
   });
 
   @override
-  EdgeInsetsGeometry get dimensions => EdgeInsets.only(bottom: arrow.height);
+  EdgeInsetsGeometry get dimensions => EdgeInsets.zero;
 
   @override
   ShapeBorder scale(double t) => this;
@@ -29,8 +31,7 @@ class DropdownShapeBorder extends ShapeBorder {
   @override
   void paint(Canvas canvas, Rect rect, {TextDirection? textDirection}) {
     final path = getOuterPath(rect, textDirection: textDirection);
-    canvas.drawPath(
-        path, BorderSide(color: Colors.black, width: 2.0).toPaint());
+    canvas.drawPath(path, borderSide.toPaint());
   }
 
   @override

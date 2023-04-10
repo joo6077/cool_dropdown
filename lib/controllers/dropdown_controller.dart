@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/scheduler/ticker.dart';
 
 class DropdownController implements TickerProvider {
-  late final AnimationController controller;
+  late final AnimationController _controller;
 
   OverlayEntry? overlayEntry;
 
   DropdownController._() {
-    controller = AnimationController(
+    _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500),
     );
@@ -26,16 +26,18 @@ class DropdownController implements TickerProvider {
     return DropdownController._();
   }
 
+  AnimationController get controller => _controller;
+
   Animation<double> get rotation => Tween<double>(begin: 0, end: 1).animate(
         CurvedAnimation(
-          parent: controller,
+          parent: _controller,
           curve: const Interval(0.0, 0.5, curve: Curves.easeOut),
         ),
       );
 
-  Animation<double> get opacity => Tween<double>(begin: .0, end: 1.0).animate(
+  Animation<double> get showDropdown => Tween<double>(begin: 0, end: 1).animate(
         CurvedAnimation(
-          parent: controller,
+          parent: _controller,
           curve: const Interval(0.5, 1.0, curve: Curves.easeOut),
         ),
       );
@@ -44,16 +46,16 @@ class DropdownController implements TickerProvider {
     overlayEntry = OverlayEntry(builder: (_) => child);
     if (overlayEntry == null) return;
     Overlay.of(context).insert(overlayEntry!);
-    controller.forward();
+    _controller.forward();
   }
 
   void close() async {
-    await controller.reverse();
+    await _controller.reverse();
     overlayEntry?.remove();
   }
 
   void dispose() {
-    controller.dispose();
+    _controller.dispose();
   }
 
   @override

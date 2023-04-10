@@ -38,6 +38,7 @@ List<String> fruits = [
 
 class _MyAppState extends State<MyApp> {
   List<CoolDropdownItem> pokemonMap = [];
+  List<CoolDropdownItem> fruitDropdownItems = [];
   @override
   void initState() {
     for (var i = 0; i < pokemons.length; i++) {
@@ -54,7 +55,18 @@ class _MyAppState extends State<MyApp> {
             value: '${pokemons[i]}'),
       );
     }
-    for (var i = 0; i < fruits.length; i++) {}
+    for (var i = 0; i < fruits.length; i++) {
+      fruitDropdownItems.add(CoolDropdownItem<String>(
+          label: '${fruits[i]}',
+          icon: Container(
+            height: 25,
+            width: 25,
+            child: SvgPicture.asset(
+              'assets/${fruits[i]}.svg',
+            ),
+          ),
+          value: '${fruits[i]}'));
+    }
     super.initState();
   }
 
@@ -74,7 +86,7 @@ class _MyAppState extends State<MyApp> {
             ),
             Center(
               child: CoolDropdown(
-                dropdownList: dropdownItemList,
+                dropdownList: fruitDropdownItems,
                 onChange: (selectedItem) {
                   print(selectedItem);
                 },
