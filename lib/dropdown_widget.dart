@@ -1,3 +1,4 @@
+import 'package:cool_dropdown/controllers/dropdown_controller.dart';
 import 'package:cool_dropdown/customPaint/dropdown_shape_border.dart';
 import 'package:cool_dropdown/enums/dropdown_align.dart';
 import 'package:cool_dropdown/enums/dropdown_arrow_align.dart';
@@ -70,6 +71,8 @@ class DropdownWidget<T> extends StatefulWidget {
     borderRadius: .0,
   );
 
+  final String dropdownKey;
+
   DropdownWidget(
       {required this.key,
       required this.inputKey,
@@ -109,7 +112,8 @@ class DropdownWidget<T> extends StatefulWidget {
       required this.isResultLabel,
       required this.bodyContext,
       required this.isDropdownLabel,
-      required this.triangleLeft}) {
+      required this.triangleLeft,
+      required this.dropdownKey}) {
     // dropdown list 초기화
     for (var i = 0; i < this.dropdownList.length; i++) {
       this.dropdownIsSelected.add(false);
@@ -158,6 +162,9 @@ class DropdownWidgetState extends State<DropdownWidget>
   late EdgeInsetsTween selectedPaddingTween;
   late int currentIndex = 0;
   AnimationUtil au = AnimationUtil();
+
+  late final _dropdownController =
+      DropdownController.getInstance(widget.dropdownKey);
 
   @override
   void initState() {
@@ -365,37 +372,59 @@ class DropdownWidgetState extends State<DropdownWidget>
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      left: 10,
-      top: 100,
-      child: Material(
-        color: Colors.transparent,
-        child: Container(
-          width: 200,
-          height: 400,
-          decoration: ShapeDecoration(
-            color: Colors.white,
-            shadows: [
-              // BoxShadow(
-              //   color: Colors.black,
-              //   blurRadius: 10,
-              //   spreadRadius: 5,
-              //   offset: Offset(10, 0),
-              // )
-            ],
-            shape: DropdownShapeBorder(
-              // radius: 10,
-              // arrowHeight: 20,
-              arrow: widget.arrow,
-              isArrowDown: true,
+    return Material(
+      color: Colors.transparent,
+      child: Stack(
+        children: [
+          GestureDetector(
+            onTap: () {
+              _dropdownController.close();
+            },
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              color: Colors.transparent,
             ),
           ),
-          child: Container(
-            padding: EdgeInsets.only(top: 10),
-            child: Text('data'),
-            color: Colors.amber,
+          Positioned(
+            top: 100,
+            left: 100,
+            child: GestureDetector(
+              onTap: () {},
+              child: ScaleTransition(
+                scale: _dropdownController.rotation,
+                alignment:
+                    Alignment((400 - widget.arrow.height * 0.5 - 16) / 400, -1),
+                child: Container(
+                  clipBehavior: Clip.antiAlias,
+                  padding: EdgeInsets.only(top: widget.arrow.height),
+                  width: 200,
+                  height: 400,
+                  decoration: ShapeDecoration(
+                    color: Colors.white,
+                    shadows: [
+                      // BoxShadow(
+                      //   color: Colors.black,
+                      //   blurRadius: 10,
+                      //   spreadRadius: 5,
+                      //   offset: Offset(10, 0),
+                      // )
+                    ],
+                    shape: DropdownShapeBorder(
+                      // radius: 10,
+                      // arrowHeight: 20,
+                      arrow: widget.arrow,
+                      isArrowDown: false,
+                    ),
+                  ),
+                  child: Container(
+                    child: Text('data'),
+                  ),
+                ),
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

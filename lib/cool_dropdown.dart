@@ -1,5 +1,8 @@
 library cool_dropdown;
 
+import 'dart:math';
+
+import 'package:cool_dropdown/controllers/dropdown_controller.dart';
 import 'package:cool_dropdown/enums/dropdown_arrow_align.dart';
 import 'package:cool_dropdown/enums/dropdown_align.dart';
 import 'package:flutter/material.dart';
@@ -183,6 +186,14 @@ class CoolDropdown<T> extends StatefulWidget {
 
 class _CoolDropdownState<T> extends State<CoolDropdown>
     with TickerProviderStateMixin {
+  /// animation controller
+  late final AnimationController _controller;
+
+  /// animation
+  late final Animation<double> _rotation;
+  late final Animation<double> _size;
+  late final Animation<double> _dropdown;
+
   GlobalKey<DropdownWidgetState> dropdownBodyChild = GlobalKey();
   GlobalKey inputKey = GlobalKey();
   Offset triangleOffset = Offset(0, 0);
@@ -194,14 +205,75 @@ class _CoolDropdownState<T> extends State<CoolDropdown>
   AnimationUtil au = AnimationUtil();
   late bool isOpen = false;
 
+  late final dropdownKey = UniqueKey().toString();
+  late final _dropdownController = DropdownController.getInstance(dropdownKey);
+
   void openDropdown() {
     isOpen = true;
     if (widget.onOpen != null) {
       widget.onOpen!(isOpen);
     }
-    this._overlayEntry = this._createOverlayEntry();
-    Overlay.of(inputKey.currentContext!).insert(this._overlayEntry);
-    rotationController.forward();
+    _dropdownController.open(
+        context: context,
+        child: DropdownWidget<T>(
+          dropdownKey: dropdownKey,
+          key: dropdownBodyChild,
+          inputKey: inputKey,
+          onChange: widget.onChange,
+          dropdownList: widget.dropdownList,
+          dropdownItemReverse: widget.dropdownItemReverse,
+          isTriangle: widget.isTriangle,
+          resultWidth: widget.resultWidth,
+          resultHeight: widget.resultHeight,
+          dropdownWidth: widget.dropdownWidth,
+          dropdownHeight: widget.dropdownHeight,
+          dropdownItemHeight: widget.dropdownItemHeight,
+          resultAlign: widget.resultAlign,
+          dropdownAlign: widget.dropdownAlign,
+          triangleAlign: widget.triangleAlign,
+          dropdownItemAlign: widget.dropdownItemAlign,
+          dropdownItemPadding: widget.dropdownItemPadding,
+          dropdownPadding: widget.dropdownPadding,
+          selectedItemPadding: widget.selectedItemPadding,
+          resultBD: widget.resultBD,
+          dropdownBD: widget.dropdownBD,
+          selectedItemBD: widget.selectedItemBD,
+          selectedItemTS: widget.selectedItemTS,
+          unselectedItemTS: widget.unselectedItemTS,
+          dropdownItemGap: widget.dropdownItemGap,
+          dropdownItemTopGap: widget.dropdownItemTopGap,
+          dropdownItemBottomGap: widget.dropdownItemBottomGap,
+          gap: widget.gap,
+          labelIconGap: widget.labelIconGap,
+          triangleWidth: widget.triangleWidth,
+          triangleHeight: widget.triangleHeight,
+          triangleLeft: widget.triangleLeft,
+          isResultLabel: widget.isResultLabel,
+          closeDropdown: () {
+            closeDropdown();
+          },
+          getSelectedItem: (selectedItem) async {
+            sizeController = AnimationController(
+              vsync: this,
+              duration: au.isAnimation(
+                  status: widget.isAnimation,
+                  duration: Duration(milliseconds: 150)),
+            );
+            textWidth = CurvedAnimation(
+              parent: sizeController,
+              curve: Curves.fastOutSlowIn,
+            );
+            setState(() {
+              this.selectedItem = selectedItem;
+            });
+            await sizeController.forward();
+          },
+          selectedItem: selectedItem,
+          isAnimation: widget.isAnimation,
+          dropdownItemMainAxis: widget.dropdownItemMainAxis,
+          bodyContext: context,
+          isDropdownLabel: widget.isDropdownLabel,
+        ));
   }
 
   void closeDropdown() {
@@ -211,69 +283,6 @@ class _CoolDropdownState<T> extends State<CoolDropdown>
     }
     this._overlayEntry.remove();
     rotationController.reverse();
-  }
-
-  OverlayEntry _createOverlayEntry() {
-    return OverlayEntry(
-      builder: (BuildContext context) => DropdownWidget<T>(
-        key: dropdownBodyChild,
-        inputKey: inputKey,
-        onChange: widget.onChange,
-        dropdownList: widget.dropdownList,
-        dropdownItemReverse: widget.dropdownItemReverse,
-        isTriangle: widget.isTriangle,
-        resultWidth: widget.resultWidth,
-        resultHeight: widget.resultHeight,
-        dropdownWidth: widget.dropdownWidth,
-        dropdownHeight: widget.dropdownHeight,
-        dropdownItemHeight: widget.dropdownItemHeight,
-        resultAlign: widget.resultAlign,
-        dropdownAlign: widget.dropdownAlign,
-        triangleAlign: widget.triangleAlign,
-        dropdownItemAlign: widget.dropdownItemAlign,
-        dropdownItemPadding: widget.dropdownItemPadding,
-        dropdownPadding: widget.dropdownPadding,
-        selectedItemPadding: widget.selectedItemPadding,
-        resultBD: widget.resultBD,
-        dropdownBD: widget.dropdownBD,
-        selectedItemBD: widget.selectedItemBD,
-        selectedItemTS: widget.selectedItemTS,
-        unselectedItemTS: widget.unselectedItemTS,
-        dropdownItemGap: widget.dropdownItemGap,
-        dropdownItemTopGap: widget.dropdownItemTopGap,
-        dropdownItemBottomGap: widget.dropdownItemBottomGap,
-        gap: widget.gap,
-        labelIconGap: widget.labelIconGap,
-        triangleWidth: widget.triangleWidth,
-        triangleHeight: widget.triangleHeight,
-        triangleLeft: widget.triangleLeft,
-        isResultLabel: widget.isResultLabel,
-        closeDropdown: () {
-          closeDropdown();
-        },
-        getSelectedItem: (selectedItem) async {
-          sizeController = AnimationController(
-            vsync: this,
-            duration: au.isAnimation(
-                status: widget.isAnimation,
-                duration: Duration(milliseconds: 150)),
-          );
-          textWidth = CurvedAnimation(
-            parent: sizeController,
-            curve: Curves.fastOutSlowIn,
-          );
-          setState(() {
-            this.selectedItem = selectedItem;
-          });
-          await sizeController.forward();
-        },
-        selectedItem: selectedItem,
-        isAnimation: widget.isAnimation,
-        dropdownItemMainAxis: widget.dropdownItemMainAxis,
-        bodyContext: context,
-        isDropdownLabel: widget.isDropdownLabel,
-      ),
-    );
   }
 
   @override
@@ -310,11 +319,15 @@ class _CoolDropdownState<T> extends State<CoolDropdown>
     });
   }
 
-  RotationTransition rotationIcon() {
-    return RotationTransition(
-        turns: Tween(begin: 0.0, end: widget.resultIconRotationValue).animate(
-            CurvedAnimation(parent: rotationController, curve: Curves.easeIn)),
-        child: widget.resultIcon ?? const SizedBox());
+  Widget rotationIcon() {
+    return AnimatedBuilder(
+        animation: _dropdownController.controller,
+        builder: (_, __) {
+          return Transform.rotate(
+            angle: pi * _dropdownController.rotation.value,
+            child: widget.resultIcon ?? const SizedBox(),
+          );
+        });
   }
 
   @override

@@ -21,7 +21,7 @@ class DropdownShapeBorder extends ShapeBorder {
   });
 
   @override
-  EdgeInsetsGeometry get dimensions => EdgeInsets.zero;
+  EdgeInsetsGeometry get dimensions => EdgeInsets.only(bottom: arrow.height);
 
   @override
   ShapeBorder scale(double t) => this;
@@ -35,14 +35,14 @@ class DropdownShapeBorder extends ShapeBorder {
 
   @override
   Path getOuterPath(Rect rect, {TextDirection? textDirection}) {
-    rect = Rect.fromPoints(rect.topLeft, rect.bottomRight);
+    rect = Rect.fromPoints(
+        rect.topLeft, rect.bottomRight - Offset(0, arrow.height));
     return isArrowDown
         ? roundedDropdownArrowDownPath(rect)
         : roundedDropdownArrowUpPath(rect);
   }
 
   Path roundedDropdownBodyPath(Rect rect) {
-    rect = Rect.fromPoints(rect.topLeft, rect.bottomRight);
     final boxWidth = rect.width;
     final boxHeight = rect.height;
     final boxOffset = Offset(rect.topLeft.dx, rect.topLeft.dy);
@@ -66,7 +66,6 @@ class DropdownShapeBorder extends ShapeBorder {
   }
 
   Path roundedDropdownArrowDownPath(Rect rect) {
-    rect = Rect.fromPoints(rect.topLeft, rect.bottomRight);
     final boxWidth = rect.width;
     final boxHeight = rect.height;
     final boxOffset = Offset(rect.topLeft.dx, rect.topLeft.dy);
@@ -108,7 +107,7 @@ class DropdownShapeBorder extends ShapeBorder {
   Path roundedDropdownArrowUpPath(Rect rect) {
     final boxWidth = rect.width;
     final boxHeight = rect.height;
-    final boxOffset = Offset(rect.topLeft.dx, rect.topLeft.dy - arrow.height);
+    final boxOffset = Offset(rect.topLeft.dx, rect.topLeft.dy);
 
     final arrowPosition = _calcArrowPosition(boxWidth);
 
