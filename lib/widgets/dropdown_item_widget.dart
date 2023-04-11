@@ -1,22 +1,15 @@
 import 'package:cool_dropdown/models/cool_dropdown_item.dart';
+import 'package:cool_dropdown/options/dropdown_item_options.dart';
 import 'package:flutter/material.dart';
 
 class DropdownItemWidget extends StatefulWidget {
   final CoolDropdownItem item;
-  final TextStyle unselectedTS;
-  final TextStyle selectedTS;
-  final BoxDecoration selectedBD;
-  final EdgeInsets padding;
-  final Alignment alignment;
+  final DropdownItemOptions dropdownItemOptions;
 
   const DropdownItemWidget({
     Key? key,
     required this.item,
-    required this.unselectedTS,
-    required this.selectedTS,
-    required this.selectedBD,
-    required this.padding,
-    required this.alignment,
+    required this.dropdownItemOptions,
   }) : super(key: key);
 
   @override
@@ -27,16 +20,16 @@ class _DropdownItemWidgetState extends State<DropdownItemWidget>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
     vsync: this,
-    duration: const Duration(milliseconds: 300),
+    duration: const Duration(milliseconds: 500),
   );
   late final _decorationBoxTween = DecorationTween(
     begin: BoxDecoration(),
-    end: widget.selectedBD,
+    end: widget.dropdownItemOptions.selectedBoxDecoration,
   ).animate(_controller);
 
   late final _textStyleTween = TextStyleTween(
-    begin: widget.unselectedTS,
-    end: widget.selectedTS,
+    begin: widget.dropdownItemOptions.textStyle,
+    end: widget.dropdownItemOptions.selectedTextStyle,
   ).animate(_controller);
 
   @override
@@ -61,8 +54,9 @@ class _DropdownItemWidgetState extends State<DropdownItemWidget>
     return DecoratedBoxTransition(
       decoration: _decorationBoxTween,
       child: Container(
-        height: 50,
-        alignment: widget.alignment,
+        padding: widget.dropdownItemOptions.selectedPadding,
+        height: widget.dropdownItemOptions.height,
+        alignment: widget.dropdownItemOptions.alignment,
         child: DefaultTextStyleTransition(
           child: Text(widget.item.label),
           style: _textStyleTween,

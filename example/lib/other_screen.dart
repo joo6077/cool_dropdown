@@ -13,9 +13,7 @@ class _OtherScreenState extends State<OtherScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Container(
-          child: CoolDropdown(dropdownList: [], onChange: (_) {}),
-        ),
+        child: Container(),
       ),
     );
   }

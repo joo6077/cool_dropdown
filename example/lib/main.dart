@@ -39,6 +39,11 @@ List<String> fruits = [
 class _MyAppState extends State<MyApp> {
   List<CoolDropdownItem> pokemonMap = [];
   List<CoolDropdownItem> fruitDropdownItems = [];
+
+  final fruitDropdownController = DropdownController();
+  final pokemonDropdownController = DropdownController();
+  final listDropdownController = DropdownController();
+
   @override
   void initState() {
     for (var i = 0; i < pokemons.length; i++) {
@@ -82,10 +87,11 @@ class _MyAppState extends State<MyApp> {
         body: ListView(
           children: [
             SizedBox(
-              height: 100,
+              height: 400,
             ),
             Center(
               child: CoolDropdown(
+                controller: fruitDropdownController,
                 dropdownList: fruitDropdownItems,
                 onChange: (selectedItem) {
                   print(selectedItem);
@@ -93,17 +99,24 @@ class _MyAppState extends State<MyApp> {
                 onOpen: (isOpen) {
                   print('$isOpen');
                 },
-                resultIcon: Container(
-                  width: 10,
-                  height: 10,
-                  child: SvgPicture.asset(
-                    'assets/dropdown-arrow.svg',
-                    semanticsLabel: 'Acme Logo',
-                    color: Colors.grey.withOpacity(0.7),
+                resultOptions: ResultOptions(
+                  width: 200,
+                  icon: SizedBox(
+                    width: 10,
+                    height: 10,
+                    child: CustomPaint(
+                      painter: DropdownArrowPainter(),
+                    ),
                   ),
                 ),
-                // dropdownBD: BoxDecoration(
-                //     color: Colors.white, border: Border.all(width: 20)),
+                dropdownOptions: DropdownOptions(
+                  width: 300,
+                  height: 300,
+                  gap: DropdownGap.all(5),
+                  borderSide: BorderSide(width: 1, color: Colors.black),
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  align: DropdownAlign.left,
+                ),
               ),
             ),
             SizedBox(
@@ -111,25 +124,22 @@ class _MyAppState extends State<MyApp> {
             ),
             Center(
               child: CoolDropdown<String>(
-                resultWidth: 70,
+                controller: pokemonDropdownController,
                 // resultIcon: Container(), // if you don't want to use Icon you can set empty Container
                 dropdownList: dropdownItemList,
-                isResultLabel: false,
+                // isResultLabel: false,
                 onChange: (a) {},
-                dropdownItemReverse: true,
-                dropdownItemMainAxis: MainAxisAlignment.start,
-                resultMainAxis: MainAxisAlignment.start,
-                dropdownWidth: 200,
-                labelIconGap: 20,
-                resultIcon: Container(
-                  width: 10,
-                  height: 10,
-                  child: SvgPicture.asset(
-                    'assets/dropdown-arrow.svg',
-                    semanticsLabel: 'Acme Logo',
-                    color: Colors.grey.withOpacity(0.7),
-                  ),
-                ),
+                // dropdownItemReverse: true,
+                // labelIconGap: 20,
+                // resultIcon: Container(
+                //   width: 10,
+                //   height: 10,
+                //   child: SvgPicture.asset(
+                //     'assets/dropdown-arrow.svg',
+                //     semanticsLabel: 'Acme Logo',
+                //     color: Colors.grey.withOpacity(0.7),
+                //   ),
+                // ),
               ),
             ),
             SizedBox(
@@ -137,44 +147,30 @@ class _MyAppState extends State<MyApp> {
             ),
             Center(
               child: CoolDropdown(
+                controller: listDropdownController,
                 dropdownList: pokemonMap,
-                dropdownItemPadding: EdgeInsets.zero,
                 onChange: (dropdownItem) {},
-                resultHeight: 50,
-                resultWidth: 50,
-                dropdownWidth: 50,
-                dropdownHeight: 200,
-                dropdownItemHeight: 30,
-                dropdownItemGap: 10,
-                resultIcon: Container(
-                  width: 25,
-                  height: 25,
-                  child: Container(
-                    width: 25,
-                    height: 25,
-                    child: SvgPicture.asset(
-                      'assets/pokeball.svg',
-                    ),
-                  ),
-                ),
-                resultIconLeftGap: 0,
-                resultPadding: EdgeInsets.zero,
-                resultIconRotation: true,
-                resultIconRotationValue: 1,
-                isDropdownLabel: false,
-                isResultLabel: false,
-                isResultIconLabel: false,
-                dropdownPadding: EdgeInsets.zero,
-                resultAlign: Alignment.center,
-                resultMainAxis: MainAxisAlignment.center,
-                dropdownItemMainAxis: MainAxisAlignment.center,
-                selectedItemBD: BoxDecoration(
-                    border: Border(
-                        left: BorderSide(
-                            color: Colors.black.withOpacity(0.7), width: 3))),
-                triangleWidth: 10,
-                triangleHeight: 10,
-                gap: 20,
+                // resultIcon: Container(
+                //   width: 25,
+                //   height: 25,
+                //   child: Container(
+                //     width: 25,
+                //     height: 25,
+                //     child: SvgPicture.asset(
+                //       'assets/pokeball.svg',
+                //     ),
+                //   ),
+                // ),
+                // resultIconLeftGap: 0,
+                // resultIconRotation: true,
+                // resultIconRotationValue: 1,
+                // isDropdownLabel: false,
+                // isResultLabel: false,
+                // isResultIconLabel: false,
+                // selectedItemBD: BoxDecoration(
+                //     border: Border(
+                //         left: BorderSide(
+                //             color: Colors.black.withOpacity(0.7), width: 3))),
               ),
             ),
             SizedBox(

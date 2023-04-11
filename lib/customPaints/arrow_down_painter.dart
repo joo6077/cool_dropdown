@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 
 class DropdownArrowPainter extends CustomPainter {
+  final Color color;
+
+  DropdownArrowPainter({
+    this.color = const Color(0xB39E9E9E),
+  });
+
   @override
   void paint(Canvas canvas, Size size) {
     Path path_0 = Path();
@@ -61,7 +67,7 @@ class DropdownArrowPainter extends CustomPainter {
     path_0.close();
 
     Paint paint0Fill = Paint()..style = PaintingStyle.fill;
-    paint0Fill.color = Colors.grey.withOpacity(0.7);
+    paint0Fill.color = color;
     canvas.drawPath(path_0, paint0Fill);
   }
 

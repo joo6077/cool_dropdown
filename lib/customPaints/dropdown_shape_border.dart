@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 class DropdownShapeBorder extends ShapeBorder {
   final DropdownArrowOptions arrow;
-  final double radius;
+  final BorderRadius radius;
   final bool isArrowDown;
   final DropdownArrowAlign triangleAlign;
   final BorderSide borderSide;
@@ -17,9 +17,9 @@ class DropdownShapeBorder extends ShapeBorder {
       height: 20.0,
       borderRadius: .0,
     ),
-    this.radius = 16.0,
-    this.isArrowDown = false,
-    this.triangleAlign = DropdownArrowAlign.right,
+    this.radius = const BorderRadius.all(Radius.circular(0)),
+    required this.isArrowDown,
+    this.triangleAlign = DropdownArrowAlign.left,
     this.borderSide = BorderSide.none,
   });
 
@@ -50,20 +50,24 @@ class DropdownShapeBorder extends ShapeBorder {
     final boxOffset = Offset(rect.topLeft.dx, rect.topLeft.dy);
 
     final path = Path()
-      ..moveTo(boxOffset.dx, radius + boxOffset.dy)
-      ..arcToPoint(Offset(radius + boxOffset.dx, boxOffset.dy),
-          radius: Radius.circular(radius))
-      ..lineTo(boxWidth - radius + boxOffset.dx, boxOffset.dy)
-      ..arcToPoint(Offset(boxWidth + boxOffset.dx, radius + boxOffset.dy),
-          radius: Radius.circular(radius))
-      ..lineTo(boxWidth + boxOffset.dx, boxHeight - radius + boxOffset.dy)
+      ..moveTo(boxOffset.dx, radius.topLeft.y + boxOffset.dy)
+      ..arcToPoint(Offset(radius.topLeft.x + boxOffset.dx, boxOffset.dy),
+          radius: radius.topLeft)
+      ..lineTo(boxWidth - radius.topRight.x + boxOffset.dx, boxOffset.dy)
       ..arcToPoint(
-          Offset(boxWidth - radius + boxOffset.dx, boxHeight + boxOffset.dy),
-          radius: Radius.circular(radius))
-      ..lineTo(radius + boxOffset.dx, boxHeight + boxOffset.dy)
-      ..arcToPoint(Offset(boxOffset.dx, boxHeight - radius + boxOffset.dy),
-          radius: Radius.circular(radius))
-      ..lineTo(boxOffset.dx, radius + boxOffset.dy);
+          Offset(boxWidth + boxOffset.dx, radius.topRight.y + boxOffset.dy),
+          radius: radius.topRight)
+      ..lineTo(boxWidth + boxOffset.dx,
+          boxHeight - radius.bottomRight.y + boxOffset.dy)
+      ..arcToPoint(
+          Offset(boxWidth - radius.bottomRight.x + boxOffset.dx,
+              boxHeight + boxOffset.dy),
+          radius: radius.bottomRight)
+      ..lineTo(radius.bottomLeft.x + boxOffset.dx, boxHeight + boxOffset.dy)
+      ..arcToPoint(
+          Offset(boxOffset.dx, boxHeight - radius.bottomLeft.y + boxOffset.dy),
+          radius: radius.bottomLeft)
+      ..lineTo(boxOffset.dx, radius.bottomLeft.y + boxOffset.dy);
     return path;
   }
 
@@ -79,16 +83,19 @@ class DropdownShapeBorder extends ShapeBorder {
     final bottomCenterTheta = atan(arrow.height / (arrow.width / 2));
 
     final path = Path()
-      ..moveTo(boxOffset.dx, radius + boxOffset.dy)
-      ..arcToPoint(Offset(radius + boxOffset.dx, boxOffset.dy),
-          radius: Radius.circular(radius))
-      ..lineTo(boxWidth - radius + boxOffset.dx, boxOffset.dy)
-      ..arcToPoint(Offset(boxWidth + boxOffset.dx, radius + boxOffset.dy),
-          radius: Radius.circular(radius))
-      ..lineTo(boxWidth + boxOffset.dx, boxHeight - radius + boxOffset.dy)
+      ..moveTo(boxOffset.dx, radius.topLeft.y + boxOffset.dy)
+      ..arcToPoint(Offset(radius.topLeft.x + boxOffset.dx, boxOffset.dy),
+          radius: radius.topLeft)
+      ..lineTo(boxWidth - radius.topRight.x + boxOffset.dx, boxOffset.dy)
       ..arcToPoint(
-          Offset(boxWidth - radius + boxOffset.dx, boxHeight + boxOffset.dy),
-          radius: Radius.circular(radius))
+          Offset(boxWidth + boxOffset.dx, radius.topRight.y + boxOffset.dy),
+          radius: radius.topRight)
+      ..lineTo(boxWidth + boxOffset.dx,
+          boxHeight - radius.bottomRight.y + boxOffset.dy)
+      ..arcToPoint(
+          Offset(boxWidth - radius.bottomRight.x + boxOffset.dx,
+              boxHeight + boxOffset.dy),
+          radius: radius.bottomRight)
       // arrow start
       ..lineTo(arrowPosition.right + boxOffset.dx, boxHeight + boxOffset.dy)
       ..arcTo(
@@ -99,10 +106,11 @@ class DropdownShapeBorder extends ShapeBorder {
           false)
       ..lineTo(arrowPosition.left + boxOffset.dx, boxHeight + boxOffset.dy)
       // arrow end
-      ..lineTo(radius + boxOffset.dx, boxHeight + boxOffset.dy)
-      ..arcToPoint(Offset(boxOffset.dx, boxHeight - radius + boxOffset.dy),
-          radius: Radius.circular(radius))
-      ..lineTo(boxOffset.dx, radius + boxOffset.dy);
+      ..lineTo(radius.bottomLeft.x + boxOffset.dx, boxHeight + boxOffset.dy)
+      ..arcToPoint(
+          Offset(boxOffset.dx, boxHeight - radius.bottomLeft.y + boxOffset.dy),
+          radius: radius.bottomLeft)
+      ..lineTo(boxOffset.dx, radius.bottomLeft.y + boxOffset.dy);
     return path;
   }
 
@@ -118,9 +126,10 @@ class DropdownShapeBorder extends ShapeBorder {
     final topCenterTheta = atan(arrow.height / (arrow.width / 2));
 
     final path = Path()
-      ..moveTo(boxOffset.dx, radius + arrow.height + boxOffset.dy)
-      ..arcToPoint(Offset(radius + boxOffset.dx, arrow.height + boxOffset.dy),
-          radius: Radius.circular(radius))
+      ..moveTo(boxOffset.dx, radius.topLeft.y + arrow.height + boxOffset.dy)
+      ..arcToPoint(
+          Offset(radius.topLeft.x + boxOffset.dx, arrow.height + boxOffset.dy),
+          radius: radius.topLeft)
       // arrow start
       ..lineTo(arrowPosition.left + boxOffset.dx, arrow.height + boxOffset.dy)
       ..arcTo(
@@ -130,22 +139,25 @@ class DropdownShapeBorder extends ShapeBorder {
           false)
       ..lineTo(arrowPosition.right + boxOffset.dx, arrow.height + boxOffset.dy)
       // arrow end
-      ..lineTo(boxWidth - radius + boxOffset.dx, arrow.height + boxOffset.dy)
+      ..lineTo(boxWidth - radius.topRight.x + boxOffset.dx,
+          arrow.height + boxOffset.dy)
       ..arcToPoint(
-          Offset(boxWidth + boxOffset.dx, radius + arrow.height + boxOffset.dy),
-          radius: Radius.circular(radius))
+          Offset(boxWidth + boxOffset.dx,
+              radius.topRight.y + arrow.height + boxOffset.dy),
+          radius: radius.topRight)
       ..lineTo(boxWidth + boxOffset.dx,
-          boxHeight - radius + arrow.height + boxOffset.dy)
+          boxHeight - radius.bottomRight.y + arrow.height + boxOffset.dy)
       ..arcToPoint(
-          Offset(boxWidth - radius + boxOffset.dx,
+          Offset(boxWidth - radius.bottomRight.x + boxOffset.dx,
               boxHeight + arrow.height + boxOffset.dy),
-          radius: Radius.circular(radius))
-      ..lineTo(radius + boxOffset.dx, boxHeight + arrow.height + boxOffset.dy)
+          radius: radius.bottomRight)
+      ..lineTo(radius.bottomLeft.x + boxOffset.dx,
+          boxHeight + arrow.height + boxOffset.dy)
       ..arcToPoint(
-          Offset(
-              boxOffset.dx, boxHeight - radius + arrow.height + boxOffset.dy),
-          radius: Radius.circular(radius))
-      ..lineTo(boxOffset.dx, radius + arrow.height + boxOffset.dy);
+          Offset(boxOffset.dx,
+              boxHeight - radius.bottomLeft.y + arrow.height + boxOffset.dy),
+          radius: radius.bottomLeft)
+      ..lineTo(boxOffset.dx, radius.bottomLeft.x + arrow.height + boxOffset.dy);
     return path;
   }
 
@@ -155,9 +167,9 @@ class DropdownShapeBorder extends ShapeBorder {
     switch (triangleAlign) {
       case DropdownArrowAlign.left:
         return _ArrowPosition(
-          left: boxRadius,
-          center: boxRadius + arrow.width / 2,
-          right: boxRadius + arrow.width,
+          left: boxRadius.topLeft.x,
+          center: boxRadius.topLeft.x + arrow.width / 2,
+          right: boxRadius.topLeft.x + arrow.width,
         );
       case DropdownArrowAlign.center:
         return _ArrowPosition(
@@ -167,9 +179,9 @@ class DropdownShapeBorder extends ShapeBorder {
         );
       case DropdownArrowAlign.right:
         return _ArrowPosition(
-          left: boxWidth - boxRadius - arrow.width,
-          center: boxWidth - boxRadius - arrow.width / 2,
-          right: boxWidth - boxRadius,
+          left: boxWidth - boxRadius.topRight.x - arrow.width,
+          center: boxWidth - boxRadius.topRight.x - arrow.width / 2,
+          right: boxWidth - boxRadius.topRight.x,
         );
     }
   }

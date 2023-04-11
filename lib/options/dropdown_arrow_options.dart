@@ -7,8 +7,8 @@ class DropdownArrowOptions {
   final DropdownArrowAlign arrowAlign;
 
   const DropdownArrowOptions({
-    required this.width,
-    required this.height,
+    this.width = 10,
+    this.height = 10,
     this.borderRadius = 0,
     this.arrowAlign = DropdownArrowAlign.center,
   });
