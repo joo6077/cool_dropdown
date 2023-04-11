@@ -1,4 +1,5 @@
 import 'package:cool_dropdown/enums/dropdown_align.dart';
+import 'package:cool_dropdown/enums/dropdown_animation.dart';
 import 'package:flutter/material.dart';
 
 class DropdownOptions {
@@ -8,6 +9,7 @@ class DropdownOptions {
   final BorderRadius borderRadius;
   final BorderSide borderSide;
   final List<BoxShadow> shadows;
+  final DropdownAnimationType animationType;
 
   final DropdownAlign align;
 
@@ -22,6 +24,7 @@ class DropdownOptions {
     this.borderRadius = const BorderRadius.all(Radius.circular(10)),
     this.borderSide = BorderSide.none,
     this.shadows = const [],
+    this.animationType = DropdownAnimationType.scale,
     this.align = DropdownAlign.center,
     this.gap = DropdownGap.zero,
     this.padding = EdgeInsets.zero,

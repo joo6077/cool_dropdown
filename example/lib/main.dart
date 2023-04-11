@@ -117,6 +117,12 @@ class _MyAppState extends State<MyApp> {
                   padding: EdgeInsets.symmetric(horizontal: 10),
                   align: DropdownAlign.left,
                 ),
+                dropdownArrowOptions: DropdownArrowOptions(
+                  width: 10,
+                  height: 10,
+                  borderRadius: 0,
+                  arrowAlign: DropdownArrowAlign.left,
+                ),
               ),
             ),
             SizedBox(

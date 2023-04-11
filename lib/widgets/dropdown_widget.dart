@@ -1,13 +1,14 @@
 import 'package:cool_dropdown/controllers/dropdown_controller.dart';
 import 'package:cool_dropdown/customPaints/dropdown_shape_border.dart';
 import 'package:cool_dropdown/enums/dropdown_align.dart';
+import 'package:cool_dropdown/enums/dropdown_animation.dart';
+import 'package:cool_dropdown/enums/dropdown_arrow_align.dart';
 import 'package:cool_dropdown/models/cool_dropdown_item.dart';
 import 'package:cool_dropdown/options/dropdown_arrow_options.dart';
 import 'package:cool_dropdown/options/dropdown_item_options.dart';
 import 'package:cool_dropdown/options/dropdown_options.dart';
 import 'package:cool_dropdown/widgets/dropdown_item_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:cool_dropdown/utils/animation_util.dart';
 
 class DropdownWidget<T> extends StatefulWidget {
   final DropdownOptions dropdownOptions;
@@ -20,17 +21,15 @@ class DropdownWidget<T> extends StatefulWidget {
   final BuildContext bodyContext;
 
   final List<CoolDropdownItem> dropdownList;
-  final List dropdownIsSelected = [];
   final Function onChange;
   final Function getSelectedItem;
   final bool isResultLabel;
   final bool isDropdownLabel;
   final CoolDropdownItem<T>? selectedItem;
-  late Widget dropdownIcon;
 
   final double labelIconGap;
 
-  DropdownWidget({
+  const DropdownWidget({
     Key? key,
     required this.dropdownOptions,
     required this.dropdownItemOptions,
@@ -46,33 +45,13 @@ class DropdownWidget<T> extends StatefulWidget {
     required this.isResultLabel,
     required this.bodyContext,
     required this.isDropdownLabel,
-  }) {
-    // // dropdown list 초기화
-    // for (var i = 0; i < this.dropdownList.length; i++) {
-    //   this.dropdownIsSelected.add(false);
-    // }
-    // // 삼각형 border 셋팅
-    // this.triangleBorder = this.dropdownBD.border != null
-    //     ? this.dropdownBD.border!.top
-    //     : BorderSide(
-    //         color: Colors.transparent,
-    //         width: 0,
-    //         style: BorderStyle.none,
-    //       );
-    // // 그림자 셋팅
-    // triangleBoxShadows = this.dropdownBD.boxShadow ?? [];
-    // // screenHeight 셋팅
-    // this.screenHeight = MediaQuery.of(this.bodyContext).size.height;
-    // // dropdownWidth setting
-    // this.dropdownWidth = this.dropdownWidth ?? this.resultWidth;
-  }
+  });
 
   @override
   DropdownWidgetState createState() => DropdownWidgetState();
 }
 
-class DropdownWidgetState extends State<DropdownWidget>
-    with TickerProviderStateMixin {
+class DropdownWidgetState extends State<DropdownWidget> {
   var dropdownOffset = Offset(0, 0);
   var selectedLabel = '';
   var isOpen = false;
@@ -80,10 +59,9 @@ class DropdownWidgetState extends State<DropdownWidget>
   var isTap = false;
 
   final _scrollController = ScrollController();
-  List<Animation> _swicherController = [];
   late int currentIndex = 0;
 
-  bool isArrowDown = true;
+  var isArrowDown = true;
 
   double? calcDropdownHeight;
 
@@ -213,6 +191,54 @@ class DropdownWidgetState extends State<DropdownWidget>
     });
   }
 
+  double get _calcArrowAlignmentDx {
+    switch (widget.dropdownArrowOptions.arrowAlign) {
+      case DropdownArrowAlign.left:
+        if (isArrowDown) {
+          return ((widget.dropdownOptions.borderRadius.topLeft.x +
+                      widget.dropdownArrowOptions.width * 0.5) /
+                  widget.dropdownOptions.width) -
+              1;
+        } else {
+          return ((widget.dropdownOptions.borderRadius.bottomLeft.x +
+                      widget.dropdownArrowOptions.width * 0.5) /
+                  widget.dropdownOptions.width) -
+              1;
+        }
+      case DropdownArrowAlign.right:
+        if (isArrowDown) {
+          return (widget.dropdownOptions.width -
+                  widget.dropdownOptions.borderRadius.topRight.x -
+                  widget.dropdownArrowOptions.width * 0.5) /
+              widget.dropdownOptions.width;
+        } else {
+          return (widget.dropdownOptions.width -
+                  widget.dropdownOptions.borderRadius.bottomRight.x -
+                  widget.dropdownArrowOptions.width * 0.5) /
+              widget.dropdownOptions.width;
+        }
+      case DropdownArrowAlign.center:
+        return 0;
+    }
+  }
+
+  Widget _buildAnimation({required Widget child}) {
+    switch (widget.dropdownOptions.animationType) {
+      case DropdownAnimationType.size:
+        return SizeTransition(
+          sizeFactor: widget.controller.showDropdown,
+          axisAlignment: -1,
+          child: child,
+        );
+      case DropdownAnimationType.scale:
+        return ScaleTransition(
+          scale: widget.controller.showDropdown,
+          alignment: Alignment(_calcArrowAlignmentDx, isArrowDown ? 1 : -1),
+          child: child,
+        );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -232,17 +258,9 @@ class DropdownWidgetState extends State<DropdownWidget>
             left: dropdownOffset.dx - widget.dropdownOptions.marginGap.left,
             child: GestureDetector(
               onTap: () {},
-              child: SizeTransition(
-                sizeFactor: widget.controller.showDropdown,
-                axisAlignment: -1,
-                // scale: _dropdownController.showDropdown,
-                // alignment:
-                //     Alignment((400 - widget.arrow.height * 0.5 - 16) / 400, -1),
+              child: _buildAnimation(
                 child: Container(
                   margin: widget.dropdownOptions.marginGap,
-                  // EdgeInsets.only(
-                  // top: borderWidth + shadowBlur + shadowSpread > 0,
-                  // ),
                   clipBehavior: Clip.antiAlias,
                   padding: EdgeInsets.only(
                     top: isArrowDown
@@ -263,6 +281,7 @@ class DropdownWidgetState extends State<DropdownWidget>
                       arrow: widget.dropdownArrowOptions,
                       radius: widget.dropdownOptions.borderRadius,
                       borderSide: widget.dropdownOptions.borderSide,
+                      arrowAlign: widget.dropdownArrowOptions.arrowAlign,
                       isArrowDown: isArrowDown,
                     ),
                   ),

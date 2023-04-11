@@ -8,7 +8,7 @@ class DropdownShapeBorder extends ShapeBorder {
   final DropdownArrowOptions arrow;
   final BorderRadius radius;
   final bool isArrowDown;
-  final DropdownArrowAlign triangleAlign;
+  final DropdownArrowAlign arrowAlign;
   final BorderSide borderSide;
 
   DropdownShapeBorder({
@@ -19,7 +19,7 @@ class DropdownShapeBorder extends ShapeBorder {
     ),
     this.radius = const BorderRadius.all(Radius.circular(0)),
     required this.isArrowDown,
-    this.triangleAlign = DropdownArrowAlign.left,
+    required this.arrowAlign,
     this.borderSide = BorderSide.none,
   });
 
@@ -164,7 +164,7 @@ class DropdownShapeBorder extends ShapeBorder {
   _ArrowPosition _calcArrowPosition(double boxWidth) {
     final boxRadius = radius;
 
-    switch (triangleAlign) {
+    switch (arrowAlign) {
       case DropdownArrowAlign.left:
         return _ArrowPosition(
           left: boxRadius.topLeft.x,
