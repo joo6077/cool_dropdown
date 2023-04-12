@@ -1,14 +1,21 @@
 import 'package:cool_dropdown/enums/dropdown_align.dart';
 import 'package:cool_dropdown/enums/dropdown_arrow_align.dart';
+import 'package:cool_dropdown/models/cool_dropdown_item.dart';
 import 'package:cool_dropdown/options/dropdown_arrow_options.dart';
+import 'package:cool_dropdown/options/dropdown_item_options.dart';
 import 'package:cool_dropdown/options/dropdown_options.dart';
 import 'package:flutter/widgets.dart';
 
-class DropdownCalculator {
+class DropdownCalculator<T> {
+  final List<CoolDropdownItem<T>> dropdownList;
   final BuildContext bodyContext;
   final GlobalKey resultKey;
   final DropdownOptions dropdownOptions;
+  final DropdownItemOptions dropdownItemOptions;
   final DropdownArrowOptions dropdownArrowOptions;
+
+  final _scrollController = ScrollController();
+  ScrollController get scrollController => _scrollController;
 
   bool _isArrowDown = false;
   bool get isArrowDown => _isArrowDown;
@@ -17,9 +24,11 @@ class DropdownCalculator {
   double? get calcDropdownHeight => _calcDropdownHeight;
 
   DropdownCalculator({
+    required this.dropdownList,
     required this.bodyContext,
     required this.resultKey,
     required this.dropdownOptions,
+    required this.dropdownItemOptions,
     required this.dropdownArrowOptions,
   });
 
@@ -103,5 +112,21 @@ class DropdownCalculator {
   double _arrowRightCenterDx(double radius) {
     return (dropdownOptions.width - radius - dropdownArrowOptions.width * 0.5) /
         dropdownOptions.width;
+  }
+
+  void setScrollPosition(int currentIndex) {
+    final totalHeight = (dropdownItemOptions.height * dropdownList.length) +
+        (dropdownOptions.gap.betweenItems * (dropdownList.length - 1));
+    var scrollPosition = (dropdownItemOptions.height * currentIndex) +
+        (dropdownOptions.gap.betweenItems * currentIndex);
+    final overScrollPosition = scrollController.position.maxScrollExtent;
+    if (overScrollPosition < scrollPosition) {
+      scrollPosition = overScrollPosition;
+    }
+    if (totalHeight < dropdownOptions.height) {
+      scrollPosition = 0;
+    }
+    scrollController.animateTo(scrollPosition,
+        duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
   }
 }

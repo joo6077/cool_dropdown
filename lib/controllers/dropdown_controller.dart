@@ -9,6 +9,9 @@ class DropdownController implements TickerProvider {
 
   OverlayEntry? _overlayEntry;
 
+  ValueNotifier<bool> _isOpenNotifier = ValueNotifier(false);
+  ValueNotifier<bool> get isOpenNotifier => _isOpenNotifier;
+
   DropdownController({
     this.duration = const Duration(milliseconds: 500),
     this.resultIconAnimation,
@@ -44,23 +47,21 @@ class DropdownController implements TickerProvider {
     _overlayEntry = OverlayEntry(builder: (_) => child);
     if (_overlayEntry == null) return;
     Overlay.of(context).insert(_overlayEntry!);
+
+    _isOpenNotifier.value = true;
+
     _controller.forward();
   }
 
   void close() async {
     await _controller.reverse();
     _overlayEntry?.remove();
+
+    _isOpenNotifier.value = false;
   }
 
   void dispose() {
     _controller.dispose();
-  }
-
-  void _setOffset({
-    required GlobalKey key,
-  }) {
-    final _resultBox = key.currentContext?.findRenderObject() as RenderBox;
-    final _resultOffset = _resultBox.localToGlobal(Offset.zero);
   }
 
   @override

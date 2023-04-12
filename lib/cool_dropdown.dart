@@ -28,8 +28,8 @@ class CoolDropdown<T> extends StatelessWidget {
   final DropdownArrowOptions dropdownArrowOptions;
   final DropdownController controller;
 
-  final Function onChange;
-  final Function? onOpen;
+  final Function(T t) onChange;
+  final Function(bool isOpened)? onOpen;
 
   CoolDropdown({
     Key? key,
@@ -46,7 +46,7 @@ class CoolDropdown<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ResultWidget(
+    return ResultWidget<T>(
       dropdownList: dropdownList,
       resultOptions: resultOptions,
       dropdownOptions: dropdownOptions,
@@ -54,6 +54,7 @@ class CoolDropdown<T> extends StatelessWidget {
       dropdownArrowOptions: dropdownArrowOptions,
       controller: controller,
       onChange: onChange,
+      defaultItem: defaultItem,
     );
   }
 }

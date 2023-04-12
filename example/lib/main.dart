@@ -38,7 +38,7 @@ List<String> fruits = [
 
 class _MyAppState extends State<MyApp> {
   List<CoolDropdownItem> pokemonMap = [];
-  List<CoolDropdownItem> fruitDropdownItems = [];
+  List<CoolDropdownItem<String>> fruitDropdownItems = [];
 
   final fruitDropdownController = DropdownController();
   final pokemonDropdownController = DropdownController();
@@ -90,38 +90,47 @@ class _MyAppState extends State<MyApp> {
               height: 400,
             ),
             Center(
-              child: CoolDropdown(
-                controller: fruitDropdownController,
-                dropdownList: fruitDropdownItems,
-                onChange: (selectedItem) {
-                  print(selectedItem);
+              child: WillPopScope(
+                onWillPop: () async {
+                  if (fruitDropdownController.isOpenNotifier.value) {
+                    fruitDropdownController.close();
+                    return Future.value(false);
+                  } else {
+                    return Future.value(true);
+                  }
                 },
-                onOpen: (isOpen) {
-                  print('$isOpen');
-                },
-                resultOptions: ResultOptions(
-                  width: 200,
-                  icon: SizedBox(
-                    width: 10,
-                    height: 10,
-                    child: CustomPaint(
-                      painter: DropdownArrowPainter(),
+                child: CoolDropdown<String>(
+                  controller: fruitDropdownController,
+                  dropdownList: fruitDropdownItems,
+                  defaultItem: fruitDropdownItems[0],
+                  onChange: (value) {
+                    fruitDropdownController.close();
+                  },
+                  onOpen: (isOpen) {},
+                  resultOptions: ResultOptions(
+                    width: 200,
+                    icon: SizedBox(
+                      width: 10,
+                      height: 10,
+                      child: CustomPaint(
+                        painter: DropdownArrowPainter(),
+                      ),
                     ),
                   ),
-                ),
-                dropdownOptions: DropdownOptions(
-                  width: 300,
-                  height: 300,
-                  gap: DropdownGap.all(5),
-                  borderSide: BorderSide(width: 1, color: Colors.black),
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  align: DropdownAlign.left,
-                ),
-                dropdownArrowOptions: DropdownArrowOptions(
-                  width: 10,
-                  height: 10,
-                  borderRadius: 0,
-                  arrowAlign: DropdownArrowAlign.left,
+                  dropdownOptions: DropdownOptions(
+                    width: 300,
+                    height: 300,
+                    gap: DropdownGap.all(5),
+                    borderSide: BorderSide(width: 1, color: Colors.black),
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    align: DropdownAlign.left,
+                  ),
+                  dropdownArrowOptions: DropdownArrowOptions(
+                    width: 10,
+                    height: 10,
+                    borderRadius: 0,
+                    arrowAlign: DropdownArrowAlign.left,
+                  ),
                 ),
               ),
             ),

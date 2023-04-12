@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 class DropdownOptions {
   final double width;
   final double height;
+  final double top;
+  final double left;
+
   final Color color;
   final BorderRadius borderRadius;
   final BorderSide borderSide;
@@ -20,6 +23,8 @@ class DropdownOptions {
   const DropdownOptions({
     this.width = 100,
     this.height = 220,
+    this.top = 0,
+    this.left = 0,
     this.color = Colors.white,
     this.borderRadius = const BorderRadius.all(Radius.circular(10)),
     this.borderSide = BorderSide.none,
@@ -64,17 +69,17 @@ class DropdownOptions {
 class DropdownGap {
   final double top;
   final double bottom;
-  final double gapBetweenItems;
+  final double betweenItems;
 
   const DropdownGap.all(double gap)
       : top = gap,
         bottom = gap,
-        gapBetweenItems = gap;
+        betweenItems = gap;
 
   const DropdownGap.only({
     this.top = 0,
     this.bottom = 0,
-    this.gapBetweenItems = 0,
+    this.betweenItems = 0,
   });
 
   static const DropdownGap zero = DropdownGap.all(0);

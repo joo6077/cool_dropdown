@@ -6,6 +6,7 @@ import 'package:cool_dropdown/models/cool_dropdown_item.dart';
 import 'package:cool_dropdown/options/dropdown_arrow_options.dart';
 import 'package:cool_dropdown/options/dropdown_item_options.dart';
 import 'package:cool_dropdown/options/dropdown_options.dart';
+import 'package:cool_dropdown/typedefs/typedef.dart';
 import 'package:cool_dropdown/widgets/dropdown_item_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -16,12 +17,11 @@ class DropdownWidget<T> extends StatefulWidget {
   final DropdownController controller;
 
   final GlobalKey resultKey;
-  final Function closeDropdown;
   final BuildContext bodyContext;
 
   final List<CoolDropdownItem> dropdownList;
-  final Function onChange;
-  final Function getSelectedItem;
+  final Function(T t) onChange;
+  final GetSelectedItem getSelectedItem;
   final bool isResultLabel;
   final bool isDropdownLabel;
   final CoolDropdownItem<T>? selectedItem;
@@ -37,7 +37,6 @@ class DropdownWidget<T> extends StatefulWidget {
     required this.resultKey,
     required this.dropdownList,
     required this.onChange,
-    required this.closeDropdown,
     required this.getSelectedItem,
     required this.selectedItem,
     required this.labelIconGap,
@@ -47,82 +46,33 @@ class DropdownWidget<T> extends StatefulWidget {
   });
 
   @override
-  DropdownWidgetState createState() => DropdownWidgetState();
+  DropdownWidgetState<T> createState() => DropdownWidgetState<T>();
 }
 
-class DropdownWidgetState extends State<DropdownWidget> {
+class DropdownWidgetState<T> extends State<DropdownWidget<T>> {
   var dropdownOffset = Offset(0, 0);
-  var selectedLabel = '';
-  var isOpen = false;
-  var isSelected = false;
-
-  final _scrollController = ScrollController();
-  late int currentIndex = 0;
-
-  double? calcDropdownHeight;
-
   late final DropdownCalculator _dropdownCalculator;
 
   @override
   void initState() {
-    // currentIndex = widget.dropdownList.indexWhere(
-    //     (dropdownItem) => mapEquals(dropdownItem, widget.selectedItem));
     _dropdownCalculator = DropdownCalculator(
-        bodyContext: widget.bodyContext,
-        resultKey: widget.resultKey,
-        dropdownOptions: widget.dropdownOptions,
-        dropdownArrowOptions: widget.dropdownArrowOptions);
+      bodyContext: widget.bodyContext,
+      resultKey: widget.resultKey,
+      dropdownOptions: widget.dropdownOptions,
+      dropdownArrowOptions: widget.dropdownArrowOptions,
+      dropdownItemOptions: widget.dropdownItemOptions,
+      dropdownList: widget.dropdownList,
+    );
 
     dropdownOffset = _dropdownCalculator.setOffset();
-    // setScrollPosition(currentIndex);
-
-    super.initState();
-  }
-
-  void dispose() {
-    super.dispose();
-  }
-
-  void setScrollPosition(int currentIndex) {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      // if (currentIndex != -1) {
-      //   double totalHeight = widget.dropdownList.length *
-      //           (widget.dropdownItemHeight + widget.dropdownItemGap) +
-      //       widget.dropdownItemTopGap +
-      //       widget.dropdownItemBottomGap;
-      //   double scrollPosition = currentIndex *
-      //           (widget.dropdownItemHeight + widget.dropdownItemGap) +
-      //       widget.dropdownItemTopGap -
-      //       widget.dropdownItemGap;
-      //   double overScrollPosition = ((widget.dropdownItemHeight *
-      //               widget.dropdownList.length) +
-      //           (widget.dropdownItemGap * (widget.dropdownList.length - 1)) +
-      //           widget.dropdownItemTopGap) -
-      //       widget.dropdownHeight +
-      //       widget.dropdownItemBottomGap;
-      //   if (currentIndex == 0) {
-      //     scrollPosition = 0;
-      //   }
-      //   if (overScrollPosition < scrollPosition) {
-      //     scrollPosition = overScrollPosition;
-      //   }
-      //   if (totalHeight < widget.dropdownHeight) {
-      //     scrollPosition = 0;
-      //   }
-      //   _scrollController.animateTo(scrollPosition,
-      //       duration: au.isAnimation(
-      //           status: widget.isAnimation,
-      //           duration: Duration(milliseconds: 300)),
-      //       curve: Curves.easeInOut);
-
-      //   setState(() {
-      //     widget.dropdownIsSelected[currentIndex] = true;
-      //   });
-
-      //   _DCController[currentIndex].forward();
-      //   _paddingController[currentIndex].forward();
-      // }
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final currentIndex = widget.dropdownList
+          .indexWhere((dropdownItem) => dropdownItem == widget.selectedItem);
+      if (currentIndex < 0) return;
+      _setSelectedItem(currentIndex);
+      _dropdownCalculator.setScrollPosition(currentIndex);
     });
+    super.initState();
   }
 
   void _setSelectedItem(int index) {
@@ -131,6 +81,7 @@ class DropdownWidgetState extends State<DropdownWidget> {
         if (index == i) {
           widget.dropdownList[i] =
               widget.dropdownList[i].copyWith(isSelected: true);
+          widget.getSelectedItem(i);
         } else {
           widget.dropdownList[i] =
               widget.dropdownList[i].copyWith(isSelected: false);
@@ -172,8 +123,12 @@ class DropdownWidgetState extends State<DropdownWidget> {
             ),
           ),
           Positioned(
-            top: dropdownOffset.dy - widget.dropdownOptions.marginGap.top,
-            left: dropdownOffset.dx - widget.dropdownOptions.marginGap.left,
+            top: dropdownOffset.dy -
+                widget.dropdownOptions.marginGap.top +
+                widget.dropdownOptions.top,
+            left: dropdownOffset.dx -
+                widget.dropdownOptions.marginGap.left +
+                widget.dropdownOptions.left,
             child: GestureDetector(
               onTap: () {},
               child: _buildAnimation(
@@ -191,7 +146,8 @@ class DropdownWidgetState extends State<DropdownWidget> {
                         : 0,
                   ),
                   width: widget.dropdownOptions.width,
-                  height: calcDropdownHeight ?? widget.dropdownOptions.height,
+                  height: _dropdownCalculator.calcDropdownHeight ??
+                      widget.dropdownOptions.height,
                   decoration: ShapeDecoration(
                     color: widget.dropdownOptions.color,
                     shadows: widget.dropdownOptions.shadows,
@@ -204,10 +160,14 @@ class DropdownWidgetState extends State<DropdownWidget> {
                     ),
                   ),
                   child: ListView.builder(
+                    controller: _dropdownCalculator.scrollController,
                     padding: widget.dropdownOptions.calcPadding,
                     itemCount: widget.dropdownList.length,
                     itemBuilder: (_, index) => GestureDetector(
-                      onTap: () => _setSelectedItem(index),
+                      onTap: () {
+                        widget.onChange.call(widget.dropdownList[index].value);
+                        _setSelectedItem(index);
+                      },
                       child: Column(
                         children: [
                           if (index == 0)
@@ -220,8 +180,7 @@ class DropdownWidgetState extends State<DropdownWidget> {
                           ),
                           if (index != widget.dropdownList.length - 1)
                             SizedBox(
-                              height:
-                                  widget.dropdownOptions.gap.gapBetweenItems,
+                              height: widget.dropdownOptions.gap.betweenItems,
                             ),
                           if (index == widget.dropdownList.length - 1)
                             SizedBox(

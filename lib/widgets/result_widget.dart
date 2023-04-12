@@ -20,10 +20,10 @@ class ResultWidget<T> extends StatefulWidget {
   final DropdownArrowOptions dropdownArrowOptions;
   final DropdownController controller;
 
-  final Function onChange;
-  final Function? onOpen;
+  final Function(T t) onChange;
+  final Function(bool isOpened)? onOpen;
 
-  final CoolDropdownItem<T>? defaultValue;
+  final CoolDropdownItem<T>? defaultItem;
 
   final bool isResultIconLabel;
   final bool isResultLabel;
@@ -43,7 +43,7 @@ class ResultWidget<T> extends StatefulWidget {
     required this.dropdownArrowOptions,
     required this.controller,
     required this.onChange,
-    this.defaultValue,
+    this.defaultItem,
     this.onOpen,
     this.isResultIconLabel = true,
     this.isResultLabel = true,
@@ -54,19 +54,24 @@ class ResultWidget<T> extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<ResultWidget> createState() => _ResultWidgetState();
+  State<ResultWidget<T>> createState() => _ResultWidgetState<T>();
 }
 
-class _ResultWidgetState<T> extends State<ResultWidget> {
+class _ResultWidgetState<T> extends State<ResultWidget<T>> {
   final resultKey = GlobalKey();
   CoolDropdownItem<T>? selectedItem;
-  late bool isOpen = false;
+  late bool isOpened = false;
+
+  @override
+  void initState() {
+    if (widget.defaultItem == null) return;
+    _setSelectedItem(widget.defaultItem!);
+    super.initState();
+  }
 
   void open() {
-    isOpen = true;
-    if (widget.onOpen != null) {
-      widget.onOpen!(isOpen);
-    }
+    isOpened = true;
+    if (widget.onOpen != null) {}
     widget.controller.open(
         context: context,
         child: DropdownWidget<T>(
@@ -79,37 +84,19 @@ class _ResultWidgetState<T> extends State<ResultWidget> {
           dropdownList: widget.dropdownList,
           labelIconGap: widget.labelIconGap,
           isResultLabel: widget.isResultLabel,
-          closeDropdown: () => widget.controller.close(),
-          getSelectedItem: (selectedItem) async {
-            // sizeController = AnimationController(
-            //   vsync: this,
-            //   duration: au.isAnimation(
-            //       status: widget.isAnimation,
-            //       duration: Duration(milliseconds: 150)),
-            // );
-            // textWidth = CurvedAnimation(
-            //   parent: sizeController,
-            //   curve: Curves.fastOutSlowIn,
-            // );
-            // setState(() {
-            //   this.selectedItem = selectedItem;
-            // });
-            // await sizeController.forward();
-          },
+          getSelectedItem: (index) =>
+              _setSelectedItem(widget.dropdownList[index]),
           selectedItem: selectedItem,
           bodyContext: context,
           isDropdownLabel: widget.isDropdownLabel,
         ));
   }
 
-  @override
-  void initState() {
-    // placeholder 셋팅
-    setDefaultValue();
-    super.initState();
+  void _setSelectedItem(CoolDropdownItem<T> item) {
+    setState(() {
+      selectedItem = item;
+    });
   }
-
-  void setDefaultValue() {}
 
   Widget buildResultIcon() {
     return AnimatedBuilder(
@@ -126,32 +113,33 @@ class _ResultWidgetState<T> extends State<ResultWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        if (isOpen) {
-          widget.controller.close();
-          return Future.value(false);
-        } else {
-          return Future.value(true);
-        }
-      },
-      child: GestureDetector(
-        onTap: () => open(),
-        child: Container(
-          key: resultKey,
-          width: widget.resultOptions.width,
-          height: widget.resultOptions.height,
-          padding: widget.resultOptions.padding,
-          decoration: widget.resultOptions.boxDecoration,
-          child: Align(
-            alignment: widget.resultOptions.alignment,
-            child: widget.isResultIconLabel
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    verticalDirection: VerticalDirection.down,
-                    children: [
-                      Expanded(
+    return GestureDetector(
+      onTap: () => open(),
+      child: Container(
+        key: resultKey,
+        width: widget.resultOptions.width,
+        height: widget.resultOptions.height,
+        padding: widget.resultOptions.padding,
+        decoration: widget.resultOptions.boxDecoration,
+        child: Align(
+          alignment: widget.resultOptions.alignment,
+          child: widget.isResultIconLabel
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  verticalDirection: VerticalDirection.down,
+                  children: [
+                    Expanded(
+                      child: AnimatedSwitcher(
+                        duration: Duration(milliseconds: 300),
+                        transitionBuilder: (child, animation) {
+                          return SizeTransition(
+                            sizeFactor: animation,
+                            axisAlignment: -2,
+                            child: child,
+                          );
+                        },
                         child: Row(
+                          key: ValueKey(selectedItem?.label),
                           mainAxisAlignment:
                               widget.resultOptions.mainAxisAlignment,
                           children: [
@@ -178,14 +166,14 @@ class _ResultWidgetState<T> extends State<ResultWidget> {
                           ].isReverse(widget.dropdownItemOptions.isReverse),
                         ),
                       ),
-                      SizedBox(
-                        width: widget.resultIconLeftGap,
-                      ),
-                      buildResultIcon(),
-                    ].isReverse(widget.resultOptions.isReverse),
-                  )
-                : buildResultIcon(),
-          ),
+                    ),
+                    SizedBox(
+                      width: widget.resultIconLeftGap,
+                    ),
+                    buildResultIcon(),
+                  ].isReverse(widget.resultOptions.isReverse),
+                )
+              : buildResultIcon(),
         ),
       ),
     );
