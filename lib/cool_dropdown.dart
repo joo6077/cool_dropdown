@@ -20,6 +20,7 @@ export 'package:cool_dropdown/customPaints/arrow_down_painter.dart';
 
 class CoolDropdown<T> extends StatelessWidget {
   final List<CoolDropdownItem<T>> dropdownList;
+  final CoolDropdownItem<T>? defaultItem;
 
   final ResultOptions resultOptions;
   final DropdownOptions dropdownOptions;
@@ -33,6 +34,7 @@ class CoolDropdown<T> extends StatelessWidget {
   CoolDropdown({
     Key? key,
     required this.dropdownList,
+    this.defaultItem,
     this.resultOptions = const ResultOptions(),
     this.dropdownOptions = const DropdownOptions(),
     this.dropdownItemOptions = const DropdownItemOptions(),

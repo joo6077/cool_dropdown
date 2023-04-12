@@ -1,8 +1,7 @@
 import 'package:cool_dropdown/controllers/dropdown_controller.dart';
+import 'package:cool_dropdown/controllers/dropdown_calculator.dart';
 import 'package:cool_dropdown/customPaints/dropdown_shape_border.dart';
-import 'package:cool_dropdown/enums/dropdown_align.dart';
 import 'package:cool_dropdown/enums/dropdown_animation.dart';
-import 'package:cool_dropdown/enums/dropdown_arrow_align.dart';
 import 'package:cool_dropdown/models/cool_dropdown_item.dart';
 import 'package:cool_dropdown/options/dropdown_arrow_options.dart';
 import 'package:cool_dropdown/options/dropdown_item_options.dart';
@@ -56,20 +55,25 @@ class DropdownWidgetState extends State<DropdownWidget> {
   var selectedLabel = '';
   var isOpen = false;
   var isSelected = false;
-  var isTap = false;
 
   final _scrollController = ScrollController();
   late int currentIndex = 0;
 
-  var isArrowDown = true;
-
   double? calcDropdownHeight;
+
+  late final DropdownCalculator _dropdownCalculator;
 
   @override
   void initState() {
     // currentIndex = widget.dropdownList.indexWhere(
     //     (dropdownItem) => mapEquals(dropdownItem, widget.selectedItem));
-    _setOffset();
+    _dropdownCalculator = DropdownCalculator(
+        bodyContext: widget.bodyContext,
+        resultKey: widget.resultKey,
+        dropdownOptions: widget.dropdownOptions,
+        dropdownArrowOptions: widget.dropdownArrowOptions);
+
+    dropdownOffset = _dropdownCalculator.setOffset();
     // setScrollPosition(currentIndex);
 
     super.initState();
@@ -121,62 +125,6 @@ class DropdownWidgetState extends State<DropdownWidget> {
     });
   }
 
-  void _setOffset() {
-    final resultBox =
-        widget.resultKey.currentContext?.findRenderObject() as RenderBox;
-    final resultOffset = resultBox.localToGlobal(Offset.zero);
-    dropdownOffset = Offset(
-      _setOffsetDx(resultBox: resultBox, resultOffset: resultOffset),
-      _setOffsetDy(resultBox: resultBox, resultOffset: resultOffset),
-    );
-  }
-
-  double _setOffsetDx({
-    required RenderBox resultBox,
-    required Offset resultOffset,
-  }) {
-    switch (widget.dropdownOptions.align) {
-      case DropdownAlign.left:
-        return resultOffset.dx;
-      case DropdownAlign.right:
-        return resultOffset.dx +
-            resultBox.size.width -
-            widget.dropdownOptions.width;
-      case DropdownAlign.center:
-        return resultOffset.dx +
-            (resultBox.size.width - widget.dropdownOptions.width) * 0.5;
-    }
-  }
-
-  double _setOffsetDy({
-    required RenderBox resultBox,
-    required Offset resultOffset,
-  }) {
-    final screenHeight = MediaQuery.of(widget.bodyContext).size.height;
-    final resultOffsetCenterDy = resultOffset.dy + resultBox.size.height * 0.5;
-
-    isArrowDown = resultOffsetCenterDy > screenHeight * 0.5;
-
-    if (isArrowDown) {
-      /// set dropdown height not to overflow screen
-      if (resultOffset.dy - widget.dropdownOptions.height < 0) {
-        calcDropdownHeight = resultOffset.dy;
-        return 0;
-      }
-      return resultOffset.dy - widget.dropdownOptions.height;
-    } else {
-      /// set dropdown height not to overflow screen
-      if (resultOffset.dy +
-              resultBox.size.height +
-              widget.dropdownOptions.height >
-          screenHeight) {
-        calcDropdownHeight =
-            screenHeight - (resultOffset.dy + resultBox.size.height);
-      }
-      return resultOffset.dy + resultBox.size.height;
-    }
-  }
-
   void _setSelectedItem(int index) {
     setState(() {
       for (var i = 0; i < widget.dropdownList.length; i++) {
@@ -191,37 +139,6 @@ class DropdownWidgetState extends State<DropdownWidget> {
     });
   }
 
-  double get _calcArrowAlignmentDx {
-    switch (widget.dropdownArrowOptions.arrowAlign) {
-      case DropdownArrowAlign.left:
-        if (isArrowDown) {
-          return ((widget.dropdownOptions.borderRadius.topLeft.x +
-                      widget.dropdownArrowOptions.width * 0.5) /
-                  widget.dropdownOptions.width) -
-              1;
-        } else {
-          return ((widget.dropdownOptions.borderRadius.bottomLeft.x +
-                      widget.dropdownArrowOptions.width * 0.5) /
-                  widget.dropdownOptions.width) -
-              1;
-        }
-      case DropdownArrowAlign.right:
-        if (isArrowDown) {
-          return (widget.dropdownOptions.width -
-                  widget.dropdownOptions.borderRadius.topRight.x -
-                  widget.dropdownArrowOptions.width * 0.5) /
-              widget.dropdownOptions.width;
-        } else {
-          return (widget.dropdownOptions.width -
-                  widget.dropdownOptions.borderRadius.bottomRight.x -
-                  widget.dropdownArrowOptions.width * 0.5) /
-              widget.dropdownOptions.width;
-        }
-      case DropdownArrowAlign.center:
-        return 0;
-    }
-  }
-
   Widget _buildAnimation({required Widget child}) {
     switch (widget.dropdownOptions.animationType) {
       case DropdownAnimationType.size:
@@ -233,7 +150,8 @@ class DropdownWidgetState extends State<DropdownWidget> {
       case DropdownAnimationType.scale:
         return ScaleTransition(
           scale: widget.controller.showDropdown,
-          alignment: Alignment(_calcArrowAlignmentDx, isArrowDown ? 1 : -1),
+          alignment: Alignment(_dropdownCalculator.calcArrowAlignmentDx,
+              _dropdownCalculator.isArrowDown ? 1 : -1),
           child: child,
         );
     }
@@ -263,11 +181,11 @@ class DropdownWidgetState extends State<DropdownWidget> {
                   margin: widget.dropdownOptions.marginGap,
                   clipBehavior: Clip.antiAlias,
                   padding: EdgeInsets.only(
-                    top: isArrowDown
+                    top: _dropdownCalculator.isArrowDown
                         ? 0
                         : widget.dropdownArrowOptions.height +
                             widget.dropdownOptions.borderSide.width,
-                    bottom: isArrowDown
+                    bottom: _dropdownCalculator.isArrowDown
                         ? widget.dropdownArrowOptions.height +
                             widget.dropdownOptions.borderSide.width
                         : 0,
@@ -282,7 +200,7 @@ class DropdownWidgetState extends State<DropdownWidget> {
                       radius: widget.dropdownOptions.borderRadius,
                       borderSide: widget.dropdownOptions.borderSide,
                       arrowAlign: widget.dropdownArrowOptions.arrowAlign,
-                      isArrowDown: isArrowDown,
+                      isArrowDown: _dropdownCalculator.isArrowDown,
                     ),
                   ),
                   child: ListView.builder(
