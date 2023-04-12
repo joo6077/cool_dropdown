@@ -29,7 +29,6 @@ class CoolDropdown<T> extends StatelessWidget {
   final DropdownController controller;
 
   final Function(T t) onChange;
-  final Function(bool isOpened)? onOpen;
 
   CoolDropdown({
     Key? key,
@@ -41,7 +40,6 @@ class CoolDropdown<T> extends StatelessWidget {
     this.dropdownArrowOptions = const DropdownArrowOptions(),
     required this.controller,
     required this.onChange,
-    this.onOpen,
   }) : super(key: key);
 
   @override

@@ -17,7 +17,7 @@ class DropdownItemOptions {
 
   const DropdownItemOptions({
     this.height = 40,
-    this.padding = const EdgeInsets.symmetric(horizontal: 10),
+    this.padding = const EdgeInsets.only(left: 10, right: 10),
     this.alignment = Alignment.centerLeft,
     this.mainAxisAlignment = MainAxisAlignment.start,
     this.boxDecoration = const BoxDecoration(
@@ -37,7 +37,7 @@ class DropdownItemOptions {
       fontSize: 16,
       fontWeight: FontWeight.w400,
     ),
-    this.selectedPadding = const EdgeInsets.only(left: 10),
+    this.selectedPadding = const EdgeInsets.only(left: 20, right: 10),
     this.isReverse = false,
   });
 }

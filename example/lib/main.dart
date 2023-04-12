@@ -70,6 +70,14 @@ class _MyAppState extends State<MyApp> {
               'assets/${fruits[i]}.svg',
             ),
           ),
+          selectedIcon: Container(
+            height: 25,
+            width: 25,
+            child: SvgPicture.asset(
+              'assets/${fruits[i]}.svg',
+              color: Color(0xFF6FCC76),
+            ),
+          ),
           value: '${fruits[i]}'));
     }
     super.initState();
@@ -104,9 +112,8 @@ class _MyAppState extends State<MyApp> {
                   dropdownList: fruitDropdownItems,
                   defaultItem: fruitDropdownItems[0],
                   onChange: (value) {
-                    fruitDropdownController.close();
+                    // fruitDropdownController.close();
                   },
-                  onOpen: (isOpen) {},
                   resultOptions: ResultOptions(
                     width: 200,
                     icon: SizedBox(
@@ -131,6 +138,8 @@ class _MyAppState extends State<MyApp> {
                     borderRadius: 0,
                     arrowAlign: DropdownArrowAlign.left,
                   ),
+                  dropdownItemOptions: DropdownItemOptions(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween),
                 ),
               ),
             ),

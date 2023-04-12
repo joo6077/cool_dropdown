@@ -21,7 +21,6 @@ class ResultWidget<T> extends StatefulWidget {
   final DropdownController controller;
 
   final Function(T t) onChange;
-  final Function(bool isOpened)? onOpen;
 
   final CoolDropdownItem<T>? defaultItem;
 
@@ -44,7 +43,6 @@ class ResultWidget<T> extends StatefulWidget {
     required this.controller,
     required this.onChange,
     this.defaultItem,
-    this.onOpen,
     this.isResultIconLabel = true,
     this.isResultLabel = true,
     this.isDropdownLabel = true,
@@ -60,7 +58,6 @@ class ResultWidget<T> extends StatefulWidget {
 class _ResultWidgetState<T> extends State<ResultWidget<T>> {
   final resultKey = GlobalKey();
   CoolDropdownItem<T>? selectedItem;
-  late bool isOpened = false;
 
   @override
   void initState() {
@@ -70,8 +67,6 @@ class _ResultWidgetState<T> extends State<ResultWidget<T>> {
   }
 
   void open() {
-    isOpened = true;
-    if (widget.onOpen != null) {}
     widget.controller.open(
         context: context,
         child: DropdownWidget<T>(

@@ -32,6 +32,11 @@ class _DropdownItemWidgetState extends State<DropdownItemWidget>
     end: widget.dropdownItemOptions.selectedTextStyle,
   ).animate(_controller);
 
+  late final _paddingTween = EdgeInsetsTween(
+    begin: widget.dropdownItemOptions.padding,
+    end: widget.dropdownItemOptions.selectedPadding,
+  ).animate(_controller);
+
   @override
   void didUpdateWidget(covariant DropdownItemWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -51,17 +56,39 @@ class _DropdownItemWidgetState extends State<DropdownItemWidget>
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBoxTransition(
-      decoration: _decorationBoxTween,
-      child: Container(
-        padding: widget.dropdownItemOptions.selectedPadding,
-        height: widget.dropdownItemOptions.height,
-        alignment: widget.dropdownItemOptions.alignment,
-        child: DefaultTextStyleTransition(
-          child: Text(widget.item.label),
-          style: _textStyleTween,
-        ),
-      ),
-    );
+    return AnimatedBuilder(
+        animation: _controller,
+        builder: (_, __) {
+          return Container(
+            padding: _paddingTween.value,
+            height: widget.dropdownItemOptions.height,
+            alignment: widget.dropdownItemOptions.alignment,
+            decoration: _decorationBoxTween.value,
+            child: Align(
+              alignment: widget.dropdownItemOptions.alignment,
+              child: Row(
+                mainAxisAlignment: widget.dropdownItemOptions.mainAxisAlignment,
+                children: [
+                  Text(
+                    widget.item.label,
+                    style: _textStyleTween.value,
+                  ),
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 500),
+                    transitionBuilder: (child, animation) {
+                      return FadeTransition(child: child, opacity: animation);
+                    },
+                    child: Container(
+                      key: ValueKey(widget.item.isSelected),
+                      child: widget.item.isSelected
+                          ? widget.item.selectedIcon
+                          : widget.item.icon,
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
+        });
   }
 }
