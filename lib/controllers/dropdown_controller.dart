@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:cool_dropdown/options/result_options.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/scheduler/ticker.dart';
 
@@ -14,8 +17,12 @@ class DropdownController implements TickerProvider {
   ValueNotifier<bool> _isOpenNotifier = ValueNotifier(false);
   ValueNotifier<bool> get isOpenNotifier => _isOpenNotifier;
 
-  ValueNotifier<bool> _isErrorNotifier = ValueNotifier(false);
-  ValueNotifier<bool> get isErrorNotifier => _isErrorNotifier;
+  Function? onError;
+
+  bool _isError = false;
+  bool get isError => _isError;
+
+  ResultOptions _resultOptions = ResultOptions();
 
   DropdownController({
     this.duration = const Duration(milliseconds: 500),
@@ -37,10 +44,8 @@ class DropdownController implements TickerProvider {
   AnimationController get controller => _controller;
   AnimationController get errorController => _errorController;
 
-  Tween<Decoration> errorDecorationTween = Tween<Decoration>(
-    begin: BoxDecoration(
-      color: Colors.transparent,
-    ),
+  Tween<Decoration> errorDecorationTween = DecorationTween(
+    begin: BoxDecoration(),
     end: BoxDecoration(
       color: Colors.red,
       borderRadius: BorderRadius.circular(10),
@@ -102,17 +107,38 @@ class DropdownController implements TickerProvider {
   }
 
   void error() {
-    _isErrorNotifier.value = true;
+    if (_isError) return;
+    _setErrorDecorationTween(
+        _resultOptions.boxDecoration, _resultOptions.errorBoxDecoration);
+    onError?.call(true);
+    _isError = true;
     _errorController.reset();
     _errorController.forward();
   }
 
-  void resetError() {
-    _isErrorNotifier.value = false;
+  void resetError() async {
+    _setErrorDecorationTween(
+        errorDecorationTween.end!,
+        isOpenNotifier.value
+            ? _resultOptions.openBoxDecoration
+            : _resultOptions.boxDecoration);
+    _errorController.reset();
+    await _errorController.forward();
+    onError?.call(false);
+    _isError = false;
   }
 
-  void _setErrorDecorationBox(Decoration startDecoration) {
-    errorDecorationTween.begin = startDecoration;
+  void changeErrorState(Function errorFunction) {
+    onError = errorFunction;
+  }
+
+  void setResultOptions(ResultOptions resultOptions) {
+    _resultOptions = resultOptions;
+  }
+
+  void _setErrorDecorationTween(Decoration begin, Decoration end) {
+    errorDecorationTween.begin = begin;
+    errorDecorationTween.end = end;
   }
 
   void setResultBoxDecoration(

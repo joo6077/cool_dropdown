@@ -59,16 +59,34 @@ class _ResultWidgetState<T> extends State<ResultWidget<T>> {
   final resultKey = GlobalKey();
   CoolDropdownItem<T>? selectedItem;
 
+  bool _isError = false;
+
   late final _decorationBoxTween = DecorationTween(
     begin: widget.resultOptions.boxDecoration,
     end: widget.resultOptions.openBoxDecoration,
   ).animate(widget.controller.resultBox);
 
+  late final _errorDecorationBoxTween = DecorationTween(
+    begin: widget.resultOptions.boxDecoration,
+    end: widget.resultOptions.errorBoxDecoration,
+  ).animate(widget.controller.resultBox);
+
   @override
   void initState() {
-    if (widget.defaultItem == null) return;
-    _setSelectedItem(widget.defaultItem!);
+    if (widget.defaultItem != null) {
+      _setSelectedItem(widget.defaultItem!);
+    }
+    // set result widget
+    widget.controller.changeErrorState(onError);
+    widget.controller.setResultOptions(widget.resultOptions);
+
     super.initState();
+  }
+
+  void onError(bool value) {
+    setState(() {
+      _isError = value;
+    });
   }
 
   void open() {
@@ -116,14 +134,19 @@ class _ResultWidgetState<T> extends State<ResultWidget<T>> {
     return GestureDetector(
       onTap: () => open(),
       child: AnimatedBuilder(
-          animation: widget.controller.controller,
+          animation: Listenable.merge([
+            widget.controller.controller,
+            widget.controller.errorController
+          ]),
           builder: (_, __) {
             return Container(
               key: resultKey,
               width: widget.resultOptions.width,
               height: widget.resultOptions.height,
               padding: widget.resultOptions.padding,
-              decoration: _decorationBoxTween.value,
+              decoration: _isError
+                  ? widget.controller.errorDecoration.value
+                  : _decorationBoxTween.value,
               child: Align(
                 alignment: widget.resultOptions.alignment,
                 child: widget.isResultIconLabel

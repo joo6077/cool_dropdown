@@ -81,6 +81,10 @@ class _MyAppState extends State<MyApp> {
           value: '${fruits[i]}'));
     }
     super.initState();
+
+    fruitDropdownController.isOpenNotifier.addListener(() {
+      // fruitDropdownController.resetError();
+    });
   }
 
   @override
@@ -94,7 +98,11 @@ class _MyAppState extends State<MyApp> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            fruitDropdownController.error();
+            if (fruitDropdownController.isError) {
+              fruitDropdownController.resetError();
+            } else {
+              fruitDropdownController.error();
+            }
           },
           child: Icon(Icons.add),
         ),
@@ -118,7 +126,9 @@ class _MyAppState extends State<MyApp> {
                   dropdownList: fruitDropdownItems,
                   defaultItem: null,
                   onChange: (value) {
-                    fruitDropdownController.resetError();
+                    if (fruitDropdownController.isError) {
+                      fruitDropdownController.resetError();
+                    }
                     // fruitDropdownController.close();
                   },
                   resultOptions: ResultOptions(
