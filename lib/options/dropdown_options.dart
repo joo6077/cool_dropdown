@@ -3,7 +3,7 @@ import 'package:cool_dropdown/enums/dropdown_animation.dart';
 import 'package:flutter/material.dart';
 
 class DropdownOptions {
-  final double width;
+  final double? width;
   final double height;
   final double top;
   final double left;
@@ -21,7 +21,7 @@ class DropdownOptions {
   final EdgeInsets padding;
 
   const DropdownOptions({
-    this.width = 100,
+    this.width,
     this.height = 220,
     this.top = 0,
     this.left = 0,

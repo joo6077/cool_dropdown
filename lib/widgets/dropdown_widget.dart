@@ -123,9 +123,7 @@ class DropdownWidgetState<T> extends State<DropdownWidget<T>> {
             ),
           ),
           Positioned(
-            top: dropdownOffset.dy -
-                widget.dropdownOptions.marginGap.top +
-                widget.dropdownOptions.top,
+            top: dropdownOffset.dy - widget.dropdownOptions.marginGap.top,
             left: dropdownOffset.dx -
                 widget.dropdownOptions.marginGap.left +
                 widget.dropdownOptions.left,
@@ -145,9 +143,8 @@ class DropdownWidgetState<T> extends State<DropdownWidget<T>> {
                             widget.dropdownOptions.borderSide.width
                         : 0,
                   ),
-                  width: widget.dropdownOptions.width,
-                  height: _dropdownCalculator.calcDropdownHeight ??
-                      widget.dropdownOptions.height,
+                  width: _dropdownCalculator.dropdownWidth,
+                  height: _dropdownCalculator.dropdownHeight,
                   decoration: ShapeDecoration(
                     color: widget.dropdownOptions.color,
                     shadows: widget.dropdownOptions.shadows,

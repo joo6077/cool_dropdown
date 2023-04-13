@@ -92,6 +92,12 @@ class _MyAppState extends State<MyApp> {
           backgroundColor: Color(0xFF6FCC76),
           title: Text('Cool Drop Down'),
         ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            fruitDropdownController.error();
+          },
+          child: Icon(Icons.add),
+        ),
         body: ListView(
           children: [
             SizedBox(
@@ -110,8 +116,9 @@ class _MyAppState extends State<MyApp> {
                 child: CoolDropdown<String>(
                   controller: fruitDropdownController,
                   dropdownList: fruitDropdownItems,
-                  defaultItem: fruitDropdownItems[0],
+                  defaultItem: null,
                   onChange: (value) {
+                    fruitDropdownController.resetError();
                     // fruitDropdownController.close();
                   },
                   resultOptions: ResultOptions(
@@ -123,10 +130,11 @@ class _MyAppState extends State<MyApp> {
                         painter: DropdownArrowPainter(),
                       ),
                     ),
+                    placeholder: 'Select Fruit',
                   ),
                   dropdownOptions: DropdownOptions(
-                    width: 300,
-                    height: 300,
+                    top: 10,
+                    height: 600,
                     gap: DropdownGap.all(5),
                     borderSide: BorderSide(width: 1, color: Colors.black),
                     padding: EdgeInsets.symmetric(horizontal: 10),

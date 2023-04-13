@@ -9,6 +9,8 @@ class ResultOptions {
   final MainAxisAlignment mainAxisAlignment;
 
   final BoxDecoration boxDecoration;
+  final BoxDecoration openBoxDecoration;
+  final BoxDecoration errorBoxDecoration;
   final TextStyle textStyle;
   final TextStyle placeholderTextStyle;
 
@@ -27,6 +29,42 @@ class ResultOptions {
     this.boxDecoration = const BoxDecoration(
       color: Color(0xFFFFFFFF),
       borderRadius: BorderRadius.all(Radius.circular(10)),
+      boxShadow: [
+        BoxShadow(
+          color: Color(0x1a9E9E9E),
+          spreadRadius: 1,
+          blurRadius: 10,
+          offset: Offset(0, 1),
+        ),
+      ],
+    ),
+    this.openBoxDecoration = const BoxDecoration(
+      color: Color(0xFFFFFFFF),
+      borderRadius: BorderRadius.all(Radius.circular(10)),
+      border: Border(
+        top: BorderSide(width: 1, color: Color(0xFF6FCC76)),
+        bottom: BorderSide(width: 1, color: Color(0xFF6FCC76)),
+        left: BorderSide(width: 1, color: Color(0xFF6FCC76)),
+        right: BorderSide(width: 1, color: Color(0xFF6FCC76)),
+      ),
+      boxShadow: [
+        BoxShadow(
+          color: Color(0x1a9E9E9E),
+          spreadRadius: 1,
+          blurRadius: 10,
+          offset: Offset(0, 1),
+        ),
+      ],
+    ),
+    this.errorBoxDecoration = const BoxDecoration(
+      color: Color(0xFFFFFFFF),
+      borderRadius: BorderRadius.all(Radius.circular(10)),
+      border: Border(
+        top: BorderSide(width: 1, color: Color(0xFFE74C3C)),
+        bottom: BorderSide(width: 1, color: Color(0xFFE74C3C)),
+        left: BorderSide(width: 1, color: Color(0xFFE74C3C)),
+        right: BorderSide(width: 1, color: Color(0xFFE74C3C)),
+      ),
       boxShadow: [
         BoxShadow(
           color: Color(0x1a9E9E9E),

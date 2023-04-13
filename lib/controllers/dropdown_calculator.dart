@@ -21,7 +21,10 @@ class DropdownCalculator<T> {
   bool get isArrowDown => _isArrowDown;
 
   double? _calcDropdownHeight;
-  double? get calcDropdownHeight => _calcDropdownHeight;
+  double _resultWidth = 0;
+
+  double get dropdownWidth => dropdownOptions.width ?? _resultWidth;
+  double get dropdownHeight => _calcDropdownHeight ?? dropdownOptions.height;
 
   DropdownCalculator({
     required this.dropdownList,
@@ -35,6 +38,8 @@ class DropdownCalculator<T> {
   Offset setOffset() {
     final resultBox = resultKey.currentContext?.findRenderObject() as RenderBox;
     final resultOffset = resultBox.localToGlobal(Offset.zero);
+    _resultWidth = resultBox.size.width;
+
     return Offset(
       _setOffsetDx(resultBox: resultBox, resultOffset: resultOffset),
       _setOffsetDy(resultBox: resultBox, resultOffset: resultOffset),
@@ -49,10 +54,9 @@ class DropdownCalculator<T> {
       case DropdownAlign.left:
         return resultOffset.dx;
       case DropdownAlign.right:
-        return resultOffset.dx + resultBox.size.width - dropdownOptions.width;
+        return resultOffset.dx + resultBox.size.width - dropdownWidth;
       case DropdownAlign.center:
-        return resultOffset.dx +
-            (resultBox.size.width - dropdownOptions.width) * 0.5;
+        return resultOffset.dx + (resultBox.size.width - dropdownWidth) * 0.5;
     }
   }
 
@@ -68,18 +72,18 @@ class DropdownCalculator<T> {
     if (_isArrowDown) {
       /// set dropdown height not to overflow screen
       if (resultOffset.dy - dropdownOptions.height < 0) {
-        _calcDropdownHeight = resultOffset.dy;
+        _calcDropdownHeight = resultOffset.dy - dropdownOptions.top;
         return 0;
       }
-      return resultOffset.dy - dropdownOptions.height;
+      return resultOffset.dy - dropdownOptions.height - dropdownOptions.top;
     } else {
       /// set dropdown height not to overflow screen
       if (resultOffset.dy + resultBox.size.height + dropdownOptions.height >
           screenHeight) {
-        _calcDropdownHeight =
-            screenHeight - (resultOffset.dy + resultBox.size.height);
+        _calcDropdownHeight = screenHeight -
+            (resultOffset.dy + resultBox.size.height + dropdownOptions.top);
       }
-      return resultOffset.dy + resultBox.size.height;
+      return resultOffset.dy + resultBox.size.height + dropdownOptions.top;
     }
   }
 
@@ -104,14 +108,12 @@ class DropdownCalculator<T> {
   }
 
   double _arrowLeftCenterDx(double radius) {
-    return ((radius + dropdownArrowOptions.width * 0.5) /
-            dropdownOptions.width) -
-        1;
+    return ((radius + dropdownArrowOptions.width * 0.5) / dropdownWidth) - 1;
   }
 
   double _arrowRightCenterDx(double radius) {
-    return (dropdownOptions.width - radius - dropdownArrowOptions.width * 0.5) /
-        dropdownOptions.width;
+    return (dropdownWidth - radius - dropdownArrowOptions.width * 0.5) /
+        dropdownWidth;
   }
 
   void setScrollPosition(int currentIndex) {

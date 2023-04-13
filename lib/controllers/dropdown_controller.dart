@@ -3,8 +3,10 @@ import 'package:flutter/src/scheduler/ticker.dart';
 
 class DropdownController implements TickerProvider {
   late final AnimationController _controller;
+  late final AnimationController _errorController;
   final Duration duration;
-  final Animation<double>? resultIconAnimation;
+  final Animation<double>? resultArrowAnimation;
+  final Animation<double>? resultBoxAnimation;
   final Animation<double>? showDropdownAnimation;
 
   OverlayEntry? _overlayEntry;
@@ -12,21 +14,53 @@ class DropdownController implements TickerProvider {
   ValueNotifier<bool> _isOpenNotifier = ValueNotifier(false);
   ValueNotifier<bool> get isOpenNotifier => _isOpenNotifier;
 
+  ValueNotifier<bool> _isErrorNotifier = ValueNotifier(false);
+  ValueNotifier<bool> get isErrorNotifier => _isErrorNotifier;
+
   DropdownController({
     this.duration = const Duration(milliseconds: 500),
-    this.resultIconAnimation,
+    this.resultArrowAnimation,
+    this.resultBoxAnimation,
     this.showDropdownAnimation,
   }) {
     _controller = AnimationController(
       vsync: this,
       duration: duration,
     );
+
+    _errorController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
   }
 
   AnimationController get controller => _controller;
+  AnimationController get errorController => _errorController;
+
+  Tween<Decoration> errorDecorationTween = Tween<Decoration>(
+    begin: BoxDecoration(
+      color: Colors.transparent,
+    ),
+    end: BoxDecoration(
+      color: Colors.red,
+      borderRadius: BorderRadius.circular(10),
+    ),
+  );
+
+  Animation<Decoration> get errorDecoration =>
+      errorDecorationTween.animate(_errorController);
 
   Animation<double> get rotation =>
-      resultIconAnimation ??
+      resultArrowAnimation ??
+      Tween<double>(begin: 0, end: 1).animate(
+        CurvedAnimation(
+          parent: _controller,
+          curve: const Interval(0.0, 0.5, curve: Curves.easeOut),
+        ),
+      );
+
+  Animation<double> get resultBox =>
+      resultBoxAnimation ??
       Tween<double>(begin: 0, end: 1).animate(
         CurvedAnimation(
           parent: _controller,
@@ -40,6 +74,13 @@ class DropdownController implements TickerProvider {
         CurvedAnimation(
           parent: _controller,
           curve: const Interval(0.5, 1.0, curve: Curves.easeOut),
+        ),
+      );
+
+  Animation<double> get showError => Tween<double>(begin: 0, end: 1).animate(
+        CurvedAnimation(
+          parent: _errorController,
+          curve: Curves.easeIn,
         ),
       );
 
@@ -59,6 +100,23 @@ class DropdownController implements TickerProvider {
 
     _isOpenNotifier.value = false;
   }
+
+  void error() {
+    _isErrorNotifier.value = true;
+    _errorController.reset();
+    _errorController.forward();
+  }
+
+  void resetError() {
+    _isErrorNotifier.value = false;
+  }
+
+  void _setErrorDecorationBox(Decoration startDecoration) {
+    errorDecorationTween.begin = startDecoration;
+  }
+
+  void setResultBoxDecoration(
+      Decoration startDecoration, Decoration endDecoration) {}
 
   void dispose() {
     _controller.dispose();

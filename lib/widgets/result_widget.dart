@@ -59,6 +59,11 @@ class _ResultWidgetState<T> extends State<ResultWidget<T>> {
   final resultKey = GlobalKey();
   CoolDropdownItem<T>? selectedItem;
 
+  late final _decorationBoxTween = DecorationTween(
+    begin: widget.resultOptions.boxDecoration,
+    end: widget.resultOptions.openBoxDecoration,
+  ).animate(widget.controller.resultBox);
+
   @override
   void initState() {
     if (widget.defaultItem == null) return;
@@ -110,67 +115,73 @@ class _ResultWidgetState<T> extends State<ResultWidget<T>> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => open(),
-      child: Container(
-        key: resultKey,
-        width: widget.resultOptions.width,
-        height: widget.resultOptions.height,
-        padding: widget.resultOptions.padding,
-        decoration: widget.resultOptions.boxDecoration,
-        child: Align(
-          alignment: widget.resultOptions.alignment,
-          child: widget.isResultIconLabel
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  verticalDirection: VerticalDirection.down,
-                  children: [
-                    Expanded(
-                      child: AnimatedSwitcher(
-                        duration: Duration(milliseconds: 300),
-                        transitionBuilder: (child, animation) {
-                          return SizeTransition(
-                            sizeFactor: animation,
-                            axisAlignment: -2,
-                            child: child,
-                          );
-                        },
-                        child: Row(
-                          key: ValueKey(selectedItem?.label),
-                          mainAxisAlignment:
-                              widget.resultOptions.mainAxisAlignment,
-                          children: [
-                            if (widget.isResultLabel)
-                              Flexible(
-                                child: Container(
-                                  child: Text(
-                                    selectedItem?.label ??
-                                        widget.resultOptions.placeholder ??
-                                        '',
-                                    overflow: TextOverflow.ellipsis,
-                                    style: selectedItem != null
-                                        ? widget.resultOptions.textStyle
-                                        : widget
-                                            .resultOptions.placeholderTextStyle,
-                                  ),
-                                ),
+      child: AnimatedBuilder(
+          animation: widget.controller.controller,
+          builder: (_, __) {
+            return Container(
+              key: resultKey,
+              width: widget.resultOptions.width,
+              height: widget.resultOptions.height,
+              padding: widget.resultOptions.padding,
+              decoration: _decorationBoxTween.value,
+              child: Align(
+                alignment: widget.resultOptions.alignment,
+                child: widget.isResultIconLabel
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        verticalDirection: VerticalDirection.down,
+                        children: [
+                          Expanded(
+                            child: AnimatedSwitcher(
+                              duration: Duration(milliseconds: 300),
+                              transitionBuilder: (child, animation) {
+                                return SizeTransition(
+                                  sizeFactor: animation,
+                                  axisAlignment: -2,
+                                  child: child,
+                                );
+                              },
+                              child: Row(
+                                key: ValueKey(selectedItem?.label),
+                                mainAxisAlignment:
+                                    widget.resultOptions.mainAxisAlignment,
+                                children: [
+                                  if (widget.isResultLabel)
+                                    Flexible(
+                                      child: Container(
+                                        child: Text(
+                                          selectedItem?.label ??
+                                              widget
+                                                  .resultOptions.placeholder ??
+                                              '',
+                                          overflow: TextOverflow.ellipsis,
+                                          style: selectedItem != null
+                                              ? widget.resultOptions.textStyle
+                                              : widget.resultOptions
+                                                  .placeholderTextStyle,
+                                        ),
+                                      ),
+                                    ),
+                                  if (widget.isResultLabel)
+                                    SizedBox(
+                                      width: widget.labelIconGap,
+                                    ),
+                                  selectedItem?.icon ?? SizedBox(),
+                                ].isReverse(
+                                    widget.dropdownItemOptions.isReverse),
                               ),
-                            if (widget.isResultLabel)
-                              SizedBox(
-                                width: widget.labelIconGap,
-                              ),
-                            selectedItem?.icon ?? SizedBox(),
-                          ].isReverse(widget.dropdownItemOptions.isReverse),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: widget.resultIconLeftGap,
-                    ),
-                    buildResultIcon(),
-                  ].isReverse(widget.resultOptions.isReverse),
-                )
-              : buildResultIcon(),
-        ),
-      ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: widget.resultIconLeftGap,
+                          ),
+                          buildResultIcon(),
+                        ].isReverse(widget.resultOptions.isReverse),
+                      )
+                    : buildResultIcon(),
+              ),
+            );
+          }),
     );
   }
 }
