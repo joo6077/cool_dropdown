@@ -54,6 +54,29 @@ class _DropdownItemWidgetState extends State<DropdownItemWidget>
     super.dispose();
   }
 
+  Widget _buildIcon() {
+    if (widget.item.icon == null && widget.item.selectedIcon == null) {
+      return const SizedBox();
+    } else if (widget.item.icon == null) {
+      return widget.item.selectedIcon!;
+    } else if (widget.item.selectedIcon == null) {
+      return widget.item.icon!;
+    } else {
+      return AnimatedSwitcher(
+        duration: const Duration(milliseconds: 500),
+        transitionBuilder: (child, animation) {
+          return FadeTransition(child: child, opacity: animation);
+        },
+        child: Container(
+          key: ValueKey(widget.item.isSelected),
+          child: widget.item.isSelected
+              ? widget.item.selectedIcon
+              : widget.item.icon,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -73,18 +96,7 @@ class _DropdownItemWidgetState extends State<DropdownItemWidget>
                     widget.item.label,
                     style: _textStyleTween.value,
                   ),
-                  AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 500),
-                    transitionBuilder: (child, animation) {
-                      return FadeTransition(child: child, opacity: animation);
-                    },
-                    child: Container(
-                      key: ValueKey(widget.item.isSelected),
-                      child: widget.item.isSelected
-                          ? widget.item.selectedIcon
-                          : widget.item.icon,
-                    ),
-                  )
+                  _buildIcon()
                 ],
               ),
             ),

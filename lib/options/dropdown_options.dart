@@ -70,16 +70,19 @@ class DropdownGap {
   final double top;
   final double bottom;
   final double betweenItems;
+  final double betweenDropdownAndEdge;
 
   const DropdownGap.all(double gap)
       : top = gap,
         bottom = gap,
-        betweenItems = gap;
+        betweenItems = gap,
+        betweenDropdownAndEdge = gap;
 
   const DropdownGap.only({
     this.top = 0,
     this.bottom = 0,
     this.betweenItems = 0,
+    this.betweenDropdownAndEdge = 0,
   });
 
   static const DropdownGap zero = DropdownGap.all(0);

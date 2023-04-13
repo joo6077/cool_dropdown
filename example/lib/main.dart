@@ -143,7 +143,7 @@ class _MyAppState extends State<MyApp> {
                     placeholder: 'Select Fruit',
                   ),
                   dropdownOptions: DropdownOptions(
-                    top: 10,
+                    top: 20,
                     height: 600,
                     gap: DropdownGap.all(5),
                     borderSide: BorderSide(width: 1, color: Colors.black),
@@ -157,7 +157,9 @@ class _MyAppState extends State<MyApp> {
                     arrowAlign: DropdownArrowAlign.left,
                   ),
                   dropdownItemOptions: DropdownItemOptions(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween),
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    height: 50,
+                  ),
                 ),
               ),
             ),

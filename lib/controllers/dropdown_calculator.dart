@@ -52,11 +52,16 @@ class DropdownCalculator<T> {
   }) {
     switch (dropdownOptions.align) {
       case DropdownAlign.left:
-        return resultOffset.dx;
+        return resultOffset.dx + dropdownOptions.left;
       case DropdownAlign.right:
-        return resultOffset.dx + resultBox.size.width - dropdownWidth;
+        return resultOffset.dx +
+            resultBox.size.width -
+            dropdownWidth +
+            dropdownOptions.left;
       case DropdownAlign.center:
-        return resultOffset.dx + (resultBox.size.width - dropdownWidth) * 0.5;
+        return resultOffset.dx +
+            (resultBox.size.width - dropdownWidth) * 0.5 +
+            dropdownOptions.left;
     }
   }
 
@@ -72,8 +77,9 @@ class DropdownCalculator<T> {
     if (_isArrowDown) {
       /// set dropdown height not to overflow screen
       if (resultOffset.dy - dropdownOptions.height < 0) {
-        _calcDropdownHeight = resultOffset.dy - dropdownOptions.top;
-        return 0;
+        _calcDropdownHeight = resultOffset.dy -
+            (dropdownOptions.top + dropdownOptions.gap.betweenDropdownAndEdge);
+        return dropdownOptions.gap.betweenDropdownAndEdge;
       }
       return resultOffset.dy - dropdownOptions.height - dropdownOptions.top;
     } else {
@@ -81,7 +87,10 @@ class DropdownCalculator<T> {
       if (resultOffset.dy + resultBox.size.height + dropdownOptions.height >
           screenHeight) {
         _calcDropdownHeight = screenHeight -
-            (resultOffset.dy + resultBox.size.height + dropdownOptions.top);
+            (resultOffset.dy +
+                resultBox.size.height +
+                dropdownOptions.top +
+                dropdownOptions.gap.betweenDropdownAndEdge);
       }
       return resultOffset.dy + resultBox.size.height + dropdownOptions.top;
     }
@@ -125,7 +134,7 @@ class DropdownCalculator<T> {
     if (overScrollPosition < scrollPosition) {
       scrollPosition = overScrollPosition;
     }
-    if (totalHeight < dropdownOptions.height) {
+    if (totalHeight < dropdownHeight) {
       scrollPosition = 0;
     }
     scrollController.animateTo(scrollPosition,

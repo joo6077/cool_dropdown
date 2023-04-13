@@ -124,9 +124,7 @@ class DropdownWidgetState<T> extends State<DropdownWidget<T>> {
           ),
           Positioned(
             top: dropdownOffset.dy - widget.dropdownOptions.marginGap.top,
-            left: dropdownOffset.dx -
-                widget.dropdownOptions.marginGap.left +
-                widget.dropdownOptions.left,
+            left: dropdownOffset.dx - widget.dropdownOptions.marginGap.left,
             child: GestureDetector(
               onTap: () {},
               child: _buildAnimation(
