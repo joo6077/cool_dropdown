@@ -8,9 +8,9 @@ enum ResultRender {
   /// label + icon
   all,
 
-  /// empty
+  /// arrow
   none,
 
-  /// icon + label
+  /// arrow + (label + icon)
   reverse,
 }

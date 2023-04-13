@@ -120,7 +120,7 @@ class _MyAppState extends State<MyApp> {
                 child: CoolDropdown<String>(
                   controller: fruitDropdownController,
                   dropdownList: fruitDropdownItems,
-                  defaultItem: null,
+                  defaultItem: fruitDropdownItems[0],
                   onChange: (value) async {
                     if (fruitDropdownController.isError) {
                       await fruitDropdownController.resetError();
@@ -140,7 +140,7 @@ class _MyAppState extends State<MyApp> {
                         painter: DropdownArrowPainter(),
                       ),
                     ),
-                    render: ResultRender.reverse,
+                    render: ResultRender.all,
                     placeholder: 'Select Fruit',
                   ),
                   dropdownOptions: DropdownOptions(
@@ -151,11 +151,11 @@ class _MyAppState extends State<MyApp> {
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     align: DropdownAlign.left,
                   ),
-                  dropdownArrowOptions: DropdownArrowOptions(
+                  dropdownArrowOptions: DropdownTriangleOptions(
                     width: 10,
                     height: 10,
                     borderRadius: 0,
-                    arrowAlign: DropdownArrowAlign.left,
+                    arrowAlign: DropdownTriangleAlign.left,
                   ),
                   dropdownItemOptions: DropdownItemOptions(
                     mainAxisAlignment: MainAxisAlignment.start,

@@ -1,18 +1,18 @@
 import 'dart:math';
 
-import 'package:cool_dropdown/enums/dropdown_arrow_align.dart';
-import 'package:cool_dropdown/options/dropdown_arrow_options.dart';
+import 'package:cool_dropdown/enums/dropdown_triangle_align.dart';
+import 'package:cool_dropdown/options/dropdown_triangle_options.dart';
 import 'package:flutter/material.dart';
 
 class DropdownShapeBorder extends ShapeBorder {
-  final DropdownArrowOptions arrow;
+  final DropdownTriangleOptions arrow;
   final BorderRadius radius;
   final bool isArrowDown;
-  final DropdownArrowAlign arrowAlign;
+  final DropdownTriangleAlign arrowAlign;
   final BorderSide borderSide;
 
   DropdownShapeBorder({
-    this.arrow = const DropdownArrowOptions(
+    this.arrow = const DropdownTriangleOptions(
       width: 30.0,
       height: 20.0,
       borderRadius: .0,
@@ -165,19 +165,19 @@ class DropdownShapeBorder extends ShapeBorder {
     final boxRadius = radius;
 
     switch (arrowAlign) {
-      case DropdownArrowAlign.left:
+      case DropdownTriangleAlign.left:
         return _ArrowPosition(
           left: boxRadius.topLeft.x,
           center: boxRadius.topLeft.x + arrow.width / 2,
           right: boxRadius.topLeft.x + arrow.width,
         );
-      case DropdownArrowAlign.center:
+      case DropdownTriangleAlign.center:
         return _ArrowPosition(
           left: boxWidth / 2 - arrow.width / 2,
           center: boxWidth / 2,
           right: boxWidth / 2 + arrow.width / 2,
         );
-      case DropdownArrowAlign.right:
+      case DropdownTriangleAlign.right:
         return _ArrowPosition(
           left: boxWidth - boxRadius.topRight.x - arrow.width,
           center: boxWidth - boxRadius.topRight.x - arrow.width / 2,

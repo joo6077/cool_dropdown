@@ -1,7 +1,7 @@
 import 'package:cool_dropdown/enums/dropdown_align.dart';
-import 'package:cool_dropdown/enums/dropdown_arrow_align.dart';
+import 'package:cool_dropdown/enums/dropdown_triangle_align.dart';
 import 'package:cool_dropdown/models/cool_dropdown_item.dart';
-import 'package:cool_dropdown/options/dropdown_arrow_options.dart';
+import 'package:cool_dropdown/options/dropdown_triangle_options.dart';
 import 'package:cool_dropdown/options/dropdown_item_options.dart';
 import 'package:cool_dropdown/options/dropdown_options.dart';
 import 'package:flutter/widgets.dart';
@@ -12,7 +12,7 @@ class DropdownCalculator<T> {
   final GlobalKey resultKey;
   final DropdownOptions dropdownOptions;
   final DropdownItemOptions dropdownItemOptions;
-  final DropdownArrowOptions dropdownArrowOptions;
+  final DropdownTriangleOptions dropdownArrowOptions;
 
   final _scrollController = ScrollController();
   ScrollController get scrollController => _scrollController;
@@ -98,20 +98,20 @@ class DropdownCalculator<T> {
 
   double get calcArrowAlignmentDx {
     switch (dropdownArrowOptions.arrowAlign) {
-      case DropdownArrowAlign.left:
+      case DropdownTriangleAlign.left:
         if (_isArrowDown) {
           return _arrowLeftCenterDx(dropdownOptions.borderRadius.topLeft.x);
         } else {
           return _arrowLeftCenterDx(dropdownOptions.borderRadius.bottomLeft.x);
         }
-      case DropdownArrowAlign.right:
+      case DropdownTriangleAlign.right:
         if (_isArrowDown) {
           return _arrowRightCenterDx(dropdownOptions.borderRadius.topRight.x);
         } else {
           return _arrowRightCenterDx(
               dropdownOptions.borderRadius.bottomRight.x);
         }
-      case DropdownArrowAlign.center:
+      case DropdownTriangleAlign.center:
         return 0;
     }
   }

@@ -1,4 +1,4 @@
-import 'package:cool_dropdown/enums/dropdown_render.dart';
+import 'package:cool_dropdown/enums/result_render.dart';
 import 'package:flutter/material.dart';
 
 class ResultOptions {
@@ -6,8 +6,8 @@ class ResultOptions {
   final double height;
   final double space;
 
-  final Alignment alignment;
   final EdgeInsets padding;
+  final Alignment alignment;
   final MainAxisAlignment mainAxisAlignment;
   final ResultRender render;
 
@@ -16,12 +16,13 @@ class ResultOptions {
   final BoxDecoration errorBoxDecoration;
   final TextStyle textStyle;
   final TextStyle placeholderTextStyle;
+  final TextOverflow textOverflow;
 
   final Widget? icon;
 
   final String? placeholder;
 
-  final bool isReverse;
+  final bool isMarquee;
 
   const ResultOptions({
     this.width = 220,
@@ -91,6 +92,7 @@ class ResultOptions {
     ),
     this.icon,
     this.placeholder,
-    this.isReverse = false,
+    this.textOverflow = TextOverflow.ellipsis,
+    this.isMarquee = false,
   });
 }

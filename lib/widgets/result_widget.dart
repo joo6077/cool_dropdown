@@ -1,15 +1,16 @@
-import 'dart:developer';
 import 'dart:math';
 
 import 'package:cool_dropdown/controllers/dropdown_controller.dart';
-import 'package:cool_dropdown/enums/dropdown_render.dart';
+import 'package:cool_dropdown/enums/dropdown_item_render.dart';
+import 'package:cool_dropdown/enums/result_render.dart';
 import 'package:cool_dropdown/models/cool_dropdown_item.dart';
-import 'package:cool_dropdown/options/dropdown_arrow_options.dart';
+import 'package:cool_dropdown/options/dropdown_triangle_options.dart';
 import 'package:cool_dropdown/options/dropdown_item_options.dart';
 import 'package:cool_dropdown/options/dropdown_options.dart';
 import 'package:cool_dropdown/options/result_options.dart';
 import 'package:cool_dropdown/utils/extension_util.dart';
 import 'package:cool_dropdown/widgets/dropdown_widget.dart';
+import 'package:cool_dropdown/widgets/marquee_widget.dart';
 import 'package:flutter/material.dart';
 
 class ResultWidget<T> extends StatefulWidget {
@@ -18,18 +19,13 @@ class ResultWidget<T> extends StatefulWidget {
   final ResultOptions resultOptions;
   final DropdownOptions dropdownOptions;
   final DropdownItemOptions dropdownItemOptions;
-  final DropdownArrowOptions dropdownArrowOptions;
+  final DropdownTriangleOptions dropdownArrowOptions;
   final DropdownController controller;
 
   final Function(T t) onChange;
   final Function(bool)? onOpen;
 
   final CoolDropdownItem<T>? defaultItem;
-
-  final bool isResultIconLabel;
-  final bool isResultLabel;
-  final bool isDropdownLabel;
-  final bool resultIconRotation;
 
   const ResultWidget({
     Key? key,
@@ -42,10 +38,6 @@ class ResultWidget<T> extends StatefulWidget {
     required this.onChange,
     this.onOpen,
     this.defaultItem,
-    this.isResultIconLabel = true,
-    this.isResultLabel = true,
-    this.isDropdownLabel = true,
-    this.resultIconRotation = true,
   }) : super(key: key);
 
   @override
@@ -82,7 +74,6 @@ class _ResultWidgetState<T> extends State<ResultWidget<T>> {
   }
 
   void open() {
-    print('object');
     widget.controller.open(
         context: context,
         child: DropdownWidget<T>(
@@ -93,12 +84,10 @@ class _ResultWidgetState<T> extends State<ResultWidget<T>> {
           resultKey: resultKey,
           onChange: widget.onChange,
           dropdownList: widget.dropdownList,
-          isResultLabel: widget.isResultLabel,
           getSelectedItem: (index) =>
               _setSelectedItem(widget.dropdownList[index]),
           selectedItem: selectedItem,
           bodyContext: context,
-          isDropdownLabel: widget.isDropdownLabel,
         ));
   }
 
@@ -126,12 +115,16 @@ class _ResultWidgetState<T> extends State<ResultWidget<T>> {
         if (widget.resultOptions.render == ResultRender.all ||
             widget.resultOptions.render == ResultRender.label ||
             widget.resultOptions.render == ResultRender.reverse)
-          Text(
-            selectedItem?.label ?? widget.resultOptions.placeholder ?? '',
-            overflow: TextOverflow.ellipsis,
-            style: selectedItem != null
-                ? widget.resultOptions.textStyle
-                : widget.resultOptions.placeholderTextStyle,
+          Flexible(
+            child: _buildMarquee(
+              Text(
+                selectedItem?.label ?? widget.resultOptions.placeholder ?? '',
+                overflow: widget.resultOptions.textOverflow,
+                style: selectedItem != null
+                    ? widget.resultOptions.textStyle
+                    : widget.resultOptions.placeholderTextStyle,
+              ),
+            ),
           ),
 
         /// if you want to show label in result widget
@@ -141,7 +134,16 @@ class _ResultWidgetState<T> extends State<ResultWidget<T>> {
           selectedItem?.icon ?? const SizedBox(),
 
         /// if you want to show icon + label in result widget
-      ].isReverse(widget.dropdownItemOptions.isReverse);
+      ].isReverse(
+          widget.dropdownItemOptions.render == DropdownItemRender.reverse);
+
+  Widget _buildMarquee(Widget child) {
+    return widget.resultOptions.isMarquee
+        ? MarqueeWidget(
+            child: child,
+          )
+        : child;
+  }
 
   @override
   Widget build(BuildContext context) {

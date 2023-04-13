@@ -2,6 +2,7 @@ import 'package:cool_dropdown/enums/dropdown_item_render.dart';
 import 'package:cool_dropdown/models/cool_dropdown_item.dart';
 import 'package:cool_dropdown/options/dropdown_item_options.dart';
 import 'package:cool_dropdown/utils/extension_util.dart';
+import 'package:cool_dropdown/widgets/marquee_widget.dart';
 import 'package:flutter/material.dart';
 
 class DropdownItemWidget extends StatefulWidget {
@@ -62,9 +63,14 @@ class _DropdownItemWidgetState extends State<DropdownItemWidget>
       if (widget.dropdownItemOptions.render == DropdownItemRender.all ||
           widget.dropdownItemOptions.render == DropdownItemRender.label ||
           widget.dropdownItemOptions.render == DropdownItemRender.reverse)
-        Text(
-          widget.item.label,
-          style: _textStyleTween.value,
+        Flexible(
+          child: _buildLabel(
+            Text(
+              widget.item.label,
+              style: _textStyleTween.value,
+              overflow: widget.dropdownItemOptions.textOverflow,
+            ),
+          ),
         ),
 
       /// if you want to show icon in result widget
@@ -74,6 +80,14 @@ class _DropdownItemWidgetState extends State<DropdownItemWidget>
         _buildIcon(),
     ].isReverse(
         widget.dropdownItemOptions.render == DropdownItemRender.reverse);
+  }
+
+  Widget _buildLabel(Widget child) {
+    return widget.dropdownItemOptions.isMarquee
+        ? MarqueeWidget(
+            child: child,
+          )
+        : child;
   }
 
   Widget _buildIcon() {

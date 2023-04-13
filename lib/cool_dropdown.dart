@@ -2,7 +2,7 @@ library cool_dropdown;
 
 import 'package:cool_dropdown/controllers/dropdown_controller.dart';
 import 'package:cool_dropdown/models/cool_dropdown_item.dart';
-import 'package:cool_dropdown/options/dropdown_arrow_options.dart';
+import 'package:cool_dropdown/options/dropdown_triangle_options.dart';
 import 'package:cool_dropdown/options/dropdown_item_options.dart';
 import 'package:cool_dropdown/options/dropdown_options.dart';
 import 'package:cool_dropdown/options/result_options.dart';
@@ -11,10 +11,10 @@ import 'package:flutter/material.dart';
 
 export 'package:cool_dropdown/controllers/dropdown_controller.dart';
 export 'package:cool_dropdown/enums/dropdown_align.dart';
-export 'package:cool_dropdown/enums/dropdown_arrow_align.dart';
-export 'package:cool_dropdown/enums/dropdown_render.dart';
+export 'package:cool_dropdown/enums/dropdown_triangle_align.dart';
+export 'package:cool_dropdown/enums/result_render.dart';
 export 'package:cool_dropdown/enums/dropdown_item_render.dart';
-export 'package:cool_dropdown/options/dropdown_arrow_options.dart';
+export 'package:cool_dropdown/options/dropdown_triangle_options.dart';
 export 'package:cool_dropdown/options/dropdown_item_options.dart';
 export 'package:cool_dropdown/options/dropdown_options.dart';
 export 'package:cool_dropdown/options/result_options.dart';
@@ -27,7 +27,7 @@ class CoolDropdown<T> extends StatelessWidget {
   final ResultOptions resultOptions;
   final DropdownOptions dropdownOptions;
   final DropdownItemOptions dropdownItemOptions;
-  final DropdownArrowOptions dropdownArrowOptions;
+  final DropdownTriangleOptions dropdownArrowOptions;
   final DropdownController controller;
 
   final Function(T) onChange;
@@ -42,7 +42,7 @@ class CoolDropdown<T> extends StatelessWidget {
     this.resultOptions = const ResultOptions(),
     this.dropdownOptions = const DropdownOptions(),
     this.dropdownItemOptions = const DropdownItemOptions(),
-    this.dropdownArrowOptions = const DropdownArrowOptions(),
+    this.dropdownArrowOptions = const DropdownTriangleOptions(),
     required this.controller,
     required this.onChange,
     this.onOpen,

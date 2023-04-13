@@ -3,7 +3,7 @@ import 'package:cool_dropdown/controllers/dropdown_controller.dart';
 import 'package:cool_dropdown/customPaints/dropdown_shape_border.dart';
 import 'package:cool_dropdown/enums/dropdown_animation.dart';
 import 'package:cool_dropdown/models/cool_dropdown_item.dart';
-import 'package:cool_dropdown/options/dropdown_arrow_options.dart';
+import 'package:cool_dropdown/options/dropdown_triangle_options.dart';
 import 'package:cool_dropdown/options/dropdown_item_options.dart';
 import 'package:cool_dropdown/options/dropdown_options.dart';
 import 'package:cool_dropdown/typedefs/typedef.dart';
@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 class DropdownWidget<T> extends StatefulWidget {
   final DropdownOptions dropdownOptions;
   final DropdownItemOptions dropdownItemOptions;
-  final DropdownArrowOptions dropdownArrowOptions;
+  final DropdownTriangleOptions dropdownArrowOptions;
   final DropdownController controller;
 
   final GlobalKey resultKey;
@@ -25,8 +25,6 @@ class DropdownWidget<T> extends StatefulWidget {
   final Function(bool)? onOpen;
 
   final GetSelectedItem getSelectedItem;
-  final bool isResultLabel;
-  final bool isDropdownLabel;
   final CoolDropdownItem<T>? selectedItem;
 
   const DropdownWidget({
@@ -41,8 +39,6 @@ class DropdownWidget<T> extends StatefulWidget {
     required this.onChange,
     this.onOpen,
     required this.getSelectedItem,
-    required this.isResultLabel,
-    required this.isDropdownLabel,
     required this.selectedItem,
   }) : super(key: key);
 

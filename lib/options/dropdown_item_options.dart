@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 
 class DropdownItemOptions {
   final double height;
-  final EdgeInsets padding;
 
+  final EdgeInsets padding;
+  final EdgeInsets selectedPadding;
   final Alignment alignment;
   final MainAxisAlignment mainAxisAlignment;
   final DropdownItemRender render;
@@ -13,9 +14,9 @@ class DropdownItemOptions {
   final BoxDecoration selectedBoxDecoration;
   final TextStyle textStyle;
   final TextStyle selectedTextStyle;
-  final EdgeInsets selectedPadding;
+  final TextOverflow textOverflow;
 
-  final bool isReverse;
+  final bool isMarquee;
 
   const DropdownItemOptions({
     this.height = 40,
@@ -41,6 +42,7 @@ class DropdownItemOptions {
       fontWeight: FontWeight.w400,
     ),
     this.selectedPadding = const EdgeInsets.only(left: 20, right: 10),
-    this.isReverse = false,
+    this.textOverflow = TextOverflow.ellipsis,
+    this.isMarquee = false,
   });
 }
