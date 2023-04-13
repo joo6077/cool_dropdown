@@ -1,5 +1,5 @@
-import 'package:cool_dropdown/controllers/dropdown_controller.dart';
 import 'package:cool_dropdown/controllers/dropdown_calculator.dart';
+import 'package:cool_dropdown/controllers/dropdown_controller.dart';
 import 'package:cool_dropdown/customPaints/dropdown_shape_border.dart';
 import 'package:cool_dropdown/enums/dropdown_animation.dart';
 import 'package:cool_dropdown/models/cool_dropdown_item.dart';
@@ -20,13 +20,14 @@ class DropdownWidget<T> extends StatefulWidget {
   final BuildContext bodyContext;
 
   final List<CoolDropdownItem> dropdownList;
+
   final Function(T t) onChange;
+  final Function(bool)? onOpen;
+
   final GetSelectedItem getSelectedItem;
   final bool isResultLabel;
   final bool isDropdownLabel;
   final CoolDropdownItem<T>? selectedItem;
-
-  final double labelIconGap;
 
   const DropdownWidget({
     Key? key,
@@ -35,15 +36,15 @@ class DropdownWidget<T> extends StatefulWidget {
     required this.dropdownArrowOptions,
     required this.controller,
     required this.resultKey,
+    required this.bodyContext,
     required this.dropdownList,
     required this.onChange,
+    this.onOpen,
     required this.getSelectedItem,
-    required this.selectedItem,
-    required this.labelIconGap,
     required this.isResultLabel,
-    required this.bodyContext,
     required this.isDropdownLabel,
-  });
+    required this.selectedItem,
+  }) : super(key: key);
 
   @override
   DropdownWidgetState<T> createState() => DropdownWidgetState<T>();
@@ -73,6 +74,12 @@ class DropdownWidgetState<T> extends State<DropdownWidget<T>> {
       _dropdownCalculator.setScrollPosition(currentIndex);
     });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _dropdownCalculator.dispose();
+    super.dispose();
   }
 
   void _setSelectedItem(int index) {

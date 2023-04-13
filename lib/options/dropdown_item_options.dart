@@ -1,3 +1,4 @@
+import 'package:cool_dropdown/enums/dropdown_item_render.dart';
 import 'package:flutter/material.dart';
 
 class DropdownItemOptions {
@@ -6,6 +7,7 @@ class DropdownItemOptions {
 
   final Alignment alignment;
   final MainAxisAlignment mainAxisAlignment;
+  final DropdownItemRender render;
 
   final BoxDecoration boxDecoration;
   final BoxDecoration selectedBoxDecoration;
@@ -20,6 +22,7 @@ class DropdownItemOptions {
     this.padding = const EdgeInsets.only(left: 10, right: 10),
     this.alignment = Alignment.centerLeft,
     this.mainAxisAlignment = MainAxisAlignment.start,
+    this.render = DropdownItemRender.all,
     this.boxDecoration = const BoxDecoration(
       color: Color(0xFFFFFFFF),
     ),

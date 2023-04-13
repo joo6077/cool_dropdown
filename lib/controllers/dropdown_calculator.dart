@@ -140,4 +140,8 @@ class DropdownCalculator<T> {
     scrollController.animateTo(scrollPosition,
         duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
   }
+
+  void dispose() {
+    _scrollController.dispose();
+  }
 }

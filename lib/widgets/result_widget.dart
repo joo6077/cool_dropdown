@@ -1,14 +1,15 @@
+import 'dart:developer';
 import 'dart:math';
 
-import 'package:cool_dropdown/widgets/dropdown_widget.dart';
-
 import 'package:cool_dropdown/controllers/dropdown_controller.dart';
+import 'package:cool_dropdown/enums/dropdown_render.dart';
 import 'package:cool_dropdown/models/cool_dropdown_item.dart';
 import 'package:cool_dropdown/options/dropdown_arrow_options.dart';
 import 'package:cool_dropdown/options/dropdown_item_options.dart';
 import 'package:cool_dropdown/options/dropdown_options.dart';
 import 'package:cool_dropdown/options/result_options.dart';
 import 'package:cool_dropdown/utils/extension_util.dart';
+import 'package:cool_dropdown/widgets/dropdown_widget.dart';
 import 'package:flutter/material.dart';
 
 class ResultWidget<T> extends StatefulWidget {
@@ -21,17 +22,14 @@ class ResultWidget<T> extends StatefulWidget {
   final DropdownController controller;
 
   final Function(T t) onChange;
+  final Function(bool)? onOpen;
 
   final CoolDropdownItem<T>? defaultItem;
 
   final bool isResultIconLabel;
   final bool isResultLabel;
-  final bool isDropdownLabel; // late
+  final bool isDropdownLabel;
   final bool resultIconRotation;
-
-  // style
-  final double labelIconGap;
-  final double resultIconLeftGap;
 
   const ResultWidget({
     Key? key,
@@ -42,13 +40,12 @@ class ResultWidget<T> extends StatefulWidget {
     required this.dropdownArrowOptions,
     required this.controller,
     required this.onChange,
+    this.onOpen,
     this.defaultItem,
     this.isResultIconLabel = true,
     this.isResultLabel = true,
     this.isDropdownLabel = true,
     this.resultIconRotation = true,
-    this.labelIconGap = 10,
-    this.resultIconLeftGap = 10,
   }) : super(key: key);
 
   @override
@@ -66,18 +63,13 @@ class _ResultWidgetState<T> extends State<ResultWidget<T>> {
     end: widget.resultOptions.openBoxDecoration,
   ).animate(widget.controller.resultBox);
 
-  late final _errorDecorationBoxTween = DecorationTween(
-    begin: widget.resultOptions.boxDecoration,
-    end: widget.resultOptions.errorBoxDecoration,
-  ).animate(widget.controller.resultBox);
-
   @override
   void initState() {
     if (widget.defaultItem != null) {
       _setSelectedItem(widget.defaultItem!);
     }
-    // set result widget
-    widget.controller.changeErrorState(onError);
+
+    widget.controller.setFunctions(onError, widget.onOpen);
     widget.controller.setResultOptions(widget.resultOptions);
 
     super.initState();
@@ -90,6 +82,7 @@ class _ResultWidgetState<T> extends State<ResultWidget<T>> {
   }
 
   void open() {
+    print('object');
     widget.controller.open(
         context: context,
         child: DropdownWidget<T>(
@@ -100,7 +93,6 @@ class _ResultWidgetState<T> extends State<ResultWidget<T>> {
           resultKey: resultKey,
           onChange: widget.onChange,
           dropdownList: widget.dropdownList,
-          labelIconGap: widget.labelIconGap,
           isResultLabel: widget.isResultLabel,
           getSelectedItem: (index) =>
               _setSelectedItem(widget.dropdownList[index]),
@@ -116,7 +108,7 @@ class _ResultWidgetState<T> extends State<ResultWidget<T>> {
     });
   }
 
-  Widget buildResultIcon() {
+  Widget _buildArrow() {
     return AnimatedBuilder(
         animation: widget.controller.controller,
         builder: (_, __) {
@@ -128,6 +120,28 @@ class _ResultWidgetState<T> extends State<ResultWidget<T>> {
                 );
         });
   }
+
+  List<Widget> _buildResultItem() => [
+        /// if you want to show icon in result widget
+        if (widget.resultOptions.render == ResultRender.all ||
+            widget.resultOptions.render == ResultRender.label ||
+            widget.resultOptions.render == ResultRender.reverse)
+          Text(
+            selectedItem?.label ?? widget.resultOptions.placeholder ?? '',
+            overflow: TextOverflow.ellipsis,
+            style: selectedItem != null
+                ? widget.resultOptions.textStyle
+                : widget.resultOptions.placeholderTextStyle,
+          ),
+
+        /// if you want to show label in result widget
+        if (widget.resultOptions.render == ResultRender.all ||
+            widget.resultOptions.render == ResultRender.icon ||
+            widget.resultOptions.render == ResultRender.reverse)
+          selectedItem?.icon ?? const SizedBox(),
+
+        /// if you want to show icon + label in result widget
+      ].isReverse(widget.dropdownItemOptions.isReverse);
 
   @override
   Widget build(BuildContext context) {
@@ -149,7 +163,7 @@ class _ResultWidgetState<T> extends State<ResultWidget<T>> {
                   : _decorationBoxTween.value,
               child: Align(
                 alignment: widget.resultOptions.alignment,
-                child: widget.isResultIconLabel
+                child: widget.resultOptions.render != ResultRender.none
                     ? Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         verticalDirection: VerticalDirection.down,
@@ -168,40 +182,16 @@ class _ResultWidgetState<T> extends State<ResultWidget<T>> {
                                 key: ValueKey(selectedItem?.label),
                                 mainAxisAlignment:
                                     widget.resultOptions.mainAxisAlignment,
-                                children: [
-                                  if (widget.isResultLabel)
-                                    Flexible(
-                                      child: Container(
-                                        child: Text(
-                                          selectedItem?.label ??
-                                              widget
-                                                  .resultOptions.placeholder ??
-                                              '',
-                                          overflow: TextOverflow.ellipsis,
-                                          style: selectedItem != null
-                                              ? widget.resultOptions.textStyle
-                                              : widget.resultOptions
-                                                  .placeholderTextStyle,
-                                        ),
-                                      ),
-                                    ),
-                                  if (widget.isResultLabel)
-                                    SizedBox(
-                                      width: widget.labelIconGap,
-                                    ),
-                                  selectedItem?.icon ?? SizedBox(),
-                                ].isReverse(
-                                    widget.dropdownItemOptions.isReverse),
+                                children: _buildResultItem(),
                               ),
                             ),
                           ),
-                          SizedBox(
-                            width: widget.resultIconLeftGap,
-                          ),
-                          buildResultIcon(),
-                        ].isReverse(widget.resultOptions.isReverse),
+                          SizedBox(width: widget.resultOptions.space),
+                          _buildArrow(),
+                        ].isReverse(widget.resultOptions.render ==
+                            ResultRender.reverse),
                       )
-                    : buildResultIcon(),
+                    : _buildArrow(),
               ),
             );
           }),

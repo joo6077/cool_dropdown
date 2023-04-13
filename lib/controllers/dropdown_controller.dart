@@ -1,6 +1,5 @@
-import 'dart:developer';
-
 import 'package:cool_dropdown/options/result_options.dart';
+import 'package:cool_dropdown/widgets/dropdown_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/scheduler/ticker.dart';
 
@@ -14,10 +13,11 @@ class DropdownController implements TickerProvider {
 
   OverlayEntry? _overlayEntry;
 
-  ValueNotifier<bool> _isOpenNotifier = ValueNotifier(false);
-  ValueNotifier<bool> get isOpenNotifier => _isOpenNotifier;
+  bool _isOpen = false;
+  bool get isOpen => _isOpen;
 
   Function? onError;
+  Function(bool)? onOpen;
 
   bool _isError = false;
   bool get isError => _isError;
@@ -89,12 +89,13 @@ class DropdownController implements TickerProvider {
         ),
       );
 
-  void open({required BuildContext context, required Widget child}) {
+  void open({required BuildContext context, required DropdownWidget child}) {
     _overlayEntry = OverlayEntry(builder: (_) => child);
     if (_overlayEntry == null) return;
     Overlay.of(context).insert(_overlayEntry!);
 
-    _isOpenNotifier.value = true;
+    _isOpen = true;
+    onOpen?.call(true);
 
     _controller.forward();
   }
@@ -103,7 +104,8 @@ class DropdownController implements TickerProvider {
     await _controller.reverse();
     _overlayEntry?.remove();
 
-    _isOpenNotifier.value = false;
+    _isOpen = false;
+    onOpen?.call(false);
   }
 
   void error() {
@@ -116,10 +118,10 @@ class DropdownController implements TickerProvider {
     _errorController.forward();
   }
 
-  void resetError() async {
+  Future<void> resetError() async {
     _setErrorDecorationTween(
         errorDecorationTween.end!,
-        isOpenNotifier.value
+        _isOpen
             ? _resultOptions.openBoxDecoration
             : _resultOptions.boxDecoration);
     _errorController.reset();
@@ -128,8 +130,9 @@ class DropdownController implements TickerProvider {
     _isError = false;
   }
 
-  void changeErrorState(Function errorFunction) {
+  void setFunctions(Function errorFunction, Function(bool)? openFunction) {
     onError = errorFunction;
+    onOpen = openFunction;
   }
 
   void setResultOptions(ResultOptions resultOptions) {
@@ -140,9 +143,6 @@ class DropdownController implements TickerProvider {
     errorDecorationTween.begin = begin;
     errorDecorationTween.end = end;
   }
-
-  void setResultBoxDecoration(
-      Decoration startDecoration, Decoration endDecoration) {}
 
   void dispose() {
     _controller.dispose();

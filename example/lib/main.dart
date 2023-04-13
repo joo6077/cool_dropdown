@@ -81,10 +81,6 @@ class _MyAppState extends State<MyApp> {
           value: '${fruits[i]}'));
     }
     super.initState();
-
-    fruitDropdownController.isOpenNotifier.addListener(() {
-      // fruitDropdownController.resetError();
-    });
   }
 
   @override
@@ -114,7 +110,7 @@ class _MyAppState extends State<MyApp> {
             Center(
               child: WillPopScope(
                 onWillPop: () async {
-                  if (fruitDropdownController.isOpenNotifier.value) {
+                  if (fruitDropdownController.isOpen) {
                     fruitDropdownController.close();
                     return Future.value(false);
                   } else {
@@ -125,13 +121,17 @@ class _MyAppState extends State<MyApp> {
                   controller: fruitDropdownController,
                   dropdownList: fruitDropdownItems,
                   defaultItem: null,
-                  onChange: (value) {
+                  onChange: (value) async {
                     if (fruitDropdownController.isError) {
-                      fruitDropdownController.resetError();
+                      await fruitDropdownController.resetError();
                     }
                     // fruitDropdownController.close();
                   },
+                  onOpen: (value) {
+                    print(value);
+                  },
                   resultOptions: ResultOptions(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
                     width: 200,
                     icon: SizedBox(
                       width: 10,
@@ -140,6 +140,7 @@ class _MyAppState extends State<MyApp> {
                         painter: DropdownArrowPainter(),
                       ),
                     ),
+                    render: ResultRender.reverse,
                     placeholder: 'Select Fruit',
                   ),
                   dropdownOptions: DropdownOptions(
@@ -157,7 +158,8 @@ class _MyAppState extends State<MyApp> {
                     arrowAlign: DropdownArrowAlign.left,
                   ),
                   dropdownItemOptions: DropdownItemOptions(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    render: DropdownItemRender.all,
                     height: 50,
                   ),
                 ),
@@ -218,7 +220,7 @@ class _MyAppState extends State<MyApp> {
               ),
             ),
             SizedBox(
-              height: 400,
+              height: 500,
             ),
           ],
         ),

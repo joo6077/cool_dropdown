@@ -12,6 +12,8 @@ import 'package:flutter/material.dart';
 export 'package:cool_dropdown/controllers/dropdown_controller.dart';
 export 'package:cool_dropdown/enums/dropdown_align.dart';
 export 'package:cool_dropdown/enums/dropdown_arrow_align.dart';
+export 'package:cool_dropdown/enums/dropdown_render.dart';
+export 'package:cool_dropdown/enums/dropdown_item_render.dart';
 export 'package:cool_dropdown/options/dropdown_arrow_options.dart';
 export 'package:cool_dropdown/options/dropdown_item_options.dart';
 export 'package:cool_dropdown/options/dropdown_options.dart';
@@ -28,7 +30,10 @@ class CoolDropdown<T> extends StatelessWidget {
   final DropdownArrowOptions dropdownArrowOptions;
   final DropdownController controller;
 
-  final Function(T t) onChange;
+  final Function(T) onChange;
+  final Function(bool)? onOpen;
+
+  final bool isMarquee;
 
   CoolDropdown({
     Key? key,
@@ -40,6 +45,8 @@ class CoolDropdown<T> extends StatelessWidget {
     this.dropdownArrowOptions = const DropdownArrowOptions(),
     required this.controller,
     required this.onChange,
+    this.onOpen,
+    this.isMarquee = false,
   }) : super(key: key);
 
   @override
@@ -52,6 +59,7 @@ class CoolDropdown<T> extends StatelessWidget {
       dropdownArrowOptions: dropdownArrowOptions,
       controller: controller,
       onChange: onChange,
+      onOpen: onOpen,
       defaultItem: defaultItem,
     );
   }

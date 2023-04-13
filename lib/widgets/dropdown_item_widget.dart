@@ -1,5 +1,7 @@
+import 'package:cool_dropdown/enums/dropdown_item_render.dart';
 import 'package:cool_dropdown/models/cool_dropdown_item.dart';
 import 'package:cool_dropdown/options/dropdown_item_options.dart';
+import 'package:cool_dropdown/utils/extension_util.dart';
 import 'package:flutter/material.dart';
 
 class DropdownItemWidget extends StatefulWidget {
@@ -54,6 +56,26 @@ class _DropdownItemWidgetState extends State<DropdownItemWidget>
     super.dispose();
   }
 
+  List<Widget> _buildDropdownItem() {
+    return [
+      /// if you want to show icon in result widget
+      if (widget.dropdownItemOptions.render == DropdownItemRender.all ||
+          widget.dropdownItemOptions.render == DropdownItemRender.label ||
+          widget.dropdownItemOptions.render == DropdownItemRender.reverse)
+        Text(
+          widget.item.label,
+          style: _textStyleTween.value,
+        ),
+
+      /// if you want to show icon in result widget
+      if (widget.dropdownItemOptions.render == DropdownItemRender.all ||
+          widget.dropdownItemOptions.render == DropdownItemRender.icon ||
+          widget.dropdownItemOptions.render == DropdownItemRender.reverse)
+        _buildIcon(),
+    ].isReverse(
+        widget.dropdownItemOptions.render == DropdownItemRender.reverse);
+  }
+
   Widget _buildIcon() {
     if (widget.item.icon == null && widget.item.selectedIcon == null) {
       return const SizedBox();
@@ -91,13 +113,7 @@ class _DropdownItemWidgetState extends State<DropdownItemWidget>
               alignment: widget.dropdownItemOptions.alignment,
               child: Row(
                 mainAxisAlignment: widget.dropdownItemOptions.mainAxisAlignment,
-                children: [
-                  Text(
-                    widget.item.label,
-                    style: _textStyleTween.value,
-                  ),
-                  _buildIcon()
-                ],
+                children: _buildDropdownItem(),
               ),
             ),
           );

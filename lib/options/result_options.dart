@@ -1,12 +1,15 @@
+import 'package:cool_dropdown/enums/dropdown_render.dart';
 import 'package:flutter/material.dart';
 
 class ResultOptions {
   final double width;
   final double height;
+  final double space;
 
   final Alignment alignment;
   final EdgeInsets padding;
   final MainAxisAlignment mainAxisAlignment;
+  final ResultRender render;
 
   final BoxDecoration boxDecoration;
   final BoxDecoration openBoxDecoration;
@@ -23,9 +26,11 @@ class ResultOptions {
   const ResultOptions({
     this.width = 220,
     this.height = 50,
+    this.space = 10,
     this.alignment = Alignment.center,
     this.padding = EdgeInsets.zero,
     this.mainAxisAlignment = MainAxisAlignment.spaceBetween,
+    this.render = ResultRender.all,
     this.boxDecoration = const BoxDecoration(
       color: Color(0xFFFFFFFF),
       borderRadius: BorderRadius.all(Radius.circular(10)),
