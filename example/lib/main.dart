@@ -64,6 +64,7 @@ class _MyAppState extends State<MyApp> {
       fruitDropdownItems.add(CoolDropdownItem<String>(
           label: '${fruits[i]}',
           icon: Container(
+            margin: EdgeInsets.only(left: 10),
             height: 25,
             width: 25,
             child: SvgPicture.asset(
@@ -71,6 +72,7 @@ class _MyAppState extends State<MyApp> {
             ),
           ),
           selectedIcon: Container(
+            margin: EdgeInsets.only(left: 10),
             height: 25,
             width: 25,
             child: SvgPicture.asset(
@@ -154,6 +156,7 @@ class _MyAppState extends State<MyApp> {
                     height: 10,
                     borderRadius: 0,
                     arrowAlign: DropdownTriangleAlign.left,
+                    left: 20,
                   ),
                   dropdownItemOptions: DropdownItemOptions(
                     mainAxisAlignment: MainAxisAlignment.start,

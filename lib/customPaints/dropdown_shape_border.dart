@@ -58,7 +58,7 @@ class DropdownShapeBorder extends ShapeBorder {
       _drawTriangleUp(
           path: path,
           boxRect: rect.shift(Offset(0, -triangle.height)),
-          arrowPosition: _calcArrowPosition(rect.width),
+          trianglePosition: _calcArrowPosition(rect.width),
           triangle: triangle);
     }
 
@@ -69,7 +69,7 @@ class DropdownShapeBorder extends ShapeBorder {
       _drawTriangleDown(
           path: path,
           boxRect: rect,
-          arrowPosition: _calcArrowPosition(rect.width),
+          trianglePosition: _calcArrowPosition(rect.width),
           triangle: triangle);
     }
 
@@ -113,64 +113,69 @@ class DropdownShapeBorder extends ShapeBorder {
   void _drawTriangleDown({
     required Path path,
     required Rect boxRect,
-    required _ArrowPosition arrowPosition,
+    required _TrianglePosition trianglePosition,
     required DropdownTriangleOptions triangle,
   }) {
-    final bottomCenterOffset = Offset(arrowPosition.center + boxRect.left,
+    final bottomCenterOffset = Offset(
+        trianglePosition.center + boxRect.left + triangle.left,
         triangle.borderRadius + boxRect.height + triangle.height + boxRect.top);
     final bottomCenterTheta = atan(triangle.height / (triangle.width / 2));
 
     path
-      ..lineTo(arrowPosition.right + boxRect.left, boxRect.height + boxRect.top)
+      ..lineTo(trianglePosition.right + boxRect.left + triangle.left,
+          boxRect.height + boxRect.top)
       ..arcTo(
           Rect.fromCircle(
               center: bottomCenterOffset, radius: triangle.borderRadius),
           pi * (1 / 2) - bottomCenterTheta,
           bottomCenterTheta * 2,
           false)
-      ..lineTo(arrowPosition.left + boxRect.left, boxRect.height + boxRect.top);
+      ..lineTo(trianglePosition.left + boxRect.left + triangle.left,
+          boxRect.height + boxRect.top);
   }
 
   void _drawTriangleUp({
     required Path path,
     required Rect boxRect,
-    required _ArrowPosition arrowPosition,
+    required _TrianglePosition trianglePosition,
     required DropdownTriangleOptions triangle,
   }) {
-    final topCenterOffset = Offset(arrowPosition.center + boxRect.left,
+    final topCenterOffset = Offset(
+        trianglePosition.center + boxRect.left + triangle.left,
         triangle.borderRadius + boxRect.top);
     final topCenterTheta = atan(triangle.height / (triangle.width / 2));
 
     path
-      ..lineTo(arrowPosition.left + boxRect.left, triangle.height + boxRect.top)
+      ..lineTo(trianglePosition.left + boxRect.left + triangle.left,
+          triangle.height + boxRect.top)
       ..arcTo(
           Rect.fromCircle(
               center: topCenterOffset, radius: triangle.borderRadius),
           pi * (3 / 2) - topCenterTheta,
           topCenterTheta * 2,
           false)
-      ..lineTo(
-          arrowPosition.right + boxRect.left, triangle.height + boxRect.top);
+      ..lineTo(trianglePosition.right + boxRect.left + triangle.left,
+          triangle.height + boxRect.top);
   }
 
-  _ArrowPosition _calcArrowPosition(double boxWidth) {
+  _TrianglePosition _calcArrowPosition(double boxWidth) {
     final boxRadius = radius;
 
     switch (arrowAlign) {
       case DropdownTriangleAlign.left:
-        return _ArrowPosition(
+        return _TrianglePosition(
           left: boxRadius.topLeft.x,
           center: boxRadius.topLeft.x + triangle.width / 2,
           right: boxRadius.topLeft.x + triangle.width,
         );
       case DropdownTriangleAlign.center:
-        return _ArrowPosition(
+        return _TrianglePosition(
           left: boxWidth / 2 - triangle.width / 2,
           center: boxWidth / 2,
           right: boxWidth / 2 + triangle.width / 2,
         );
       case DropdownTriangleAlign.right:
-        return _ArrowPosition(
+        return _TrianglePosition(
           left: boxWidth - boxRadius.topRight.x - triangle.width,
           center: boxWidth - boxRadius.topRight.x - triangle.width / 2,
           right: boxWidth - boxRadius.topRight.x,
@@ -182,12 +187,12 @@ class DropdownShapeBorder extends ShapeBorder {
   Path getInnerPath(Rect rect, {TextDirection? textDirection}) => Path();
 }
 
-class _ArrowPosition {
+class _TrianglePosition {
   final double left;
   final double center;
   final double right;
 
-  _ArrowPosition({
+  _TrianglePosition({
     required this.left,
     required this.center,
     required this.right,
