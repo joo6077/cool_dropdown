@@ -140,11 +140,11 @@ class DropdownWidgetState<T> extends State<DropdownWidget<T>> {
                     color: widget.dropdownOptions.color,
                     shadows: widget.dropdownOptions.shadows,
                     shape: DropdownShapeBorder(
-                      arrow: widget.dropdownArrowOptions,
+                      triangle: widget.dropdownArrowOptions,
                       radius: widget.dropdownOptions.borderRadius,
                       borderSide: widget.dropdownOptions.borderSide,
                       arrowAlign: widget.dropdownArrowOptions.arrowAlign,
-                      isArrowDown: _dropdownCalculator.isArrowDown,
+                      isTriangleDown: _dropdownCalculator.isArrowDown,
                     ),
                   ),
                   child: ListView.builder(

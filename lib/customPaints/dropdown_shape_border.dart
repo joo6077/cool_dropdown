@@ -5,28 +5,28 @@ import 'package:cool_dropdown/options/dropdown_triangle_options.dart';
 import 'package:flutter/material.dart';
 
 class DropdownShapeBorder extends ShapeBorder {
-  final DropdownTriangleOptions arrow;
+  final DropdownTriangleOptions triangle;
   final BorderRadius radius;
-  final bool isArrowDown;
+  final bool isTriangleDown;
   final DropdownTriangleAlign arrowAlign;
   final BorderSide borderSide;
 
   DropdownShapeBorder({
-    this.arrow = const DropdownTriangleOptions(
+    this.triangle = const DropdownTriangleOptions(
       width: 30.0,
       height: 20.0,
       borderRadius: .0,
     ),
     this.radius = const BorderRadius.all(Radius.circular(0)),
-    required this.isArrowDown,
+    required this.isTriangleDown,
     required this.arrowAlign,
     this.borderSide = BorderSide.none,
   });
 
   @override
   EdgeInsetsGeometry get dimensions => EdgeInsets.only(
-        top: isArrowDown ? 0 : arrow.height,
-        bottom: isArrowDown ? arrow.height : 0,
+        top: isTriangleDown ? 0 : triangle.height,
+        bottom: isTriangleDown ? triangle.height : 0,
       );
 
   @override
@@ -41,127 +41,116 @@ class DropdownShapeBorder extends ShapeBorder {
   @override
   Path getOuterPath(Rect rect, {TextDirection? textDirection}) {
     rect = Rect.fromPoints(
-        rect.topLeft, rect.bottomRight - Offset(0, arrow.height));
-    return isArrowDown
-        ? roundedDropdownArrowDownPath(rect)
-        : roundedDropdownArrowUpPath(rect);
+        rect.topLeft, rect.bottomRight - Offset(0, triangle.height));
+    return roundedDropdownPath(rect);
   }
 
-  Path roundedDropdownBodyPath(Rect rect) {
-    final boxWidth = rect.width;
-    final boxHeight = rect.height;
-    final boxOffset = Offset(rect.topLeft.dx, rect.topLeft.dy);
+  Path roundedDropdownPath(Rect rect) {
+    final calcTriangleHeight = isTriangleDown ? 0 : triangle.height;
 
-    final path = Path()
-      ..moveTo(boxOffset.dx, radius.topLeft.y + boxOffset.dy)
-      ..arcToPoint(Offset(radius.topLeft.x + boxOffset.dx, boxOffset.dy),
-          radius: radius.topLeft)
-      ..lineTo(boxWidth - radius.topRight.x + boxOffset.dx, boxOffset.dy)
-      ..arcToPoint(
-          Offset(boxWidth + boxOffset.dx, radius.topRight.y + boxOffset.dy),
-          radius: radius.topRight)
-      ..lineTo(boxWidth + boxOffset.dx,
-          boxHeight - radius.bottomRight.y + boxOffset.dy)
-      ..arcToPoint(
-          Offset(boxWidth - radius.bottomRight.x + boxOffset.dx,
-              boxHeight + boxOffset.dy),
-          radius: radius.bottomRight)
-      ..lineTo(radius.bottomLeft.x + boxOffset.dx, boxHeight + boxOffset.dy)
-      ..arcToPoint(
-          Offset(boxOffset.dx, boxHeight - radius.bottomLeft.y + boxOffset.dy),
-          radius: radius.bottomLeft)
-      ..lineTo(boxOffset.dx, radius.bottomLeft.y + boxOffset.dy);
+    rect = Rect.fromLTWH(rect.topLeft.dx, rect.topLeft.dy + calcTriangleHeight,
+        rect.width, rect.height);
+
+    final path = Path();
+    _drawTopLeftCorner(path, rect);
+
+    if (!isTriangleDown) {
+      _drawTriangleUp(
+          path: path,
+          boxRect: rect.shift(Offset(0, -triangle.height)),
+          arrowPosition: _calcArrowPosition(rect.width),
+          triangle: triangle);
+    }
+
+    _drawTopRightCorner(path, rect);
+    _drawBottomRightCorner(path, rect);
+
+    if (isTriangleDown) {
+      _drawTriangleDown(
+          path: path,
+          boxRect: rect,
+          arrowPosition: _calcArrowPosition(rect.width),
+          triangle: triangle);
+    }
+
+    _drawBottomLeftCorner(path, rect);
     return path;
   }
 
-  Path roundedDropdownArrowDownPath(Rect rect) {
-    final boxWidth = rect.width;
-    final boxHeight = rect.height;
-    final boxOffset = Offset(rect.topLeft.dx, rect.topLeft.dy);
+  void _drawTopLeftCorner(Path path, Rect rect) {
+    path
+      ..moveTo(rect.left, radius.topLeft.y + rect.top)
+      ..arcToPoint(Offset(radius.topLeft.x + rect.left, rect.top),
+          radius: radius.topLeft);
+  }
 
-    final arrowPosition = _calcArrowPosition(boxWidth);
+  void _drawTopRightCorner(Path path, Rect rect) {
+    path
+      ..lineTo(rect.width - radius.topRight.x + rect.left, rect.top)
+      ..arcToPoint(Offset(rect.width + rect.left, radius.topRight.y + rect.top),
+          radius: radius.topRight);
+  }
 
-    final bottomCenterOffset = Offset(arrowPosition.center + boxOffset.dx,
-        arrow.borderRadius + boxHeight + arrow.height + boxOffset.dy);
-    final bottomCenterTheta = atan(arrow.height / (arrow.width / 2));
-
-    final path = Path()
-      ..moveTo(boxOffset.dx, radius.topLeft.y + boxOffset.dy)
-      ..arcToPoint(Offset(radius.topLeft.x + boxOffset.dx, boxOffset.dy),
-          radius: radius.topLeft)
-      ..lineTo(boxWidth - radius.topRight.x + boxOffset.dx, boxOffset.dy)
+  void _drawBottomRightCorner(Path path, Rect rect) {
+    path
+      ..lineTo(
+          rect.width + rect.left, rect.height - radius.bottomRight.y + rect.top)
       ..arcToPoint(
-          Offset(boxWidth + boxOffset.dx, radius.topRight.y + boxOffset.dy),
-          radius: radius.topRight)
-      ..lineTo(boxWidth + boxOffset.dx,
-          boxHeight - radius.bottomRight.y + boxOffset.dy)
+          Offset(rect.width - radius.bottomRight.x + rect.left,
+              rect.height + rect.top),
+          radius: radius.bottomRight);
+  }
+
+  void _drawBottomLeftCorner(Path path, Rect rect) {
+    path
+      ..lineTo(radius.bottomLeft.x + rect.left, rect.height + rect.top)
       ..arcToPoint(
-          Offset(boxWidth - radius.bottomRight.x + boxOffset.dx,
-              boxHeight + boxOffset.dy),
-          radius: radius.bottomRight)
-      // arrow start
-      ..lineTo(arrowPosition.right + boxOffset.dx, boxHeight + boxOffset.dy)
+          Offset(rect.left, rect.height - radius.bottomLeft.y + rect.top),
+          radius: radius.bottomLeft)
+      ..lineTo(rect.left, radius.bottomLeft.y + rect.top);
+  }
+
+  void _drawTriangleDown({
+    required Path path,
+    required Rect boxRect,
+    required _ArrowPosition arrowPosition,
+    required DropdownTriangleOptions triangle,
+  }) {
+    final bottomCenterOffset = Offset(arrowPosition.center + boxRect.left,
+        triangle.borderRadius + boxRect.height + triangle.height + boxRect.top);
+    final bottomCenterTheta = atan(triangle.height / (triangle.width / 2));
+
+    path
+      ..lineTo(arrowPosition.right + boxRect.left, boxRect.height + boxRect.top)
       ..arcTo(
           Rect.fromCircle(
-              center: bottomCenterOffset, radius: arrow.borderRadius),
+              center: bottomCenterOffset, radius: triangle.borderRadius),
           pi * (1 / 2) - bottomCenterTheta,
           bottomCenterTheta * 2,
           false)
-      ..lineTo(arrowPosition.left + boxOffset.dx, boxHeight + boxOffset.dy)
-      // arrow end
-      ..lineTo(radius.bottomLeft.x + boxOffset.dx, boxHeight + boxOffset.dy)
-      ..arcToPoint(
-          Offset(boxOffset.dx, boxHeight - radius.bottomLeft.y + boxOffset.dy),
-          radius: radius.bottomLeft)
-      ..lineTo(boxOffset.dx, radius.bottomLeft.y + boxOffset.dy);
-    return path;
+      ..lineTo(arrowPosition.left + boxRect.left, boxRect.height + boxRect.top);
   }
 
-  Path roundedDropdownArrowUpPath(Rect rect) {
-    final boxWidth = rect.width;
-    final boxHeight = rect.height;
-    final boxOffset = Offset(rect.topLeft.dx, rect.topLeft.dy);
+  void _drawTriangleUp({
+    required Path path,
+    required Rect boxRect,
+    required _ArrowPosition arrowPosition,
+    required DropdownTriangleOptions triangle,
+  }) {
+    final topCenterOffset = Offset(arrowPosition.center + boxRect.left,
+        triangle.borderRadius + boxRect.top);
+    final topCenterTheta = atan(triangle.height / (triangle.width / 2));
 
-    final arrowPosition = _calcArrowPosition(boxWidth);
-
-    final topCenterOffset = Offset(
-        arrowPosition.center + boxOffset.dx, arrow.borderRadius + boxOffset.dy);
-    final topCenterTheta = atan(arrow.height / (arrow.width / 2));
-
-    final path = Path()
-      ..moveTo(boxOffset.dx, radius.topLeft.y + arrow.height + boxOffset.dy)
-      ..arcToPoint(
-          Offset(radius.topLeft.x + boxOffset.dx, arrow.height + boxOffset.dy),
-          radius: radius.topLeft)
-      // arrow start
-      ..lineTo(arrowPosition.left + boxOffset.dx, arrow.height + boxOffset.dy)
+    path
+      ..lineTo(arrowPosition.left + boxRect.left, triangle.height + boxRect.top)
       ..arcTo(
-          Rect.fromCircle(center: topCenterOffset, radius: arrow.borderRadius),
+          Rect.fromCircle(
+              center: topCenterOffset, radius: triangle.borderRadius),
           pi * (3 / 2) - topCenterTheta,
           topCenterTheta * 2,
           false)
-      ..lineTo(arrowPosition.right + boxOffset.dx, arrow.height + boxOffset.dy)
-      // arrow end
-      ..lineTo(boxWidth - radius.topRight.x + boxOffset.dx,
-          arrow.height + boxOffset.dy)
-      ..arcToPoint(
-          Offset(boxWidth + boxOffset.dx,
-              radius.topRight.y + arrow.height + boxOffset.dy),
-          radius: radius.topRight)
-      ..lineTo(boxWidth + boxOffset.dx,
-          boxHeight - radius.bottomRight.y + arrow.height + boxOffset.dy)
-      ..arcToPoint(
-          Offset(boxWidth - radius.bottomRight.x + boxOffset.dx,
-              boxHeight + arrow.height + boxOffset.dy),
-          radius: radius.bottomRight)
-      ..lineTo(radius.bottomLeft.x + boxOffset.dx,
-          boxHeight + arrow.height + boxOffset.dy)
-      ..arcToPoint(
-          Offset(boxOffset.dx,
-              boxHeight - radius.bottomLeft.y + arrow.height + boxOffset.dy),
-          radius: radius.bottomLeft)
-      ..lineTo(boxOffset.dx, radius.bottomLeft.x + arrow.height + boxOffset.dy);
-    return path;
+      ..lineTo(
+          arrowPosition.right + boxRect.left, triangle.height + boxRect.top);
   }
 
   _ArrowPosition _calcArrowPosition(double boxWidth) {
@@ -171,19 +160,19 @@ class DropdownShapeBorder extends ShapeBorder {
       case DropdownTriangleAlign.left:
         return _ArrowPosition(
           left: boxRadius.topLeft.x,
-          center: boxRadius.topLeft.x + arrow.width / 2,
-          right: boxRadius.topLeft.x + arrow.width,
+          center: boxRadius.topLeft.x + triangle.width / 2,
+          right: boxRadius.topLeft.x + triangle.width,
         );
       case DropdownTriangleAlign.center:
         return _ArrowPosition(
-          left: boxWidth / 2 - arrow.width / 2,
+          left: boxWidth / 2 - triangle.width / 2,
           center: boxWidth / 2,
-          right: boxWidth / 2 + arrow.width / 2,
+          right: boxWidth / 2 + triangle.width / 2,
         );
       case DropdownTriangleAlign.right:
         return _ArrowPosition(
-          left: boxWidth - boxRadius.topRight.x - arrow.width,
-          center: boxWidth - boxRadius.topRight.x - arrow.width / 2,
+          left: boxWidth - boxRadius.topRight.x - triangle.width,
+          center: boxWidth - boxRadius.topRight.x - triangle.width / 2,
           right: boxWidth - boxRadius.topRight.x,
         );
     }
