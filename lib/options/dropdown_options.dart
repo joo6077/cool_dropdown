@@ -3,22 +3,41 @@ import 'package:cool_dropdown/enums/dropdown_animation.dart';
 import 'package:flutter/material.dart';
 
 class DropdownOptions {
+  /// The width of the dropdown.
   final double? width;
-  final double height;
-  final double top;
-  final double left;
 
+  /// The height of the dropdown.
+  final double height, top, left;
+
+  /// The color of the dropdown.
   final Color color;
+
+  /// The border radius of the dropdown.
   final BorderRadius borderRadius;
+
+  /// The border of the dropdown.
   final BorderSide borderSide;
+
+  /// The shadows of the dropdown.
   final List<BoxShadow> shadows;
+
+  /// The animation type of the dropdown, [size], [scale].
   final DropdownAnimationType animationType;
 
+  /// The alignment of the dropdown. If the dropdown and result box are different sizes, the dropdown will be aligned to the result box
   final DropdownAlign align;
 
+  /// The gap between the dropdown and dropdown items.
   final DropdownGap gap;
 
+  /// The padding of the dropdown.
   final EdgeInsets padding;
+
+  /// The duration of the dropdown scroll animation.
+  final Duration duration;
+
+  /// The curve of the dropdown scroll animation.
+  final Curve curve;
 
   const DropdownOptions({
     this.width,
@@ -33,8 +52,11 @@ class DropdownOptions {
     this.align = DropdownAlign.center,
     this.gap = DropdownGap.zero,
     this.padding = EdgeInsets.zero,
+    this.duration = const Duration(milliseconds: 300),
+    this.curve = Curves.easeInOut,
   });
 
+  /// The max blur radius plus max spread radius of the dropdown.
   double get shadowMaxBlurRadiusPlusMaxSpreadRadius {
     double max = 0;
     for (final shadow in shadows) {
@@ -58,6 +80,7 @@ class DropdownOptions {
         right: borderSide.width * 0.5 + padding.right,
       );
 
+  /// dropdown border width + shadow max blur radius plus max spread radius to show shadow
   EdgeInsets get marginGap => EdgeInsets.only(
         top: borderSide.width * 0.5 + shadowMaxBlurRadiusPlusMaxSpreadRadius,
         bottom: borderSide.width * 0.5 + shadowMaxBlurRadiusPlusMaxSpreadRadius,

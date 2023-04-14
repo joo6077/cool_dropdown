@@ -7,9 +7,11 @@ class DropdownController implements TickerProvider {
   late final AnimationController _controller;
   late final AnimationController _errorController;
   final Duration duration;
+  final Duration errorDuration;
   final Animation<double>? resultArrowAnimation;
   final Animation<double>? resultBoxAnimation;
   final Animation<double>? showDropdownAnimation;
+  final Animation<double>? showErrorAnimation;
 
   OverlayEntry? _overlayEntry;
 
@@ -26,9 +28,11 @@ class DropdownController implements TickerProvider {
 
   DropdownController({
     this.duration = const Duration(milliseconds: 500),
+    this.errorDuration = const Duration(milliseconds: 500),
     this.resultArrowAnimation,
     this.resultBoxAnimation,
     this.showDropdownAnimation,
+    this.showErrorAnimation,
   }) {
     _controller = AnimationController(
       vsync: this,
@@ -37,7 +41,7 @@ class DropdownController implements TickerProvider {
 
     _errorController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 500),
+      duration: errorDuration,
     );
   }
 

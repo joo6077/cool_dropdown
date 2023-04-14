@@ -149,7 +149,7 @@ class DropdownCalculator<T> {
       scrollPosition = 0;
     }
     scrollController.animateTo(scrollPosition,
-        duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
+        duration: dropdownOptions.duration, curve: dropdownOptions.curve);
   }
 
   void dispose() {

@@ -2,27 +2,41 @@ import 'package:cool_dropdown/enums/result_render.dart';
 import 'package:flutter/material.dart';
 
 class ResultOptions {
-  final double width;
-  final double height;
-  final double space;
+  /// Result width
+  final double width, height, space;
 
+  /// Result padding
   final EdgeInsets padding;
+
+  /// Result alignment of (text + icon)
   final Alignment alignment;
+
+  /// Result main axis alignment of (text + icon)
   final MainAxisAlignment mainAxisAlignment;
+
+  /// Result render type [label], [icon], [all], [none], [reverse]
   final ResultRender render;
 
-  final BoxDecoration boxDecoration;
-  final BoxDecoration openBoxDecoration;
-  final BoxDecoration errorBoxDecoration;
-  final TextStyle textStyle;
-  final TextStyle placeholderTextStyle;
+  /// Result box decoration
+  final BoxDecoration boxDecoration, openBoxDecoration, errorBoxDecoration;
+
+  /// Result text style
+  final TextStyle textStyle, placeholderTextStyle;
+
+  /// Result text is overflow
   final TextOverflow textOverflow;
 
+  /// Result icon
   final Widget? icon;
 
+  /// Result placeholder
   final String? placeholder;
 
+  /// Result is marquee
   final bool isMarquee;
+
+  /// The duration of the switch animation.
+  final Duration duration, marqueeDuration, backDuration, pauseDuration;
 
   const ResultOptions({
     this.width = 220,
@@ -94,5 +108,9 @@ class ResultOptions {
     this.placeholder,
     this.textOverflow = TextOverflow.ellipsis,
     this.isMarquee = false,
+    this.duration = const Duration(milliseconds: 300),
+    this.marqueeDuration = const Duration(milliseconds: 6000),
+    this.backDuration = const Duration(milliseconds: 800),
+    this.pauseDuration = const Duration(milliseconds: 800),
   });
 }

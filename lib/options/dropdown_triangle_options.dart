@@ -1,11 +1,7 @@
 import 'package:cool_dropdown/enums/dropdown_triangle_align.dart';
 
 class DropdownTriangleOptions {
-  final double width;
-  final double height;
-  final double left;
-
-  final double borderRadius;
+  final double width, height, left, borderRadius;
   final DropdownTriangleAlign arrowAlign;
 
   const DropdownTriangleOptions({

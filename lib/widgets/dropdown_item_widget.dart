@@ -23,7 +23,7 @@ class _DropdownItemWidgetState extends State<DropdownItemWidget>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
     vsync: this,
-    duration: const Duration(milliseconds: 500),
+    duration: widget.dropdownItemOptions.duration,
   );
   late final _decorationBoxTween = DecorationTween(
     begin: BoxDecoration(),
@@ -99,7 +99,7 @@ class _DropdownItemWidgetState extends State<DropdownItemWidget>
       return widget.item.icon!;
     } else {
       return AnimatedSwitcher(
-        duration: const Duration(milliseconds: 500),
+        duration: widget.dropdownItemOptions.duration,
         transitionBuilder: (child, animation) {
           return FadeTransition(child: child, opacity: animation);
         },

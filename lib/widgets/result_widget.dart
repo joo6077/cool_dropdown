@@ -172,7 +172,7 @@ class _ResultWidgetState<T> extends State<ResultWidget<T>> {
                         children: [
                           Expanded(
                             child: AnimatedSwitcher(
-                              duration: Duration(milliseconds: 300),
+                              duration: widget.resultOptions.duration,
                               transitionBuilder: (child, animation) {
                                 return SizeTransition(
                                   sizeFactor: animation,
