@@ -19,8 +19,8 @@ class DropdownCalculator<T> {
   final _scrollController = ScrollController();
   ScrollController get scrollController => _scrollController;
 
-  bool _isArrowDown = false;
-  bool get isArrowDown => _isArrowDown;
+  bool _isTriangleDown = false;
+  bool get isArrowDown => _isTriangleDown;
 
   double? _calcDropdownHeight;
   double _resultWidth = 0;
@@ -30,12 +30,6 @@ class DropdownCalculator<T> {
       _calcDropdownHeight ?? min(dropdownOptions.height, _totalHeight);
 
   double get _totalHeight {
-    print((dropdownItemOptions.height * dropdownList.length) +
-        (dropdownOptions.gap.betweenItems * (dropdownList.length - 1)) +
-        dropdownOptions.gap.top +
-        dropdownOptions.gap.bottom +
-        dropdownArrowOptions.height +
-        dropdownOptions.borderSide.width * 2);
     return (dropdownItemOptions.height * dropdownList.length) +
         (dropdownOptions.gap.betweenItems * (dropdownList.length - 1)) +
         dropdownOptions.gap.top +
@@ -90,16 +84,16 @@ class DropdownCalculator<T> {
     final screenHeight = MediaQuery.of(bodyContext).size.height;
     final resultOffsetCenterDy = resultOffset.dy + resultBox.size.height * 0.5;
 
-    _isArrowDown = resultOffsetCenterDy > screenHeight * 0.5;
+    _isTriangleDown = resultOffsetCenterDy > screenHeight * 0.5;
 
-    if (_isArrowDown) {
+    if (_isTriangleDown) {
       /// set dropdown height not to overflow screen
       if (resultOffset.dy - dropdownOptions.height < 0) {
         _calcDropdownHeight = resultOffset.dy -
             (dropdownOptions.top + dropdownOptions.gap.betweenDropdownAndEdge);
         return dropdownOptions.gap.betweenDropdownAndEdge;
       }
-      return resultOffset.dy - dropdownOptions.height - dropdownOptions.top;
+      return resultOffset.dy - dropdownHeight - dropdownOptions.top;
     } else {
       /// set dropdown height not to overflow screen
       if (resultOffset.dy + resultBox.size.height + dropdownOptions.height >
@@ -117,13 +111,13 @@ class DropdownCalculator<T> {
   double get calcArrowAlignmentDx {
     switch (dropdownArrowOptions.arrowAlign) {
       case DropdownTriangleAlign.left:
-        if (_isArrowDown) {
+        if (_isTriangleDown) {
           return _arrowLeftCenterDx(dropdownOptions.borderRadius.topLeft.x);
         } else {
           return _arrowLeftCenterDx(dropdownOptions.borderRadius.bottomLeft.x);
         }
       case DropdownTriangleAlign.right:
-        if (_isArrowDown) {
+        if (_isTriangleDown) {
           return _arrowRightCenterDx(dropdownOptions.borderRadius.topRight.x);
         } else {
           return _arrowRightCenterDx(
