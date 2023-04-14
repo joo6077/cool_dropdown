@@ -28,11 +28,11 @@ List<String> fruits = [
   'apple',
   'banana',
   'grapes',
-  'lemon',
-  'melon',
-  'orange',
-  'pineapple',
-  'strawberry',
+  // 'lemon',
+  // 'melon',
+  // 'orange',
+  // 'pineapple',
+  // 'strawberry',
   'watermelon',
 ];
 
@@ -127,9 +127,7 @@ class _MyAppState extends State<MyApp> {
                     }
                     // fruitDropdownController.close();
                   },
-                  onOpen: (value) {
-                    print(value);
-                  },
+                  onOpen: (value) {},
                   resultOptions: ResultOptions(
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     width: 200,
@@ -145,7 +143,7 @@ class _MyAppState extends State<MyApp> {
                   ),
                   dropdownOptions: DropdownOptions(
                     top: 20,
-                    height: 600,
+                    height: 400,
                     gap: DropdownGap.all(5),
                     borderSide: BorderSide(width: 1, color: Colors.black),
                     padding: EdgeInsets.symmetric(horizontal: 10),

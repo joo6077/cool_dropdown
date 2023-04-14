@@ -52,10 +52,10 @@ class DropdownOptions {
 
   /// padding - dropdown border width
   EdgeInsets get calcPadding => EdgeInsets.only(
-        top: borderSide.width + padding.top,
-        bottom: borderSide.width + padding.bottom,
-        left: borderSide.width + padding.left,
-        right: borderSide.width + padding.right,
+        top: borderSide.width * 0.5 + padding.top,
+        bottom: borderSide.width * 0.5 + padding.bottom,
+        left: borderSide.width * 0.5 + padding.left,
+        right: borderSide.width * 0.5 + padding.right,
       );
 
   EdgeInsets get marginGap => EdgeInsets.only(

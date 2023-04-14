@@ -24,7 +24,10 @@ class DropdownShapeBorder extends ShapeBorder {
   });
 
   @override
-  EdgeInsetsGeometry get dimensions => EdgeInsets.zero;
+  EdgeInsetsGeometry get dimensions => EdgeInsets.only(
+        top: isArrowDown ? 0 : arrow.height,
+        bottom: isArrowDown ? arrow.height : 0,
+      );
 
   @override
   ShapeBorder scale(double t) => this;

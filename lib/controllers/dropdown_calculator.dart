@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cool_dropdown/enums/dropdown_align.dart';
 import 'package:cool_dropdown/enums/dropdown_triangle_align.dart';
 import 'package:cool_dropdown/models/cool_dropdown_item.dart';
@@ -24,7 +26,23 @@ class DropdownCalculator<T> {
   double _resultWidth = 0;
 
   double get dropdownWidth => dropdownOptions.width ?? _resultWidth;
-  double get dropdownHeight => _calcDropdownHeight ?? dropdownOptions.height;
+  double get dropdownHeight =>
+      _calcDropdownHeight ?? min(dropdownOptions.height, _totalHeight);
+
+  double get _totalHeight {
+    print((dropdownItemOptions.height * dropdownList.length) +
+        (dropdownOptions.gap.betweenItems * (dropdownList.length - 1)) +
+        dropdownOptions.gap.top +
+        dropdownOptions.gap.bottom +
+        dropdownArrowOptions.height +
+        dropdownOptions.borderSide.width * 2);
+    return (dropdownItemOptions.height * dropdownList.length) +
+        (dropdownOptions.gap.betweenItems * (dropdownList.length - 1)) +
+        dropdownOptions.gap.top +
+        dropdownOptions.gap.bottom +
+        dropdownArrowOptions.height +
+        dropdownOptions.borderSide.width;
+  }
 
   DropdownCalculator({
     required this.dropdownList,
@@ -126,15 +144,13 @@ class DropdownCalculator<T> {
   }
 
   void setScrollPosition(int currentIndex) {
-    final totalHeight = (dropdownItemOptions.height * dropdownList.length) +
-        (dropdownOptions.gap.betweenItems * (dropdownList.length - 1));
     var scrollPosition = (dropdownItemOptions.height * currentIndex) +
         (dropdownOptions.gap.betweenItems * currentIndex);
     final overScrollPosition = scrollController.position.maxScrollExtent;
     if (overScrollPosition < scrollPosition) {
       scrollPosition = overScrollPosition;
     }
-    if (totalHeight < dropdownHeight) {
+    if (_totalHeight < dropdownHeight) {
       scrollPosition = 0;
     }
     scrollController.animateTo(scrollPosition,

@@ -134,16 +134,6 @@ class DropdownWidgetState<T> extends State<DropdownWidget<T>> {
                 child: Container(
                   margin: widget.dropdownOptions.marginGap,
                   clipBehavior: Clip.antiAlias,
-                  padding: EdgeInsets.only(
-                    top: _dropdownCalculator.isArrowDown
-                        ? 0
-                        : widget.dropdownArrowOptions.height +
-                            widget.dropdownOptions.borderSide.width,
-                    bottom: _dropdownCalculator.isArrowDown
-                        ? widget.dropdownArrowOptions.height +
-                            widget.dropdownOptions.borderSide.width
-                        : 0,
-                  ),
                   width: _dropdownCalculator.dropdownWidth,
                   height: _dropdownCalculator.dropdownHeight,
                   decoration: ShapeDecoration(
@@ -159,6 +149,7 @@ class DropdownWidgetState<T> extends State<DropdownWidget<T>> {
                   ),
                   child: ListView.builder(
                     controller: _dropdownCalculator.scrollController,
+                    // padding: widget.dropdownOptions.calcPadding,
                     padding: widget.dropdownOptions.calcPadding,
                     itemCount: widget.dropdownList.length,
                     itemBuilder: (_, index) => GestureDetector(
