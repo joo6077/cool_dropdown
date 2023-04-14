@@ -35,7 +35,7 @@ class DropdownCalculator<T> {
         dropdownOptions.gap.top +
         dropdownOptions.gap.bottom +
         dropdownArrowOptions.height +
-        dropdownOptions.borderSide.width;
+        dropdownOptions.borderSide.width * 2;
   }
 
   DropdownCalculator({
@@ -86,16 +86,17 @@ class DropdownCalculator<T> {
 
     _isTriangleDown = resultOffsetCenterDy > screenHeight * 0.5;
 
+    /// set dropdown height not to overflow screen
     if (_isTriangleDown) {
-      /// set dropdown height not to overflow screen
       if (resultOffset.dy - dropdownOptions.height < 0) {
         _calcDropdownHeight = resultOffset.dy -
             (dropdownOptions.top + dropdownOptions.gap.betweenDropdownAndEdge);
         return dropdownOptions.gap.betweenDropdownAndEdge;
       }
+
+      /// shrinkwrap
       return resultOffset.dy - dropdownHeight - dropdownOptions.top;
     } else {
-      /// set dropdown height not to overflow screen
       if (resultOffset.dy + resultBox.size.height + dropdownOptions.height >
           screenHeight) {
         _calcDropdownHeight = screenHeight -

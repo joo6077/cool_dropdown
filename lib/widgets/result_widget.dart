@@ -80,7 +80,7 @@ class _ResultWidgetState<T> extends State<ResultWidget<T>> {
           controller: widget.controller,
           dropdownOptions: widget.dropdownOptions,
           dropdownItemOptions: widget.dropdownItemOptions,
-          dropdownArrowOptions: widget.dropdownArrowOptions,
+          dropdownTriangleOptions: widget.dropdownArrowOptions,
           resultKey: resultKey,
           onChange: widget.onChange,
           dropdownList: widget.dropdownList,

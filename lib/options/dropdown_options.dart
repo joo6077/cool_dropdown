@@ -59,10 +59,10 @@ class DropdownOptions {
       );
 
   EdgeInsets get marginGap => EdgeInsets.only(
-        top: borderSide.width + shadowMaxBlurRadiusPlusMaxSpreadRadius,
-        bottom: borderSide.width + shadowMaxBlurRadiusPlusMaxSpreadRadius,
-        left: borderSide.width + shadowMaxBlurRadiusPlusMaxSpreadRadius,
-        right: borderSide.width + shadowMaxBlurRadiusPlusMaxSpreadRadius,
+        top: borderSide.width * 0.5 + shadowMaxBlurRadiusPlusMaxSpreadRadius,
+        bottom: borderSide.width * 0.5 + shadowMaxBlurRadiusPlusMaxSpreadRadius,
+        left: borderSide.width * 0.5 + shadowMaxBlurRadiusPlusMaxSpreadRadius,
+        right: borderSide.width * 0.5 + shadowMaxBlurRadiusPlusMaxSpreadRadius,
       );
 }
 

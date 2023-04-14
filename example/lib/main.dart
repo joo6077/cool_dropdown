@@ -27,12 +27,12 @@ List<String> pokemons = [
 List<String> fruits = [
   'apple',
   'banana',
-  // 'grapes',
-  // 'lemon',
-  // 'melon',
-  // 'orange',
-  // 'pineapple',
-  // 'strawberry',
+  'grapes',
+  'lemon',
+  'melon',
+  'orange',
+  'pineapple',
+  'strawberry',
   'watermelon',
 ];
 

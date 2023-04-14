@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 class DropdownWidget<T> extends StatefulWidget {
   final DropdownOptions dropdownOptions;
   final DropdownItemOptions dropdownItemOptions;
-  final DropdownTriangleOptions dropdownArrowOptions;
+  final DropdownTriangleOptions dropdownTriangleOptions;
   final DropdownController controller;
 
   final GlobalKey resultKey;
@@ -31,7 +31,7 @@ class DropdownWidget<T> extends StatefulWidget {
     Key? key,
     required this.dropdownOptions,
     required this.dropdownItemOptions,
-    required this.dropdownArrowOptions,
+    required this.dropdownTriangleOptions,
     required this.controller,
     required this.resultKey,
     required this.bodyContext,
@@ -56,7 +56,7 @@ class DropdownWidgetState<T> extends State<DropdownWidget<T>> {
       bodyContext: widget.bodyContext,
       resultKey: widget.resultKey,
       dropdownOptions: widget.dropdownOptions,
-      dropdownArrowOptions: widget.dropdownArrowOptions,
+      dropdownArrowOptions: widget.dropdownTriangleOptions,
       dropdownItemOptions: widget.dropdownItemOptions,
       dropdownList: widget.dropdownList,
     );
@@ -135,21 +135,23 @@ class DropdownWidgetState<T> extends State<DropdownWidget<T>> {
                   margin: widget.dropdownOptions.marginGap,
                   clipBehavior: Clip.antiAlias,
                   width: _dropdownCalculator.dropdownWidth,
-                  height: _dropdownCalculator.dropdownHeight,
+                  height: _dropdownCalculator.dropdownHeight +
+                      widget.dropdownOptions.borderSide.width,
+                  padding: EdgeInsets.all(
+                      widget.dropdownOptions.borderSide.width * 0.5),
                   decoration: ShapeDecoration(
                     color: widget.dropdownOptions.color,
                     shadows: widget.dropdownOptions.shadows,
                     shape: DropdownShapeBorder(
-                      triangle: widget.dropdownArrowOptions,
+                      triangle: widget.dropdownTriangleOptions,
                       radius: widget.dropdownOptions.borderRadius,
                       borderSide: widget.dropdownOptions.borderSide,
-                      arrowAlign: widget.dropdownArrowOptions.arrowAlign,
+                      arrowAlign: widget.dropdownTriangleOptions.arrowAlign,
                       isTriangleDown: _dropdownCalculator.isArrowDown,
                     ),
                   ),
                   child: ListView.builder(
                     controller: _dropdownCalculator.scrollController,
-                    // padding: widget.dropdownOptions.calcPadding,
                     padding: widget.dropdownOptions.calcPadding,
                     itemCount: widget.dropdownList.length,
                     itemBuilder: (_, index) => GestureDetector(
@@ -161,7 +163,8 @@ class DropdownWidgetState<T> extends State<DropdownWidget<T>> {
                         children: [
                           if (index == 0)
                             SizedBox(
-                              height: widget.dropdownOptions.gap.top,
+                              height: widget.dropdownOptions.gap.top +
+                                  widget.dropdownOptions.borderSide.width * 0.5,
                             ),
                           DropdownItemWidget(
                             item: widget.dropdownList[index],
@@ -173,7 +176,8 @@ class DropdownWidgetState<T> extends State<DropdownWidget<T>> {
                             ),
                           if (index == widget.dropdownList.length - 1)
                             SizedBox(
-                              height: widget.dropdownOptions.gap.bottom,
+                              height: widget.dropdownOptions.gap.bottom +
+                                  widget.dropdownOptions.borderSide.width * 0.5,
                             ),
                         ],
                       ),
