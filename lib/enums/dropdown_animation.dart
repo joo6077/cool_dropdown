@@ -1,0 +1,4 @@
+enum DropdownAnimationType {
+  size,
+  scale,
+}

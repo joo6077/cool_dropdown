@@ -18,7 +18,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -47,26 +47,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - dropdown-arrow.svg
-    - menu.svg
-    - apple.svg
-    - banana.svg
-    - grapes.svg
-    - pineapple.svg
-    - watermelon.svg
-    - lemon.svg
-    - orange.svg
-    - strawberry.svg
-    - melon.svg
-    - pikachu.svg
-    - pokeball.svg
-    - charmander.svg
-    - squirtle.svg
-    - bullbasaur.svg
-    - snorlax.svg
-    - psyduck.svg
-    - mankey.svg
-    - meowth.svg
+    - assets/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
