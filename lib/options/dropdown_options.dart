@@ -47,7 +47,14 @@ class DropdownOptions {
     this.color = Colors.white,
     this.borderRadius = const BorderRadius.all(Radius.circular(10)),
     this.borderSide = BorderSide.none,
-    this.shadows = const [],
+    this.shadows = const [
+      BoxShadow(
+        color: Color(0x1a9E9E9E),
+        spreadRadius: 1,
+        blurRadius: 10,
+        offset: Offset(0, 1),
+      )
+    ],
     this.animationType = DropdownAnimationType.scale,
     this.align = DropdownAlign.center,
     this.gap = DropdownGap.zero,
@@ -73,20 +80,26 @@ class DropdownOptions {
   }
 
   /// padding - dropdown border width
-  EdgeInsets get calcPadding => EdgeInsets.only(
-        top: borderSide.width * 0.5 + padding.top,
-        bottom: borderSide.width * 0.5 + padding.bottom,
-        left: borderSide.width * 0.5 + padding.left,
-        right: borderSide.width * 0.5 + padding.right,
-      );
+  EdgeInsets get calcPadding => animationType == DropdownAnimationType.size
+      ? EdgeInsets.only(
+          top: borderSide.width * 0.5 + padding.top,
+          bottom: borderSide.width * 0.5 + padding.bottom,
+          left: borderSide.width * 0.5 + padding.left,
+          right: borderSide.width * 0.5 + padding.right,
+        )
+      : EdgeInsets.zero;
 
   /// dropdown border width + shadow max blur radius plus max spread radius to show shadow
-  EdgeInsets get marginGap => EdgeInsets.only(
-        top: borderSide.width * 0.5 + shadowMaxBlurRadiusPlusMaxSpreadRadius,
-        bottom: borderSide.width * 0.5 + shadowMaxBlurRadiusPlusMaxSpreadRadius,
-        left: borderSide.width * 0.5 + shadowMaxBlurRadiusPlusMaxSpreadRadius,
-        right: borderSide.width * 0.5 + shadowMaxBlurRadiusPlusMaxSpreadRadius,
-      );
+  EdgeInsets get marginGap => animationType == DropdownAnimationType.size
+      ? EdgeInsets.only(
+          top: borderSide.width * 0.5 + shadowMaxBlurRadiusPlusMaxSpreadRadius,
+          bottom:
+              borderSide.width * 0.5 + shadowMaxBlurRadiusPlusMaxSpreadRadius,
+          left: borderSide.width * 0.5 + shadowMaxBlurRadiusPlusMaxSpreadRadius,
+          right:
+              borderSide.width * 0.5 + shadowMaxBlurRadiusPlusMaxSpreadRadius,
+        )
+      : EdgeInsets.zero;
 }
 
 class DropdownGap {

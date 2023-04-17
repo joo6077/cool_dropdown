@@ -4,21 +4,41 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/scheduler/ticker.dart';
 
 class DropdownController implements TickerProvider {
+  /// dropdown staggered animation controller
   late final AnimationController _controller;
+
+  /// error animation controller
   late final AnimationController _errorController;
+
+  /// dropdown staggered animation duration
   final Duration duration;
+
+  /// error animation duration
   final Duration errorDuration;
-  final Animation<double>? resultArrowAnimation;
-  final Animation<double>? resultBoxAnimation;
-  final Animation<double>? showDropdownAnimation;
-  final Animation<double>? showErrorAnimation;
+
+  /// result arrow animation interval
+  final Interval resultArrowInterval;
+
+  /// result box animation interval
+  final Interval resultBoxInterval;
+
+  /// show dropdown animation interval
+  final Interval showDropdownInterval;
+
+  /// show error animation curve
+  final Curve showErrorCurve;
 
   OverlayEntry? _overlayEntry;
 
   bool _isOpen = false;
   bool get isOpen => _isOpen;
 
-  Function? onError;
+  Function? _onError;
+  Function? get onError => _onError;
+
+  Function? _openFunction;
+  Function? get openFunction => _openFunction;
+
   Function(bool)? onOpen;
 
   bool _isError = false;
@@ -29,10 +49,10 @@ class DropdownController implements TickerProvider {
   DropdownController({
     this.duration = const Duration(milliseconds: 500),
     this.errorDuration = const Duration(milliseconds: 500),
-    this.resultArrowAnimation,
-    this.resultBoxAnimation,
-    this.showDropdownAnimation,
-    this.showErrorAnimation,
+    this.resultArrowInterval = const Interval(0.0, 0.5, curve: Curves.easeOut),
+    this.resultBoxInterval = const Interval(0.0, 0.5, curve: Curves.easeOut),
+    this.showDropdownInterval = const Interval(0.5, 1.0, curve: Curves.easeOut),
+    this.showErrorCurve = Curves.easeIn,
   }) {
     _controller = AnimationController(
       vsync: this,
@@ -59,41 +79,35 @@ class DropdownController implements TickerProvider {
   Animation<Decoration> get errorDecoration =>
       errorDecorationTween.animate(_errorController);
 
-  Animation<double> get rotation =>
-      resultArrowAnimation ??
-      Tween<double>(begin: 0, end: 1).animate(
+  Animation<double> get rotation => Tween<double>(begin: 0, end: 1).animate(
         CurvedAnimation(
           parent: _controller,
-          curve: const Interval(0.0, 0.5, curve: Curves.easeOut),
+          curve: this.resultArrowInterval,
         ),
       );
 
-  Animation<double> get resultBox =>
-      resultBoxAnimation ??
-      Tween<double>(begin: 0, end: 1).animate(
+  Animation<double> get resultBox => Tween<double>(begin: 0, end: 1).animate(
         CurvedAnimation(
           parent: _controller,
-          curve: const Interval(0.0, 0.5, curve: Curves.easeOut),
+          curve: this.resultBoxInterval,
         ),
       );
 
-  Animation<double> get showDropdown =>
-      showDropdownAnimation ??
-      Tween<double>(begin: 0, end: 1).animate(
+  Animation<double> get showDropdown => Tween<double>(begin: 0, end: 1).animate(
         CurvedAnimation(
           parent: _controller,
-          curve: const Interval(0.5, 1.0, curve: Curves.easeOut),
+          curve: this.showDropdownInterval,
         ),
       );
 
   Animation<double> get showError => Tween<double>(begin: 0, end: 1).animate(
         CurvedAnimation(
           parent: _errorController,
-          curve: Curves.easeIn,
+          curve: this.showErrorCurve,
         ),
       );
 
-  void open({required BuildContext context, required DropdownWidget child}) {
+  void show({required BuildContext context, required DropdownWidget child}) {
     _overlayEntry = OverlayEntry(builder: (_) => child);
     if (_overlayEntry == null) return;
     Overlay.of(context).insert(_overlayEntry!);
@@ -104,6 +118,10 @@ class DropdownController implements TickerProvider {
     _controller.forward();
   }
 
+  void open() {
+    openFunction!.call();
+  }
+
   void close() async {
     await _controller.reverse();
     _overlayEntry?.remove();
@@ -112,14 +130,14 @@ class DropdownController implements TickerProvider {
     onOpen?.call(false);
   }
 
-  void error() {
+  Future<void> error() async {
     if (_isError) return;
     _setErrorDecorationTween(
         _resultOptions.boxDecoration, _resultOptions.errorBoxDecoration);
-    onError?.call(true);
+    _onError?.call(true);
     _isError = true;
     _errorController.reset();
-    _errorController.forward();
+    await _errorController.forward();
   }
 
   Future<void> resetError() async {
@@ -130,13 +148,15 @@ class DropdownController implements TickerProvider {
             : _resultOptions.boxDecoration);
     _errorController.reset();
     await _errorController.forward();
-    onError?.call(false);
+    _onError?.call(false);
     _isError = false;
   }
 
-  void setFunctions(Function errorFunction, Function(bool)? openFunction) {
-    onError = errorFunction;
-    onOpen = openFunction;
+  void setFunctions(Function errorFunction, Function(bool)? onOpenCallback,
+      Function openFunction) {
+    _onError = errorFunction;
+    onOpen = onOpenCallback;
+    _openFunction = openFunction;
   }
 
   void setResultOptions(ResultOptions resultOptions) {

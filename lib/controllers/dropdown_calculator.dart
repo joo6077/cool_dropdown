@@ -14,7 +14,7 @@ class DropdownCalculator<T> {
   final GlobalKey resultKey;
   final DropdownOptions dropdownOptions;
   final DropdownItemOptions dropdownItemOptions;
-  final DropdownTriangleOptions dropdownArrowOptions;
+  final DropdownTriangleOptions dropdownTriangleOptions;
 
   final _scrollController = ScrollController();
   ScrollController get scrollController => _scrollController;
@@ -34,7 +34,7 @@ class DropdownCalculator<T> {
         (dropdownOptions.gap.betweenItems * (dropdownList.length - 1)) +
         dropdownOptions.gap.top +
         dropdownOptions.gap.bottom +
-        dropdownArrowOptions.height +
+        dropdownTriangleOptions.height +
         dropdownOptions.borderSide.width * 2;
   }
 
@@ -44,7 +44,7 @@ class DropdownCalculator<T> {
     required this.resultKey,
     required this.dropdownOptions,
     required this.dropdownItemOptions,
-    required this.dropdownArrowOptions,
+    required this.dropdownTriangleOptions,
   });
 
   Offset setOffset() {
@@ -110,7 +110,7 @@ class DropdownCalculator<T> {
   }
 
   double get calcArrowAlignmentDx {
-    switch (dropdownArrowOptions.arrowAlign) {
+    switch (dropdownTriangleOptions.align) {
       case DropdownTriangleAlign.left:
         if (_isTriangleDown) {
           return _arrowLeftCenterDx(dropdownOptions.borderRadius.topLeft.x);
@@ -130,11 +130,15 @@ class DropdownCalculator<T> {
   }
 
   double _arrowLeftCenterDx(double radius) {
-    return ((radius + dropdownArrowOptions.width * 0.5) / dropdownWidth) - 1;
+    return (((radius + dropdownTriangleOptions.width * 0.5) +
+                dropdownTriangleOptions.left) /
+            dropdownWidth) -
+        1;
   }
 
   double _arrowRightCenterDx(double radius) {
-    return (dropdownWidth - radius - dropdownArrowOptions.width * 0.5) /
+    return ((dropdownWidth - radius - dropdownTriangleOptions.width * 0.5) +
+            dropdownTriangleOptions.left) /
         dropdownWidth;
   }
 

@@ -1,3 +1,4 @@
+import 'package:cool_dropdown/customPaints/arrow_down_painter.dart';
 import 'package:cool_dropdown/enums/result_render.dart';
 import 'package:flutter/material.dart';
 
@@ -43,7 +44,7 @@ class ResultOptions {
     this.height = 50,
     this.space = 10,
     this.alignment = Alignment.center,
-    this.padding = EdgeInsets.zero,
+    this.padding = const EdgeInsets.symmetric(horizontal: 10),
     this.mainAxisAlignment = MainAxisAlignment.spaceBetween,
     this.render = ResultRender.all,
     this.boxDecoration = const BoxDecoration(
@@ -104,7 +105,13 @@ class ResultOptions {
       fontSize: 16,
       fontWeight: FontWeight.w400,
     ),
-    this.icon,
+    this.icon = const SizedBox(
+      width: 10,
+      height: 10,
+      child: CustomPaint(
+        painter: DropdownArrowPainter(),
+      ),
+    ),
     this.placeholder,
     this.textOverflow = TextOverflow.ellipsis,
     this.isMarquee = false,

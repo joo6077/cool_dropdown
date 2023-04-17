@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class DropdownArrowPainter extends CustomPainter {
   final Color color;
 
-  DropdownArrowPainter({
+  const DropdownArrowPainter({
     this.color = const Color(0xB39E9E9E),
   });
 

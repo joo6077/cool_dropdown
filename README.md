@@ -12,25 +12,28 @@
 
 ## Features
 
-- All customizable css(font, fontsize. color, icon, result, dropdown decoration...)
+- All customizable style(font, fontsize. color, icon, result, dropdown decoration...)
 - Auto scroll to selected item position
 - dropdown is automatically placed. It's based on the position of the result on the screen.(top/bottom)
 - Support triangle arrow
-- Support overflow ellipsis
+- Support overflow ellipsis.
+- Marquee effect.
+- Customizable animation.
+- Error handling.
+
 - "COOL"
 
 ## Samples
 
 <div style="display: flex;">
-<img src="https://github.com/joo6077/cool_dropdown/blob/master/screenshots/sample_01.gif?raw=true" height="500">
-<img src="https://github.com/joo6077/cool_dropdown/blob/master/screenshots/sample_02.gif?raw=true" height="500"/>
-<img src="https://github.com/joo6077/cool_dropdown/blob/master/screenshots/sample_03.gif?raw=true" height="500"/>
-<img src="https://github.com/joo6077/cool_datepicker/blob/master/screenshots/sample_01.gif?raw=true" height="500">
+<img src="https://github.com/joo6077/cool_dropdown/blob/master/screenshots/sample_01.gif?raw=true" height="480">
+<img src="https://github.com/joo6077/cool_dropdown/blob/master/screenshots/sample_02.gif?raw=true" height="480"/>
+<img src="https://github.com/joo6077/cool_dropdown/blob/master/screenshots/sample_03.gif?raw=true" height="480"/>
 </div>
 
-## Options map
+<!-- ## Options map
 
-<img src="https://github.com/joo6077/cool_dropdown/blob/master/screenshots/dropdown_description.png?raw=true" height="500"/>
+<img src="https://github.com/joo6077/cool_dropdown/blob/master/screenshots/dropdown_description.png?raw=true" height="500"/> -->
 
 ## Installing
 
@@ -46,193 +49,100 @@ pubspec.yaml:
 dependencies:
   cool_dropdown: ^(latest)
 ```
+## Cool Dropdown options
 
-## Usage
+| Option                  | Type                      | Default  | Description                                                           |
+| ----------------------- |:-------------------------:| --------:|:--------------------------------------------------------------------- |
+| dropdownList            | List<CoolDropdownItem<T>> | []       | Dropdown item list.                                                   |
+| defaultItem             | CoolDropdownItem<T>?      | null     | Default item of the dropdown.                                         |
+| onChange                | Function(T)               | required | When user selects one of the items, you will get T type value.        |
+| onOpen                  | Function(bool)            | null     | When user either open or close the dropdown, you will get bool value. |
+| resultOptions           | ResultOptions             | -        |                                                                       |
+| dropdownOptions         | DropdownOptions           | -        | Check below.                                                          |
+| dropdownItemOptions     | DropdownItemOptions       | -        | Check below.                                                          |
+| dropdownTriangleOptions | DropdownTriangleOptions   | -        | Check below.                                                          |
+| dropdownController      | DropdownController        | required | Check below.                                                          |
+## ResultOptions(result<v1.3.0> -> ResultOptions<v.2.0.0>)
 
-```dart
-import 'package:cool_dropdown/cool_dropdown.dart';
+| Option               | Type          | Default                      | Description                                       |
+| -------------------- |:-------------:| ----------------------------:|:------------------------------------------------- |
+| width                | double        | 220                          |                                                   |
+| height               | double        | 50                           |                                                   |
+| space                | double        | 10                           | Space between (label + icon) and arrow icon.      |
+| padding              | EdgeInsets    | EdgeInsets.zero              |                                                   |
+| alignment            | Alignment     | Alignment.center             | Alignment of (label + icon).                      |
+| render               | ResultRender  | ResultRender.all             | Set the order of the result elements to render.   |
+| boxDecoration        | BoxDecoration |                              | BoxDecoration of the result box.                  |
+| openBoxDecoration    | BoxDecoration |                              | BoxDecoration of when result box is open.         |
+| errorBoxDecoration   | BoxDecoration |                              | BoxDecoration of when result box is on error.     |
+| textStyle            | TextStyle     |                              | TextStyle of the label in result box.             |
+| placeholderTextStyle | TextStyle     |                              | TextStyle of the placeholder in result box.       |
+| isMarquee            | bool          | false                        | A marquee effect when the label overflows.        |
+| duration             | Duration      | Duration(milliseconds: 300)  | When dropdown value is changed.                   |
+| marqueeDuration      | Duration      | Duration(milliseconds: 6000) | Duration of the marquee effect                    |
+| backDuration         | Duration      | Duration(milliseconds: 800)  | Reverse animation duration of the marquee effect  |
+| pauseDuration        | Duration      | Duration(milliseconds: 800)  | Pause duration after marquee effect.              |
 
-List dropdownItemList = [
-  {'label': 'apple', 'value': 'apple'}, // label is required and unique
-  {'label': 'banana', 'value': 'banana'},
-  {'label': 'grape', 'value': 'grape'},
-  {'label': 'pineapple', 'value': 'pineapple'},
-  {'label': 'grape fruit', 'value': 'grape fruit'},
-  {'label': 'kiwi', 'value': 'kiwi'},
-];
+## Dropdown options(dropdown<v1.3.0> -> dropdownOptions<v2.0.0>)
 
-CoolDropdown(
-              dropdownList: dropdownItemList,
-              onChange: (_) {},
-              defaultValue: dropdownItemList[3],
-              // placeholder: 'insert...',
-            )
-```
+| Option               | Type                  | Default                               | Description                                                                                                                        |
+| -------------------- |:---------------------:| -------------------------------------:|:---------------------------------------------------------------------------------------------------------------------------------- |
+| width                | double?               | result width                          | Dropdown width.                                                                                                                    |
+| height               | double                | 50                                    | Dropdown height.                                                                                                                   |
+| top                  | double                | 0                                     | Top position of the dropdown.                                                                                                      |
+| left                 | double                | 0                                     | Left position of the dropdown.                                                                                                     |
+| color                | Color                 | Colors.white                          | Dropdown color.                                                                                                                    |
+| borderRadius         | BorderRadius          | BorderRadius.all(Radius.circular(10)) | BorderRadius of the dropdown.                                                                                                      |
+| shadow               | List<BoxShadow>       | []                                    | BoxShadow list of the dropdown.                                                                                                    |
+| animationType        | DropdownAnimationType | DropdownAnimationType.scale           | Animation type of the dropdown.                                                                                                    |
+| align                | DropdownAlign         | DropdownAlign.center                  | The alignment of the dropdown. If the dropdown and result box are different sizes, the dropdown will be aligned to the result box. |
+| gap                  | DropdownGap           | DropdownGap.zero                      | The gap between the dropdown and dropdown items.                                                                                   |
+| padding              | EdgeInsets            | EdgeInsets.zero                       |                                                                                                                                    |
+| duration             | Duration              | Duration(milliseconds: 300)           | Duration of the dropdown scroll animation.                                                                                         |
+| curve                | Curve                 | Curves.easeInOut                      | Curve of the dropdown scroll animation.                                                                                            |
 
-## Important options
+## Dropdown item options(new)
 
-| option       | Type      |  Default | Description                                                                                                                                                                                            |
-| ------------ | --------- | -------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| onChange     | Function  | required | when user selects one of the values, it's triggered. You <span style="color:#333333">must</span> put one parameter in the Function. (ex. onChange: (a) {}).Then, you will get return selectedItem Map. |
-| onOpen       | Function  | null | it returns parameter boolean depending on open/close the dropdown (ex. onOpen: (a) {}). |
-| dropdownList | List<Map> | required | You have to declare a key, "label", all elements of the List                                                                                                                                           |
-| isAnimation  | bool      |     true | turn on/off animation                                                                                                                                                                                  |
+| Option                | Type               | Default                               | Description                                              |
+| --------------------- |:------------------:| -------------------------------------:|:-------------------------------------------------------- |
+| height                | double             | 50                                    | Dropdown item height.                                    |
+| padding               | EdgeInsets         |  EdgeInsets.symmetric(horizontal: 10) | Padding of the dropdown item.                            |
+| alignment             | Alignment          | Alignment.centerLeft                  | Vertical alignment of the dropdown item.                 |
+| mainAxisAlignment     | MainAxisAlignment  | MainAxisAlignment.start               | Horizontal alignment of the dropdown item(label + icon). |
+| render                | DropdownItemRender | DropdownItemRender.all                | Set the order of the dropdown item  elements to render.  |
+| boxDecoration         | BoxDecoration      |                                       | BoxDecoration of the result box.                         |
+| selectedBoxDecoration | BoxDecoration      |                                       | BoxDecoration of when dropdown item is selected.         |
+| textStyle             | TextStyle          |                                       | TextStyle of the label in dropdown item.                 |
+| selectedTextStyle     | TextStyle          |                                       | Selected TextStyle of the label in dropdown item.        |
+| textOverflow          | TextOverFlow       |                                       | TextOverflow of the label in dropdown item.              |
+| isMarquee             | bool               | false                                 | A marquee effect when the label overflows.               |
+| duration              | Duration           | Duration(milliseconds: 300)           | When dropdown value is changed.                          |
+| marqueeDuration       | Duration           | Duration(milliseconds: 6000)          | Duration of the marquee effect                           |
+| backDuration          | Duration           | Duration(milliseconds: 800)           | Reverse animation duration of the marquee effect         |
+| pauseDuration         | Duration           | Duration(milliseconds: 800)           | Pause duration after marquee effect.                     |
 
-```dart
-import 'package:flutter_svg/flutter_svg.dart';
 
-List dropdownItemList = [
-  {
-    'label': 'apple',
-    'value': 'apple',
-    'icon': Container(        // if you want to use icon, you have to declare key as 'icon'
-       key: UniqueKey(),       // you have to use UniqueKey()
-       height: 20,
-       width: 20,
-       child: SvgPicture.asset(          // I recommend to use this library, if you want to use svg extension
-         'assets/apple.svg',
-       ),
-     ),
-    'selectedIcon': Container(          // if you want to use different icon when user select item, you have to declare key as 'selectedIcon'
-      key: UniqueKey(),
-      width: 20,
-      height: 20,
-      child: SvgPicture.asset(
-        'assets/apple.svg',
-        color: Color(0xFF6FCC76),
-      ),
-    ),
-  }
-];
-```
+## Dropdown triangle options(new)
 
-## Result options(dropdown<v1.2.0> -> result<v1.3.0>)
+| Option       | Type                  | Default                      | Description                                |
+| ------------ |:---------------------:| ----------------------------:|:------------------------------------------ |
+| width        | double                | 10                           | Triangle width of the dropdown.            |
+| height       | double                | 10                           | Triangle height of the dropdown.           |
+| left         | double                | 0                            | Left position of the triangle.             |
+| borderRadius | BorderRadius          | 0                            | BorderRadius of the triangle.              |
+| align        | DropdownTriangleAlign | DropdownTriangleAlign.center | Alignment of the triangle on the dropdown. |
 
-| option                  | Type              |                 Default | Description                                |
-| ----------------------- | ----------------- | ----------------------: | ------------------------------------------ |
-| resultWidth             | double            |                     220 |                                            |
-| resultHeight            | double            |                      50 |                                            |
-| resultBD                | BoxDecoration     |              below code | BoxDecoration of the result                |
-| resultTS                | TextStyle         |              below code | TextStyle of the result                    |
-| resultPadding           | EdgeInsets        |              below code | Padding of the result                      |
-| resultAlign             | Alignment         |              below code | Alignment of the result in row             |
-| resultMainAxis          | MainAxisAlignment | MainAxisAlignment.start | MainAxisAlignment of the result in row     |
-| resultReverse           | bool              |                   false | Reverse order of the result by row         |
-| labelIconGap            | double            |                      10 | Gap between the label and icon             |
-| isResultLabel           | bool              |                    true | Show/hide the label of the result          |
-| isResultBoxLabel        | bool              |                    true | Show/hide the label of the dropdown        |
-| isResultIconLabel       | bool              |                    true | Show/hide the label and icon of the result |
-| resultIconLeftGap       | double            |                      10 | Gap left side of the result and icon       |
-| resultIcon              | Widget            |     dropdown arrow icon | Icon of the result at right                |
-| resultIconRotation      | bool              |                    true | Rotation animation of the resultIcon       |
-| resultIconRotationValue | double            |                     0.5 | Rotation value of the resultIcon animation |
-| placeholder             | String            |                    null |                                            |
-| placeholderTS           | TextStyle         |              below code |                                            |
-| defaultValue            | Map               |                    null | Default selected value                     |
-| gap                     | double            |                      30 | Gap between the result and dropdown        |
-| iconSize                | double            |                      10 | the size of the dropdown arrow icon        |
+## Dropdown Controller(new)
 
-```dart
-resultBD = BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
-              spreadRadius: 1,
-              blurRadius: 10,
-              offset: Offset(0, 1),
-            ),
-          ],
-        );
-```
-
-```dart
-resultTS = TextStyle(
-            fontSize: 20,
-            color: Colors.black,
-          );
-```
-
-```dart
-resultPadding = const EdgeInsets.only(left: 10, right: 10);
-```
-
-```dart
-resultAlign = Alignment.centerLeft;
-```
-
-```dart
-placeholderTS = TextStyle(color: Colors.grey.withOpacity(0.7), fontSize: 20);
-```
-
-## Dropdown & triangle options(dropdownBox<v1.2.0> -> dropdown<v1.3.0>)
-
-| option                | Type              |                 Default | Description                                           |
-| --------------------- | ----------------- | ----------------------: | ----------------------------------------------------- |
-| dropdownWidth         | double            |based on the resultWidth |                                                       |
-| dropdownHeight        | double            |                     300 |                                                       |
-| dropdownBD            | BoxDecoration     |              below code | BoxDecoration of the dropdown                         |
-| dropdownPadding       | EdgeInsets        |              below code | Padding of the dropdown                               |
-| dropdownAlign         | String            |                'center' | Only 'left', 'center', 'right' available              |
-| dropdownItemHeight    | double            |                      50 | Height of items in the dropdown                       |
-| dropdownItemGap       | double            |                       5 | Gaps between items in the dropdown                    |
-| dropdownItemTopGap    | double            |                      10 | Gap between the first item and the dropdown top       |
-| dropdownItemBottomGap | double            |                      10 | Gap between the last item and the dropdown bottom     |
-| dropdownItemPadding   | EdgeInsets        |              below code | Padding of dropdown                                   |
-| dropdownItemReverse   | bool              |                   false | reverse order(label, icon) of the dropdownItem by row |
-| dropdownItemMainAxis  | MainAxisAlignment | MainAxisAlignment.start | MainAxisAlignment of dropdown in row                  |
-| isTriangle            | bool              |                    true | show/hide triangle arrow                              |
-| triangleWidth         | double            |                      20 |                                                       |
-| triangleHeight        | double            |                      20 |                                                       |
-| triangleLeft          | double            |                      10 | Left of the current triangle position                 |
-| triangleAlign         | String            |                'center' | Only 'left', 'center', 'right' available              |
-| selectedItemBD        | BoxDecoration     |              below code | BoxDecoration of selectedItem                         |
-| selectedItemTS        | TextStyle         |              below code | TextStyle of selectedItem                             |
-| selectedItemPadding   | EdgeInsets        |              below code | Padding of selectedItem                               |
-| unselectedItemTS      | TextStyle         |              below code | TextStyle of unselectedItem                           |
-
-```dart
-dropdownBD = BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
-              spreadRadius: 1,
-              blurRadius: 10,
-              offset: Offset(0, 1),
-            ),
-          ],
-        );
-```
-
-```dart
-dropdownPadding = const EdgeInsets.only(left: 10, right: 10);
-```
-
-```dart
-dropdownItemPadding = const EdgeInsets.only(left: 10, right: 10);
-```
-
-```dart
-selectedItemBD = BoxDecoration(
-          color: Color(0XFFEFFAF0),
-          borderRadius: BorderRadius.circular(10),
-        );
-```
-
-```dart
-selectedItemTS = TextStyle(color: Color(0xFF6FCC76), fontSize: 20);
-```
-
-```dart
-selectedItemPadding = const EdgeInsets.only(left: 10, right: 10);
-```
-
-```dart
-unselectedItemTS = TextStyle(
-            fontSize: 20,
-            color: Colors.black,
-          );
-```
+| Option               | Type     | Default                                   | Description                                     |
+| -------------------- |:--------:| -----------------------------------------:|:----------------------------------------------- |
+| duration             | Duration | Duration(milliseconds: 500)               | Dropdown staggered animation duration.          |
+| errorDuration        | Duration | Duration(milliseconds: 500)               | Result box decoration error animation duration. |
+| resultArrowInterval  | Interval | Interval(0.0, 0.5, curve: Curves.easeOut) | Result arrow animation interval.                |
+| resultBoxInterval    | Interval | Interval(0.0, 0.5, curve: Curves.easeOut) | Result box animation interval.                  |
+| showDropdownInterval | Interval | Interval(0.5, 1.0, curve: Curves.easeOut) | Show dropdown animation interval.               |
+| showErrorCurve       | Curve    | Curves.easeIn                             | Show error animation curve.                     |
+| open                 | method   | -                                         | Open the dropdown.                              |
+| close                | method   | -                                         | Close the dropdown.                             |
+| error                | method   | -                                         | Occur an error of the dropdown.                 |
+| resetError           | method   | -                                         | Reset an error of the dropdown.                 |

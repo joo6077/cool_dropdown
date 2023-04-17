@@ -22,7 +22,6 @@ class DropdownWidget<T> extends StatefulWidget {
   final List<CoolDropdownItem> dropdownList;
 
   final Function(T t) onChange;
-  final Function(bool)? onOpen;
 
   final GetSelectedItem getSelectedItem;
   final CoolDropdownItem<T>? selectedItem;
@@ -37,7 +36,6 @@ class DropdownWidget<T> extends StatefulWidget {
     required this.bodyContext,
     required this.dropdownList,
     required this.onChange,
-    this.onOpen,
     required this.getSelectedItem,
     required this.selectedItem,
   }) : super(key: key);
@@ -56,7 +54,7 @@ class DropdownWidgetState<T> extends State<DropdownWidget<T>> {
       bodyContext: widget.bodyContext,
       resultKey: widget.resultKey,
       dropdownOptions: widget.dropdownOptions,
-      dropdownArrowOptions: widget.dropdownTriangleOptions,
+      dropdownTriangleOptions: widget.dropdownTriangleOptions,
       dropdownItemOptions: widget.dropdownItemOptions,
       dropdownList: widget.dropdownList,
     );
@@ -146,7 +144,7 @@ class DropdownWidgetState<T> extends State<DropdownWidget<T>> {
                       triangle: widget.dropdownTriangleOptions,
                       radius: widget.dropdownOptions.borderRadius,
                       borderSide: widget.dropdownOptions.borderSide,
-                      arrowAlign: widget.dropdownTriangleOptions.arrowAlign,
+                      arrowAlign: widget.dropdownTriangleOptions.align,
                       isTriangleDown: _dropdownCalculator.isArrowDown,
                     ),
                   ),

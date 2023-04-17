@@ -14,6 +14,7 @@ export 'package:cool_dropdown/enums/dropdown_align.dart';
 export 'package:cool_dropdown/enums/dropdown_triangle_align.dart';
 export 'package:cool_dropdown/enums/result_render.dart';
 export 'package:cool_dropdown/enums/dropdown_item_render.dart';
+export 'package:cool_dropdown/enums/dropdown_animation.dart';
 export 'package:cool_dropdown/options/dropdown_triangle_options.dart';
 export 'package:cool_dropdown/options/dropdown_item_options.dart';
 export 'package:cool_dropdown/options/dropdown_options.dart';
@@ -27,7 +28,7 @@ class CoolDropdown<T> extends StatelessWidget {
   final ResultOptions resultOptions;
   final DropdownOptions dropdownOptions;
   final DropdownItemOptions dropdownItemOptions;
-  final DropdownTriangleOptions dropdownArrowOptions;
+  final DropdownTriangleOptions dropdownTriangleOptions;
   final DropdownController controller;
 
   final Function(T) onChange;
@@ -42,7 +43,7 @@ class CoolDropdown<T> extends StatelessWidget {
     this.resultOptions = const ResultOptions(),
     this.dropdownOptions = const DropdownOptions(),
     this.dropdownItemOptions = const DropdownItemOptions(),
-    this.dropdownArrowOptions = const DropdownTriangleOptions(),
+    this.dropdownTriangleOptions = const DropdownTriangleOptions(),
     required this.controller,
     required this.onChange,
     this.onOpen,
@@ -56,7 +57,7 @@ class CoolDropdown<T> extends StatelessWidget {
       resultOptions: resultOptions,
       dropdownOptions: dropdownOptions,
       dropdownItemOptions: dropdownItemOptions,
-      dropdownArrowOptions: dropdownArrowOptions,
+      dropdownArrowOptions: dropdownTriangleOptions,
       controller: controller,
       onChange: onChange,
       onOpen: onOpen,

@@ -11,6 +11,7 @@ class DropdownItemOptions {
 
   final BoxDecoration boxDecoration, selectedBoxDecoration;
   final TextStyle textStyle, selectedTextStyle;
+
   final TextOverflow textOverflow;
 
   final bool isMarquee;
@@ -19,7 +20,7 @@ class DropdownItemOptions {
 
   const DropdownItemOptions({
     this.height = 40,
-    this.padding = const EdgeInsets.only(left: 10, right: 10),
+    this.padding = const EdgeInsets.symmetric(horizontal: 10),
     this.alignment = Alignment.centerLeft,
     this.mainAxisAlignment = MainAxisAlignment.start,
     this.render = DropdownItemRender.all,

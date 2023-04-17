@@ -37,7 +37,7 @@ List<String> fruits = [
 ];
 
 class _MyAppState extends State<MyApp> {
-  List<CoolDropdownItem> pokemonMap = [];
+  List<CoolDropdownItem<String>> pokemonDropdownItems = [];
   List<CoolDropdownItem<String>> fruitDropdownItems = [];
 
   final fruitDropdownController = DropdownController();
@@ -47,7 +47,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     for (var i = 0; i < pokemons.length; i++) {
-      pokemonMap.add(
+      pokemonDropdownItems.add(
         CoolDropdownItem<String>(
             label: '${pokemons[i]}',
             icon: Container(
@@ -62,7 +62,7 @@ class _MyAppState extends State<MyApp> {
     }
     for (var i = 0; i < fruits.length; i++) {
       fruitDropdownItems.add(CoolDropdownItem<String>(
-          label: '${fruits[i]}',
+          label: 'Delicious ${fruits[i]}',
           icon: Container(
             margin: EdgeInsets.only(left: 10),
             height: 25,
@@ -94,20 +94,21 @@ class _MyAppState extends State<MyApp> {
           backgroundColor: Color(0xFF6FCC76),
           title: Text('Cool Drop Down'),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () async {
             if (fruitDropdownController.isError) {
               fruitDropdownController.resetError();
             } else {
-              fruitDropdownController.error();
+              await fruitDropdownController.error();
             }
+            fruitDropdownController.open();
           },
-          child: Icon(Icons.add),
+          label: Text('Error'),
         ),
         body: ListView(
           children: [
             SizedBox(
-              height: 400,
+              height: 100,
             ),
             Center(
               child: WillPopScope(
@@ -122,7 +123,7 @@ class _MyAppState extends State<MyApp> {
                 child: CoolDropdown<String>(
                   controller: fruitDropdownController,
                   dropdownList: fruitDropdownItems,
-                  defaultItem: fruitDropdownItems[0],
+                  defaultItem: null,
                   onChange: (value) async {
                     if (fruitDropdownController.isError) {
                       await fruitDropdownController.resetError();
@@ -133,7 +134,7 @@ class _MyAppState extends State<MyApp> {
                   resultOptions: ResultOptions(
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     width: 200,
-                    icon: SizedBox(
+                    icon: const SizedBox(
                       width: 10,
                       height: 10,
                       child: CustomPaint(
@@ -142,23 +143,25 @@ class _MyAppState extends State<MyApp> {
                     ),
                     render: ResultRender.all,
                     placeholder: 'Select Fruit',
+                    isMarquee: true,
                   ),
                   dropdownOptions: DropdownOptions(
-                    top: 20,
-                    height: 400,
-                    gap: DropdownGap.all(5),
-                    borderSide: BorderSide(width: 1, color: Colors.black),
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    align: DropdownAlign.left,
-                  ),
-                  dropdownArrowOptions: DropdownTriangleOptions(
-                    width: 10,
-                    height: 10,
-                    borderRadius: 0,
-                    arrowAlign: DropdownTriangleAlign.left,
+                      top: 20,
+                      height: 400,
+                      gap: DropdownGap.all(5),
+                      borderSide: BorderSide(width: 1, color: Colors.black),
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      align: DropdownAlign.left,
+                      animationType: DropdownAnimationType.size),
+                  dropdownTriangleOptions: DropdownTriangleOptions(
+                    width: 20,
+                    height: 30,
+                    align: DropdownTriangleAlign.left,
+                    borderRadius: 3,
                     left: 20,
                   ),
                   dropdownItemOptions: DropdownItemOptions(
+                    isMarquee: true,
                     mainAxisAlignment: MainAxisAlignment.start,
                     render: DropdownItemRender.all,
                     height: 50,
@@ -172,21 +175,31 @@ class _MyAppState extends State<MyApp> {
             Center(
               child: CoolDropdown<String>(
                 controller: pokemonDropdownController,
-                // resultIcon: Container(), // if you don't want to use Icon you can set empty Container
-                dropdownList: dropdownItemList,
-                // isResultLabel: false,
-                onChange: (a) {},
-                // dropdownItemReverse: true,
-                // labelIconGap: 20,
-                // resultIcon: Container(
-                //   width: 10,
-                //   height: 10,
-                //   child: SvgPicture.asset(
-                //     'assets/dropdown-arrow.svg',
-                //     semanticsLabel: 'Acme Logo',
-                //     color: Colors.grey.withOpacity(0.7),
-                //   ),
-                // ),
+                dropdownList: pokemonDropdownItems,
+                defaultItem: pokemonDropdownItems.last,
+                onChange: (a) {
+                  pokemonDropdownController.close();
+                },
+                resultOptions: ResultOptions(
+                  width: 70,
+                  render: ResultRender.icon,
+                  icon: SizedBox(
+                    width: 10,
+                    height: 10,
+                    child: CustomPaint(
+                      painter: DropdownArrowPainter(color: Colors.green),
+                    ),
+                  ),
+                ),
+                dropdownOptions: DropdownOptions(
+                  width: 140,
+                ),
+                dropdownItemOptions: DropdownItemOptions(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  selectedBoxDecoration: BoxDecoration(
+                    color: Color(0XFFEFFAF0),
+                  ),
+                ),
               ),
             ),
             SizedBox(
@@ -195,29 +208,32 @@ class _MyAppState extends State<MyApp> {
             Center(
               child: CoolDropdown(
                 controller: listDropdownController,
-                dropdownList: pokemonMap,
+                dropdownList: pokemonDropdownItems,
                 onChange: (dropdownItem) {},
-                // resultIcon: Container(
-                //   width: 25,
-                //   height: 25,
-                //   child: Container(
-                //     width: 25,
-                //     height: 25,
-                //     child: SvgPicture.asset(
-                //       'assets/pokeball.svg',
-                //     ),
-                //   ),
-                // ),
-                // resultIconLeftGap: 0,
-                // resultIconRotation: true,
-                // resultIconRotationValue: 1,
-                // isDropdownLabel: false,
-                // isResultLabel: false,
-                // isResultIconLabel: false,
-                // selectedItemBD: BoxDecoration(
-                //     border: Border(
-                //         left: BorderSide(
-                //             color: Colors.black.withOpacity(0.7), width: 3))),
+                resultOptions: ResultOptions(
+                  width: 50,
+                  render: ResultRender.none,
+                  icon: Container(
+                    width: 25,
+                    height: 25,
+                    child: SvgPicture.asset(
+                      'assets/pokeball.svg',
+                    ),
+                  ),
+                ),
+                dropdownItemOptions: DropdownItemOptions(
+                  render: DropdownItemRender.icon,
+                  selectedPadding: EdgeInsets.zero,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  selectedBoxDecoration: BoxDecoration(
+                    border: Border(
+                      left: BorderSide(
+                        color: Colors.black.withOpacity(0.7),
+                        width: 3,
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ),
             SizedBox(

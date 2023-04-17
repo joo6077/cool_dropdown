@@ -118,7 +118,10 @@ class DropdownShapeBorder extends ShapeBorder {
   }) {
     final bottomCenterOffset = Offset(
         trianglePosition.center + boxRect.left + triangle.left,
-        triangle.borderRadius + boxRect.height + triangle.height + boxRect.top);
+        -triangle.borderRadius +
+            boxRect.height +
+            triangle.height +
+            boxRect.top);
     final bottomCenterTheta = atan(triangle.height / (triangle.width / 2));
 
     path

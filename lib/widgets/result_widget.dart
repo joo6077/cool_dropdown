@@ -61,7 +61,7 @@ class _ResultWidgetState<T> extends State<ResultWidget<T>> {
       _setSelectedItem(widget.defaultItem!);
     }
 
-    widget.controller.setFunctions(onError, widget.onOpen);
+    widget.controller.setFunctions(onError, widget.onOpen, open);
     widget.controller.setResultOptions(widget.resultOptions);
 
     super.initState();
@@ -74,7 +74,7 @@ class _ResultWidgetState<T> extends State<ResultWidget<T>> {
   }
 
   void open() {
-    widget.controller.open(
+    widget.controller.show(
         context: context,
         child: DropdownWidget<T>(
           controller: widget.controller,
@@ -101,12 +101,10 @@ class _ResultWidgetState<T> extends State<ResultWidget<T>> {
     return AnimatedBuilder(
         animation: widget.controller.controller,
         builder: (_, __) {
-          return widget.resultOptions.icon == null
-              ? const SizedBox()
-              : Transform.rotate(
-                  angle: pi * widget.controller.rotation.value,
-                  child: widget.resultOptions.icon,
-                );
+          return Transform.rotate(
+            angle: pi * widget.controller.rotation.value,
+            child: widget.resultOptions.icon,
+          );
         });
   }
 
@@ -189,7 +187,7 @@ class _ResultWidgetState<T> extends State<ResultWidget<T>> {
                             ),
                           ),
                           SizedBox(width: widget.resultOptions.space),
-                          _buildArrow(),
+                          if (widget.resultOptions.icon != null) _buildArrow(),
                         ].isReverse(widget.resultOptions.render ==
                             ResultRender.reverse),
                       )
