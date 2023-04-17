@@ -1,7 +1,7 @@
 import 'package:cool_dropdown/options/result_options.dart';
 import 'package:cool_dropdown/widgets/dropdown_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/scheduler/ticker.dart';
+import 'package:flutter/scheduler.dart';
 
 class DropdownController implements TickerProvider {
   /// dropdown staggered animation controller

@@ -1,3 +1,7 @@
+## [2.0.1] - 2023.04.17
+
+- fix ticker import.
+
 ## [2.0.0] - 2023.04.17
 
 - improve performances and apply newer code.
