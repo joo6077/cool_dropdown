@@ -75,6 +75,7 @@ dependencies:
 | errorBoxDecoration   | BoxDecoration |                              | BoxDecoration of when result box is on error.     |
 | textStyle            | TextStyle     |                              | TextStyle of the label in result box.             |
 | placeholderTextStyle | TextStyle     |                              | TextStyle of the placeholder in result box.       |
+| textOverflow         | TextOverFlow  |                              | TextOverflow of the label in result box.          |
 | isMarquee            | bool          | false                        | A marquee effect when the label overflows.        |
 | duration             | Duration      | Duration(milliseconds: 300)  | When dropdown value is changed.                   |
 | marqueeDuration      | Duration      | Duration(milliseconds: 6000) | Duration of the marquee effect                    |
