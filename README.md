@@ -12,11 +12,9 @@
 
 ## Features
 
-- All customizable style(font, fontsize. color, icon, result, dropdown decoration...)
-- Auto scroll to selected item position
-- dropdown is automatically placed. It's based on the position of the result on the screen.(top/bottom)
-- Support triangle arrow
-- Support overflow ellipsis.
+- All customizable style(font, fontsize. color, icon, result, dropdown decoration...).
+- Auto scroll to selected item position.
+- Dropdown is automatically placed. It's based on the position of the result on the screen(top/bottom).
 - Marquee effect.
 - Customizable animation.
 - Error handling.
