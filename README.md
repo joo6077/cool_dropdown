@@ -26,9 +26,9 @@
 ## Samples
 
 <div style="display: flex;">
-<img src="https://github.com/joo6077/cool_dropdown/blob/master/screenshots/sample_01.gif?raw=true" height="480">
-<img src="https://github.com/joo6077/cool_dropdown/blob/master/screenshots/sample_02.gif?raw=true" height="480"/>
-<img src="https://github.com/joo6077/cool_dropdown/blob/master/screenshots/sample_03.gif?raw=true" height="480"/>
+<img src="https://github.com/joo6077/cool_dropdown/blob/master/screenshots/new_sample_01.gif?raw=true" height="480">
+<img src="https://github.com/joo6077/cool_dropdown/blob/master/screenshots/new_sample_02.gif?raw=true" height="480"/>
+<img src="https://github.com/joo6077/cool_dropdown/blob/master/screenshots/new_sample_03.gif?raw=true" height="480"/>
 </div>
 
 <!-- ## Options map
