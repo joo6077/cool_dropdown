@@ -94,16 +94,34 @@ class _MyAppState extends State<MyApp> {
           backgroundColor: Color(0xFF6FCC76),
           title: Text('Cool Drop Down'),
         ),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () async {
-            if (fruitDropdownController.isError) {
-              fruitDropdownController.resetError();
-            } else {
-              await fruitDropdownController.error();
-            }
-            fruitDropdownController.open();
-          },
-          label: Text('Error'),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FloatingActionButton.extended(
+              onPressed: () async {
+                fruitDropdownController.resetValue();
+              },
+              label: Text('Reset'),
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            FloatingActionButton.extended(
+              onPressed: () async {
+                if (fruitDropdownController.isError) {
+                  fruitDropdownController.resetError();
+                } else {
+                  await fruitDropdownController.error();
+                }
+                fruitDropdownController.open();
+              },
+              label: Text('Error'),
+            ),
+            SizedBox(
+              width: 10,
+            ),
+          ],
         ),
         body: ListView(
           children: [

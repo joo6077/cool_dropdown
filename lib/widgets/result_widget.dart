@@ -61,7 +61,8 @@ class _ResultWidgetState<T> extends State<ResultWidget<T>> {
       _setSelectedItem(widget.defaultItem!);
     }
 
-    widget.controller.setFunctions(onError, widget.onOpen, open);
+    widget.controller
+        .setFunctions(onError, widget.onOpen, open, _setSelectedItem);
     widget.controller.setResultOptions(widget.resultOptions);
 
     super.initState();
@@ -91,7 +92,7 @@ class _ResultWidgetState<T> extends State<ResultWidget<T>> {
         ));
   }
 
-  void _setSelectedItem(CoolDropdownItem<T> item) {
+  void _setSelectedItem(CoolDropdownItem<T>? item) {
     setState(() {
       selectedItem = item;
     });

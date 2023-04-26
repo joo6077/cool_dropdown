@@ -39,6 +39,9 @@ class DropdownController implements TickerProvider {
   Function? _openFunction;
   Function? get openFunction => _openFunction;
 
+  Function? _resetFunction;
+  Function? get resetFunction => _resetFunction;
+
   Function(bool)? onOpen;
 
   bool _isError = false;
@@ -130,6 +133,10 @@ class DropdownController implements TickerProvider {
     onOpen?.call(false);
   }
 
+  void resetValue() {
+    resetFunction!.call(null);
+  }
+
   Future<void> error() async {
     if (_isError) return;
     _setErrorDecorationTween(
@@ -153,10 +160,11 @@ class DropdownController implements TickerProvider {
   }
 
   void setFunctions(Function errorFunction, Function(bool)? onOpenCallback,
-      Function openFunction) {
+      Function openFunction, Function resetFunction) {
     _onError = errorFunction;
     onOpen = onOpenCallback;
     _openFunction = openFunction;
+    _resetFunction = resetFunction;
   }
 
   void setResultOptions(ResultOptions resultOptions) {

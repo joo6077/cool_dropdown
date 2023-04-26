@@ -1,3 +1,7 @@
+## [2.0.2] - 2023.04.26
+
+- add resetValue method in dropdownController.
+
 ## [2.0.1] - 2023.04.17
 
 - fix ticker import.
