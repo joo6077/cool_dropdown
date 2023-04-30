@@ -60,7 +60,7 @@ dependencies:
 | dropdownItemOptions     | DropdownItemOptions       | -        | Check below.                                                          |
 | dropdownTriangleOptions | DropdownTriangleOptions   | -        | Check below.                                                          |
 | dropdownController      | DropdownController        | required | Check below.                                                          |
-## ResultOptions(result<v1.3.0> -> ResultOptions<v.2.0.0>)
+## Result Options(result<v1.3.0> -> ResultOptions<v.2.0.0>)
 
 | Option               | Type          | Default                      | Description                                       |
 | -------------------- |:-------------:| ----------------------------:|:------------------------------------------------- |
@@ -82,7 +82,7 @@ dependencies:
 | backDuration         | Duration      | Duration(milliseconds: 800)  | Reverse animation duration of the marquee effect  |
 | pauseDuration        | Duration      | Duration(milliseconds: 800)  | Pause duration after marquee effect.              |
 
-## Dropdown options(dropdown<v1.3.0> -> dropdownOptions<v2.0.0>)
+## Dropdown Options(dropdown<v1.3.0> -> dropdownOptions<v2.0.0>)
 
 | Option               | Type                  | Default                               | Description                                                                                                                        |
 | -------------------- |:---------------------:| -------------------------------------:|:---------------------------------------------------------------------------------------------------------------------------------- |
@@ -95,12 +95,13 @@ dependencies:
 | shadow               | List<BoxShadow>       | []                                    | BoxShadow list of the dropdown.                                                                                                    |
 | animationType        | DropdownAnimationType | DropdownAnimationType.scale           | Animation type of the dropdown.                                                                                                    |
 | align                | DropdownAlign         | DropdownAlign.center                  | The alignment of the dropdown. If the dropdown and result box are different sizes, the dropdown will be aligned to the result box. |
+| align                | SelectedItemAlign     | SelectedItemAlign.center              | The scroll alignment of the selected item in the dropdown.                                                                         |
 | gap                  | DropdownGap           | DropdownGap.zero                      | The gap between the dropdown and dropdown items.                                                                                   |
 | padding              | EdgeInsets            | EdgeInsets.zero                       |                                                                                                                                    |
 | duration             | Duration              | Duration(milliseconds: 300)           | Duration of the dropdown scroll animation.                                                                                         |
 | curve                | Curve                 | Curves.easeInOut                      | Curve of the dropdown scroll animation.                                                                                            |
 
-## Dropdown item options(new)
+## Dropdown Item Options(new)
 
 | Option                | Type               | Default                               | Description                                              |
 | --------------------- |:------------------:| -------------------------------------:|:-------------------------------------------------------- |
@@ -145,3 +146,4 @@ dependencies:
 | close                | method   | -                                         | Close the dropdown.                             |
 | error                | method   | -                                         | Occur an error of the dropdown.                 |
 | resetError           | method   | -                                         | Reset an error of the dropdown.                 |
+| resetValue           | method   | -                                         | Reset the value of the dropdown.                |

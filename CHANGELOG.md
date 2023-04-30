@@ -1,3 +1,8 @@
+## [2.1.0] - 2023.04.30
+
+- add SelectedItemAlign in dropdownOptions.
+- fixed dropdown triangle width, height issue.
+
 ## [2.0.2] - 2023.04.26
 
 - add resetValue method in dropdownController.

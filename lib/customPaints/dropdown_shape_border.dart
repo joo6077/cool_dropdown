@@ -54,23 +54,26 @@ class DropdownShapeBorder extends ShapeBorder {
     final path = Path();
     _drawTopLeftCorner(path, rect);
 
-    if (!isTriangleDown) {
-      _drawTriangleUp(
-          path: path,
-          boxRect: rect.shift(Offset(0, -triangle.height)),
-          trianglePosition: _calcArrowPosition(rect.width),
-          triangle: triangle);
+    if (triangle.width > 0 && triangle.height > 0) {
+      if (!isTriangleDown) {
+        _drawTriangleUp(
+            path: path,
+            boxRect: rect.shift(Offset(0, -triangle.height)),
+            trianglePosition: _calcArrowPosition(rect.width),
+            triangle: triangle);
+      }
     }
-
     _drawTopRightCorner(path, rect);
     _drawBottomRightCorner(path, rect);
 
-    if (isTriangleDown) {
-      _drawTriangleDown(
-          path: path,
-          boxRect: rect,
-          trianglePosition: _calcArrowPosition(rect.width),
-          triangle: triangle);
+    if (triangle.width > 0 && triangle.height > 0) {
+      if (isTriangleDown) {
+        _drawTriangleDown(
+            path: path,
+            boxRect: rect,
+            trianglePosition: _calcArrowPosition(rect.width),
+            triangle: triangle);
+      }
     }
 
     _drawBottomLeftCorner(path, rect);

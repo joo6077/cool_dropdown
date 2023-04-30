@@ -1,5 +1,6 @@
 import 'package:cool_dropdown/enums/dropdown_align.dart';
 import 'package:cool_dropdown/enums/dropdown_animation.dart';
+import 'package:cool_dropdown/enums/selected_item_align.dart';
 import 'package:flutter/material.dart';
 
 class DropdownOptions {
@@ -26,6 +27,9 @@ class DropdownOptions {
 
   /// The alignment of the dropdown. If the dropdown and result box are different sizes, the dropdown will be aligned to the result box
   final DropdownAlign align;
+
+  /// The scroll alignment of the selected item in the dropdown.
+  final SelectedItemAlign selectedItemAlign;
 
   /// The gap between the dropdown and dropdown items.
   final DropdownGap gap;
@@ -57,6 +61,7 @@ class DropdownOptions {
     ],
     this.animationType = DropdownAnimationType.scale,
     this.align = DropdownAlign.center,
+    this.selectedItemAlign = SelectedItemAlign.center,
     this.gap = DropdownGap.zero,
     this.padding = EdgeInsets.zero,
     this.duration = const Duration(milliseconds: 300),

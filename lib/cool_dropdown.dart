@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 export 'package:cool_dropdown/controllers/dropdown_controller.dart';
 export 'package:cool_dropdown/enums/dropdown_align.dart';
 export 'package:cool_dropdown/enums/dropdown_triangle_align.dart';
+export 'package:cool_dropdown/enums/selected_item_align.dart';
 export 'package:cool_dropdown/enums/result_render.dart';
 export 'package:cool_dropdown/enums/dropdown_item_render.dart';
 export 'package:cool_dropdown/enums/dropdown_animation.dart';

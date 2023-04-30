@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:cool_dropdown/enums/dropdown_align.dart';
 import 'package:cool_dropdown/enums/dropdown_triangle_align.dart';
+import 'package:cool_dropdown/enums/selected_item_align.dart';
 import 'package:cool_dropdown/models/cool_dropdown_item.dart';
 import 'package:cool_dropdown/options/dropdown_triangle_options.dart';
 import 'package:cool_dropdown/options/dropdown_item_options.dart';
@@ -142,12 +143,36 @@ class DropdownCalculator<T> {
         dropdownWidth;
   }
 
+  double _setSelectedItemPosition() {
+    switch (dropdownOptions.selectedItemAlign) {
+      case SelectedItemAlign.start:
+        return 0;
+      case SelectedItemAlign.center:
+        return dropdownHeight * 0.5 -
+            dropdownItemOptions.height * 0.5 -
+            dropdownOptions.borderSide.width -
+            dropdownOptions.gap.betweenItems -
+            dropdownTriangleOptions.height * 0.5;
+      case SelectedItemAlign.end:
+        return dropdownHeight -
+            dropdownItemOptions.height -
+            dropdownOptions.borderSide.width -
+            dropdownOptions.gap.betweenItems -
+            dropdownOptions.gap.bottom -
+            dropdownTriangleOptions.height;
+    }
+  }
+
   void setScrollPosition(int currentIndex) {
-    var scrollPosition = (dropdownItemOptions.height * currentIndex) +
-        (dropdownOptions.gap.betweenItems * currentIndex);
+    final selectedItemOffset = _setSelectedItemPosition();
+    double scrollPosition = (dropdownItemOptions.height * currentIndex) +
+        (dropdownOptions.gap.betweenItems * currentIndex) -
+        selectedItemOffset;
     final overScrollPosition = scrollController.position.maxScrollExtent;
     if (overScrollPosition < scrollPosition) {
       scrollPosition = overScrollPosition;
+    } else if (scrollPosition < 0) {
+      scrollPosition = 0;
     }
     if (_totalHeight < dropdownHeight) {
       scrollPosition = 0;
