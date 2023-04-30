@@ -1,6 +1,6 @@
 name: cool_dropdown
 description: Customizable cool dropdown UI You can customize selected item, BoxDecoration of the dropdownBox, and dropdown input.
-version: 2.0.2
+version: 2.1.0
 homepage: https://github.com/joo6077/cool_dropdown
 
 environment:
