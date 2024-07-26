@@ -21,7 +21,7 @@ class DropdownWidget<T> extends StatefulWidget {
 
   final List<CoolDropdownItem> dropdownList;
 
-  final Function(T t) onChange;
+  final void Function(T t) onChange;
 
   final GetSelectedItem getSelectedItem;
   final CoolDropdownItem<T>? selectedItem;
@@ -61,8 +61,7 @@ class DropdownWidgetState<T> extends State<DropdownWidget<T>> {
 
     dropdownOffset = _dropdownCalculator.setOffset();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      final currentIndex = widget.dropdownList
-          .indexWhere((dropdownItem) => dropdownItem == widget.selectedItem);
+      final currentIndex = widget.dropdownList.indexWhere((dropdownItem) => dropdownItem == widget.selectedItem);
       if (currentIndex < 0) return;
       _setSelectedItem(currentIndex);
       _dropdownCalculator.setScrollPosition(currentIndex);
@@ -80,12 +79,10 @@ class DropdownWidgetState<T> extends State<DropdownWidget<T>> {
     setState(() {
       for (var i = 0; i < widget.dropdownList.length; i++) {
         if (index == i) {
-          widget.dropdownList[i] =
-              widget.dropdownList[i].copyWith(isSelected: true);
+          widget.dropdownList[i] = widget.dropdownList[i].copyWith(isSelected: true);
           widget.getSelectedItem(i);
         } else {
-          widget.dropdownList[i] =
-              widget.dropdownList[i].copyWith(isSelected: false);
+          widget.dropdownList[i] = widget.dropdownList[i].copyWith(isSelected: false);
         }
       }
     });
@@ -102,8 +99,7 @@ class DropdownWidgetState<T> extends State<DropdownWidget<T>> {
       case DropdownAnimationType.scale:
         return ScaleTransition(
           scale: widget.controller.showDropdown,
-          alignment: Alignment(_dropdownCalculator.calcArrowAlignmentDx,
-              _dropdownCalculator.isArrowDown ? 1 : -1),
+          alignment: Alignment(_dropdownCalculator.calcArrowAlignmentDx, _dropdownCalculator.isArrowDown ? 1 : -1),
           child: child,
         );
     }
@@ -133,10 +129,8 @@ class DropdownWidgetState<T> extends State<DropdownWidget<T>> {
                   margin: widget.dropdownOptions.marginGap,
                   clipBehavior: Clip.antiAlias,
                   width: _dropdownCalculator.dropdownWidth,
-                  height: _dropdownCalculator.dropdownHeight +
-                      widget.dropdownOptions.borderSide.width,
-                  padding: EdgeInsets.all(
-                      widget.dropdownOptions.borderSide.width * 0.5),
+                  height: _dropdownCalculator.dropdownHeight + widget.dropdownOptions.borderSide.width,
+                  padding: EdgeInsets.all(widget.dropdownOptions.borderSide.width * 0.5),
                   decoration: ShapeDecoration(
                     color: widget.dropdownOptions.color,
                     shadows: widget.dropdownOptions.shadows,
@@ -161,8 +155,7 @@ class DropdownWidgetState<T> extends State<DropdownWidget<T>> {
                         children: [
                           if (index == 0)
                             SizedBox(
-                              height: widget.dropdownOptions.gap.top +
-                                  widget.dropdownOptions.borderSide.width * 0.5,
+                              height: widget.dropdownOptions.gap.top + widget.dropdownOptions.borderSide.width * 0.5,
                             ),
                           DropdownItemWidget(
                             item: widget.dropdownList[index],
@@ -174,8 +167,7 @@ class DropdownWidgetState<T> extends State<DropdownWidget<T>> {
                             ),
                           if (index == widget.dropdownList.length - 1)
                             SizedBox(
-                              height: widget.dropdownOptions.gap.bottom +
-                                  widget.dropdownOptions.borderSide.width * 0.5,
+                              height: widget.dropdownOptions.gap.bottom + widget.dropdownOptions.borderSide.width * 0.5,
                             ),
                         ],
                       ),

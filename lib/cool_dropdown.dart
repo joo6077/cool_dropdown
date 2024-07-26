@@ -30,9 +30,9 @@ class CoolDropdown<T> extends StatelessWidget {
   final DropdownOptions dropdownOptions;
   final DropdownItemOptions dropdownItemOptions;
   final DropdownTriangleOptions dropdownTriangleOptions;
-  final DropdownController controller;
+  final DropdownController<T> controller;
 
-  final Function(T) onChange;
+  final void Function(T value) onChange;
   final Function(bool)? onOpen;
 
   final bool isMarquee;
