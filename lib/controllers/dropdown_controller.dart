@@ -1,9 +1,11 @@
+import 'package:cool_dropdown/models/cool_dropdown_item.dart';
 import 'package:cool_dropdown/options/result_options.dart';
+import 'package:cool_dropdown/typedefs/typedef.dart';
 import 'package:cool_dropdown/widgets/dropdown_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
-class DropdownController implements TickerProvider {
+class DropdownController<T> implements TickerProvider {
   /// dropdown staggered animation controller
   late final AnimationController _controller;
 
@@ -33,16 +35,16 @@ class DropdownController implements TickerProvider {
   bool _isOpen = false;
   bool get isOpen => _isOpen;
 
-  Function? _onError;
-  Function? get onError => _onError;
+  void Function(bool value)? _onError;
+  void Function(bool value)? get onError => _onError;
 
-  Function? _openFunction;
-  Function? get openFunction => _openFunction;
+  VoidCallback? _openFunction;
+  VoidCallback? get openFunction => _openFunction;
 
-  Function? _resetFunction;
-  Function? get resetFunction => _resetFunction;
+  ItemSelectionCallback<T>? _setValueFunction;
+  ItemSelectionCallback<T>? get setValueFunction => _setValueFunction;
 
-  Function(bool)? onOpen;
+  void Function(bool isOpened)? onOpen;
 
   bool _isError = false;
   bool get isError => _isError;
@@ -79,8 +81,7 @@ class DropdownController implements TickerProvider {
     ),
   );
 
-  Animation<Decoration> get errorDecoration =>
-      errorDecorationTween.animate(_errorController);
+  Animation<Decoration> get errorDecoration => errorDecorationTween.animate(_errorController);
 
   Animation<double> get rotation => Tween<double>(begin: 0, end: 1).animate(
         CurvedAnimation(
@@ -134,13 +135,16 @@ class DropdownController implements TickerProvider {
   }
 
   void resetValue() {
-    resetFunction!.call(null);
+    setValueFunction?.call(null);
+  }
+
+  void setValue(CoolDropdownItem<T>? item) {
+    setValueFunction?.call(item);
   }
 
   Future<void> error() async {
     if (_isError) return;
-    _setErrorDecorationTween(
-        _resultOptions.boxDecoration, _resultOptions.errorBoxDecoration);
+    _setErrorDecorationTween(_resultOptions.boxDecoration, _resultOptions.errorBoxDecoration);
     _onError?.call(true);
     _isError = true;
     _errorController.reset();
@@ -149,22 +153,23 @@ class DropdownController implements TickerProvider {
 
   Future<void> resetError() async {
     _setErrorDecorationTween(
-        errorDecorationTween.end!,
-        _isOpen
-            ? _resultOptions.openBoxDecoration
-            : _resultOptions.boxDecoration);
+        errorDecorationTween.end!, _isOpen ? _resultOptions.openBoxDecoration : _resultOptions.boxDecoration);
     _errorController.reset();
     await _errorController.forward();
     _onError?.call(false);
     _isError = false;
   }
 
-  void setFunctions(Function errorFunction, Function(bool)? onOpenCallback,
-      Function openFunction, Function resetFunction) {
+  void setFunctions({
+    required void Function(bool value) errorFunction,
+    required void Function(bool isOpened)? onOpenCallback,
+    required ItemSelectionCallback<T> setItemFunction,
+    required VoidCallback openFunction,
+  }) {
     _onError = errorFunction;
     onOpen = onOpenCallback;
     _openFunction = openFunction;
-    _resetFunction = resetFunction;
+    _setValueFunction = setItemFunction;
   }
 
   void setResultOptions(ResultOptions resultOptions) {

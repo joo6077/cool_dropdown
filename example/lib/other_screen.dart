@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:cool_dropdown/cool_dropdown.dart';
 
 class OtherScreen extends StatefulWidget {
   const OtherScreen({Key? key}) : super(key: key);

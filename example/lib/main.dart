@@ -14,16 +14,7 @@ class MyApp extends StatefulWidget {
 
 List<CoolDropdownItem<String>> dropdownItemList = [];
 
-List<String> pokemons = [
-  'pikachu',
-  'charmander',
-  'squirtle',
-  'bullbasaur',
-  'snorlax',
-  'mankey',
-  'psyduck',
-  'meowth'
-];
+List<String> pokemons = ['pikachu', 'charmander', 'squirtle', 'bullbasaur', 'snorlax', 'mankey', 'psyduck', 'meowth'];
 List<String> fruits = [
   'apple',
   'banana',
@@ -40,8 +31,8 @@ class _MyAppState extends State<MyApp> {
   List<CoolDropdownItem<String>> pokemonDropdownItems = [];
   List<CoolDropdownItem<String>> fruitDropdownItems = [];
 
-  final fruitDropdownController = DropdownController();
-  final pokemonDropdownController = DropdownController();
+  final fruitDropdownController = DropdownController<String>();
+  final pokemonDropdownController = DropdownController<String>();
   final listDropdownController = DropdownController();
 
   @override
