@@ -112,6 +112,8 @@ class DropdownController<T> implements TickerProvider {
       );
 
   void show({required BuildContext context, required DropdownWidget child}) {
+    if (_isOpen) return;
+
     _overlayEntry = OverlayEntry(builder: (_) => child);
     if (_overlayEntry == null) return;
     Overlay.of(context).insert(_overlayEntry!);
@@ -123,10 +125,13 @@ class DropdownController<T> implements TickerProvider {
   }
 
   void open() {
+    if (_isOpen) return;
+
     openFunction!.call();
   }
 
   void close() async {
+    if (!_isOpen) return;
     await _controller.reverse();
     _overlayEntry?.remove();
 
@@ -152,8 +157,7 @@ class DropdownController<T> implements TickerProvider {
   }
 
   Future<void> resetError() async {
-    _setErrorDecorationTween(
-        errorDecorationTween.end!, _isOpen ? _resultOptions.openBoxDecoration : _resultOptions.boxDecoration);
+    _setErrorDecorationTween(errorDecorationTween.end!, _isOpen ? _resultOptions.openBoxDecoration : _resultOptions.boxDecoration);
     _errorController.reset();
     await _errorController.forward();
     _onError?.call(false);
